@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Argent Research · All-weather risk management</title>
+<meta name="description" content="Describe a business risk or upload your books, and get a sized Kalshi hedge with its cost, its payout and your cash whether the bet comes right or wrong.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Argent Research">
+<meta property="og:title" content="Argent Research · All-weather risk management">
+<meta property="og:description" content="Describe a business risk or upload your books, and get a sized Kalshi hedge with its cost, its payout and your cash whether the bet comes right or wrong.">
+<meta property="og:url" content="https://peterhanck.github.io/argent-research/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://peterhanck.github.io/argent-research/">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+/* Theme and logo: Argent Research BP deck, 20260912 version. Content slides are white with navy Helvetica Neue titles,
+   #238CCB uppercase labels, slate body text and #C9D7E2 rules; the cover and side panels are #06131F with the logo and #4BB3F2. */
+:root{
+  --ground:#FFFFFF; --surface:#FFFFFF; --panel:#F3F8FB; --shade:#EAF1F6; --ink:#0B1B2A; --muted:#66788A; --faint:#9FB1C1; --rule:#C9D7E2; --rule-strong:#9FB1C1;
+  --accent:#238CCB; --accent-hover:#1B78B0; --accent-tint:#E6F1F9; --on-accent:#FFFFFF;
+  --hit:#B85300; --hit-bar:#F36C00; --pay:#238CCB; --pay-bar:#238CCB; --no-bar:#7E90A2;
+  --cover:#06131F; --cover-2:#0B2233; --cover-ink:#FFFFFF; --cover-muted:#9FB1C1; --cover-rule:#1C3246; --cover-accent:#4BB3F2;
+  --band:var(--cover); --band-ink:var(--cover-ink); --band-muted:var(--cover-muted); --band-rule:var(--cover-rule); --band-accent:var(--cover-accent);
+  --good:#17784A; --good-tint:#E5F3EC; --warn:#8A5A0B; --warn-tint:#F7EEDC; --off-tint:#EEF3F7;
+  --display:"Helvetica Neue",Helvetica,Arial,sans-serif; --body:"Helvetica Neue",Helvetica,Arial,sans-serif; --quote:var(--body);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace; --shadow:none;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#06131F; --surface:#0B1B2A; --panel:#0B2233; --shade:#10283C; --ink:#F3F8FB; --muted:#9FB1C1; --faint:#66788A; --rule:#1C3246; --rule-strong:#2B4760;
+  --accent:#4BB3F2; --accent-hover:#72C4F5; --accent-tint:#0E2A40; --on-accent:#06131F;
+  --hit:#FF9A52; --hit-bar:#F36C00; --pay:#4BB3F2; --pay-bar:#4BB3F2; --no-bar:#9FB1C1;
+  --cover:#030B13; --cover-2:#0B2233; --cover-rule:#1C3246;
+  --good:#5BC98A; --good-tint:#0F2A1D; --warn:#E6AE55; --warn-tint:#2A2012; --off-tint:#10283C; } }
+:root[data-theme="dark"]{
+  --ground:#06131F; --surface:#0B1B2A; --panel:#0B2233; --shade:#10283C; --ink:#F3F8FB; --muted:#9FB1C1; --faint:#66788A; --rule:#1C3246; --rule-strong:#2B4760;
+  --accent:#4BB3F2; --accent-hover:#72C4F5; --accent-tint:#0E2A40; --on-accent:#06131F;
+  --hit:#FF9A52; --hit-bar:#F36C00; --pay:#4BB3F2; --pay-bar:#4BB3F2; --no-bar:#9FB1C1;
+  --cover:#030B13; --cover-2:#0B2233; --cover-rule:#1C3246;
+  --good:#5BC98A; --good-tint:#0F2A1D; --warn:#E6AE55; --warn-tint:#2A2012; --off-tint:#10283C; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth} @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{background:var(--ground);color:var(--ink);font:16px/1.6 var(--body);margin:0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+.wrap>*,.grid>*,.cols>*{min-width:0}
+h1,h2,h3{text-wrap:balance;margin:0;font-family:var(--display);font-weight:700;letter-spacing:-.01em} p{margin:0}
+a{color:var(--accent)} code,.mono{font-family:var(--mono)}
+button{font:700 14.5px var(--body);cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eyebrow{font:700 12px/1.3 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:6px;padding:11px 20px;border:1px solid var(--rule-strong);background:var(--surface);text-decoration:none;color:var(--ink);font:700 14.5px/1.2 var(--body)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)} .btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.ghost{background:transparent}
+.pill{display:inline-flex;align-items:center;gap:6px;font:700 11.5px/1.4 var(--body);letter-spacing:.02em;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.pill.good{background:var(--good-tint);color:var(--good)} .pill.warn{background:var(--warn-tint);color:var(--warn)} .pill.off{background:var(--off-tint);color:var(--muted)} .pill.acc{background:var(--accent-tint);color:var(--accent)}
+
+/* nav: the deck's cover navy, carrying its logo */
+.nav{position:sticky;top:0;z-index:20;background:var(--cover);border-bottom:1px solid var(--cover-rule)}
+.nav .wrap{display:flex;align-items:center;gap:12px 28px;min-height:68px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;text-decoration:none;color:var(--cover-ink)}
+.brand img{display:block;height:30px;width:auto;max-width:100%}
+.nav nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav nav a{font:500 14px var(--body);color:var(--cover-muted);text-decoration:none;padding:8px 12px;border-radius:6px} .nav nav a:hover{color:var(--cover-ink);background:var(--cover-2)}
+.snapchip{font:500 12px var(--mono);color:var(--cover-muted);border:1px solid var(--cover-rule);border-radius:6px;padding:5px 10px;white-space:nowrap}
+
+/* hero: the cover slide */
+.hero{background:var(--cover);color:var(--cover-ink);padding-block:64px 44px}
+.hero .eyebrow{color:var(--cover-accent)}
+.hero h1{font-size:clamp(38px,5.6vw,68px);line-height:1.05;max-width:17ch;margin-top:14px;color:var(--cover-ink)}
+.hero .rule{display:block;width:220px;max-width:40%;height:3px;background:var(--cover-accent);margin-top:26px}
+.hero .lede{font-size:18px;max-width:62ch;margin-top:22px;color:var(--cover-muted)}
+.composer{margin-top:30px;max-width:860px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.tabs{display:flex;gap:4px;padding:8px;border-bottom:1px solid var(--rule);background:var(--panel)}
+.tabs button{border:1px solid transparent;background:transparent;padding:8px 14px;border-radius:6px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);border-color:var(--rule)}
+.pane{padding:18px 20px 16px}
+.pane label.lab{font:700 12px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+textarea#risk-text{width:100%;border:0;resize:vertical;min-height:96px;font:400 22px/1.4 var(--body);color:var(--ink);background:transparent;padding:6px 0 0}
+textarea#risk-text:focus{outline:none}
+.composer-foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;border-top:1px solid var(--rule);margin-top:10px;padding-top:12px}
+.composer-foot .hint{font-size:13px;color:var(--muted)} .composer-foot .grow{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:12px;font-size:13px;color:var(--muted)}
+.chips button{border:1px solid var(--rule);background:var(--surface);border-radius:6px;padding:5px 11px;font:700 13px var(--body);color:var(--accent)}
+.chips button:hover{border-color:var(--accent)}
+.files{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.files label{display:grid;gap:6px;border:1.5px dashed var(--rule-strong);border-radius:8px;padding:14px;font:700 14px var(--body)}
+.files label span{font:400 13px var(--body);color:var(--muted)} .files input{font:13px var(--body);color:var(--ink);max-width:100%}
+.strip{margin-top:12px;max-width:860px;width:100%;display:flex;align-items:center;gap:14px;background:var(--cover-2);color:var(--cover-ink);border:1px solid var(--cover-rule);border-radius:10px;padding:12px 16px;text-align:left}
+.strip:hover{border-color:var(--cover-accent)}
+.strip .tag{font:700 12px var(--body);letter-spacing:.04em;border:1px solid var(--cover-rule);border-radius:4px;padding:6px 8px;color:var(--cover-accent)} .strip .grow{flex:1} .strip small{color:var(--cover-muted);font-weight:400}
+.tape{margin-top:26px;display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.tick-card{flex:0 0 auto;display:grid;gap:5px;min-width:180px;border:1px solid var(--cover-rule);background:var(--cover-2);border-radius:8px;padding:10px 12px;text-decoration:none;color:var(--cover-ink)}
+.tick-card:hover{border-color:var(--cover-accent)}
+.tick-card small{font:500 11px var(--mono);color:var(--cover-muted)} .tick-card b{font:700 13px/1.3 var(--body)} .tick-card .bar{height:4px;border-radius:2px;background:var(--cover-rule);overflow:hidden} .tick-card .bar i{display:block;height:100%;background:var(--cover-accent)}
+.tick-card em{font:700 13px var(--body);font-style:normal;color:var(--cover-accent);font-variant-numeric:tabular-nums}
+
+/* result: a content slide */
+.result{padding-block:56px 64px}
+.rhead{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px 40px;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:26px}
+.rhead h2{font-size:clamp(30px,4vw,48px);line-height:1.08;margin-top:10px}
+.rhead>p{font-size:15.5px;color:var(--muted)}
+.rsource{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.stats{margin-top:26px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stat{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;display:grid;gap:4px;align-content:start}
+.stat span{font:700 12px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.stat b{font:700 clamp(30px,3.6vw,44px)/1.05 var(--display);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.stat small{font-size:13px;color:var(--muted)}
+.stat.pay{border-color:var(--accent)} .stat.pay b{color:var(--pay)}
+.stats .wide{grid-column:1/-1;display:grid;gap:6px}
+.stats .callout{background:var(--panel);border-color:var(--accent)}
+.sizer{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px}
+.sizer label{font:700 14px var(--body)} .sizer input[type=range]{flex:1;min-width:180px;accent-color:var(--accent)} .sizer .val{font:700 14px var(--body);min-width:4ch;font-variant-numeric:tabular-nums}
+.sizer .note{font-size:13px;color:var(--muted);flex-basis:100%}
+.sizer .check{display:flex;gap:8px;align-items:center;font:500 13.5px var(--body)}
+.knobs{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:end;flex-basis:100%}
+.knobs label{display:grid;gap:3px;font:500 12.5px/1.35 var(--body);color:var(--muted);max-width:100%}
+.knobs input{font:500 14px var(--body);font-variant-numeric:tabular-nums;width:11ch;max-width:100%;padding:6px 8px;border-radius:6px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)}
+.toggle.risks{margin-bottom:10px}
+.worlds{margin-top:26px}
+.toggle{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:4px;width:max-content;max-width:100%;margin:0 auto}
+.toggle button{border:0;background:transparent;border-radius:6px;padding:8px 13px;font:700 13.5px var(--body);color:var(--muted);white-space:nowrap}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.toggle button .p{font:500 12px var(--body);font-variant-numeric:tabular-nums;opacity:.85;margin-left:6px}
+.world{margin-top:14px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.world .dial{display:grid;place-items:center;padding:28px;background:var(--panel);border-right:1px solid var(--rule)}
+.world .dial svg{width:min(260px,100%);height:auto}
+.world .dial text{font-family:var(--display);fill:var(--ink)}
+.world .detail{padding:28px 30px;display:grid;gap:14px;align-content:start}
+.world .detail h3{font:700 clamp(20px,2.2vw,26px)/1.25 var(--display)}
+.lines{display:grid;border-top:1px solid var(--rule)}
+.lines div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.lines b{font:700 15px var(--body);font-variant-numeric:tabular-nums} .lines .hit b{color:var(--hit)} .lines .payl b{color:var(--pay)}
+.netline{display:flex;justify-content:space-between;align-items:end;gap:12px;padding-top:6px}
+.netline span{font:700 12px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent);max-width:18ch}
+.netline b{font:700 clamp(32px,4vw,46px)/1 var(--display);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.dist{margin-top:14px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.dist h3{font:700 14px var(--body);letter-spacing:0;margin-bottom:8px}
+.segs{display:flex;gap:3px;min-height:54px}
+.seg{border:0;padding:8px 8px 6px;border-radius:6px;text-align:left;display:grid;align-content:space-between;gap:2px;min-width:0;overflow:hidden;font:500 12px/1.25 var(--body);color:var(--ink);background:var(--shade)}
+.seg.right{background:color-mix(in srgb,var(--pay-bar) 16%,var(--surface))} .seg.sel{outline:2px solid var(--accent);outline-offset:-2px}
+.seg b{font:700 12.5px var(--body);font-variant-numeric:tabular-nums;white-space:nowrap} .seg small{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cta{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.cta .fine{flex:1;min-width:240px;text-align:right;font-size:13px;color:var(--muted)}
+details.orders{margin-top:12px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:10px 16px}
+details.orders summary{cursor:pointer;font:700 14px var(--body)}
+details.how{margin-top:10px} details.how summary{cursor:pointer;font:700 13px var(--body);color:var(--accent);width:fit-content} details.how p{font-size:13px;line-height:1.55;color:var(--muted);margin-top:6px;max-width:88ch}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);font-size:13.5px;vertical-align:top}
+th{font:700 11px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap}
+.year{margin-top:40px;display:grid;gap:14px}
+.year .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.card h3{font:700 22px/1.2 var(--display)}
+.score td{font-size:14px} .score tr.big td{font-weight:700;border-top:1px solid var(--rule-strong)} .up{color:var(--good)} .down{color:var(--hit)}
+.chart{position:relative} .chart svg{display:block;width:100%;height:auto;min-width:520px}
+svg text{font-family:var(--body);fill:var(--ink)} .tk{font-size:11.5px;fill:var(--muted)} .gl{stroke:var(--rule);stroke-width:1} .al{stroke:var(--rule-strong);stroke-width:1}
+.a-no{fill:var(--no-bar);opacity:.16} .l-no{stroke:var(--no-bar);stroke-width:2;fill:none} .a-yes{fill:var(--pay-bar);opacity:.16} .l-yes{stroke:var(--pay-bar);stroke-width:2;fill:none}
+.m-no{stroke:var(--no-bar);stroke-width:1.5} .m-yes{stroke:var(--pay-bar);stroke-width:1.5} .hitr{fill:transparent}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)} .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.k-no{background:var(--no-bar)} .k-yes{background:var(--pay-bar)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong);border-radius:6px;padding:6px 9px;font:12px/1.45 var(--body);font-variant-numeric:tabular-nums;white-space:nowrap;display:none;z-index:5}
+.yearcta{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between}
+.others{margin-top:44px;border-top:1px solid var(--rule);padding-top:26px;display:grid;gap:14px}
+.others h3{font:700 clamp(22px,2.4vw,28px)/1.25 var(--display);max-width:40ch}
+.olist{display:grid;border-top:1px solid var(--rule)}
+.orow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr) auto;gap:8px 18px;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
+.orow b{font:700 15px var(--body)} .orow p{font-size:14px;color:var(--muted)}
+.orow button{border:1px solid var(--rule-strong);background:var(--surface);border-radius:6px;padding:6px 14px;font:700 13px var(--body)}
+
+/* band: the deck's navy side panel */
+.band{background:var(--cover);color:var(--cover-ink);padding-block:64px}
+.band .logo{display:block;height:64px;width:auto;margin-bottom:40px}
+.band h2{font-size:clamp(32px,4.4vw,52px);line-height:1.05;max-width:18ch;margin-top:10px}
+.band .eyebrow{color:var(--cover-accent)}
+.steps{margin-top:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;padding:0}
+.steps li{border-left:1px solid var(--cover-rule);padding:4px 24px;display:grid;gap:10px;align-content:start}
+.steps li b{font:700 12px var(--body);letter-spacing:.04em;color:var(--cover-accent)} .steps li h3{font:700 22px/1.2 var(--display);color:var(--cover-ink)} .steps li p{color:var(--cover-muted);font-size:15px}
+
+/* examples */
+.examples{padding-block:64px}
+.exhead{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;border-bottom:1px solid var(--rule);padding-bottom:22px}
+.exhead h2{font-size:clamp(32px,4.4vw,52px);line-height:1.05;margin-top:10px}
+.exgrid{margin-top:26px;display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:16px}
+.exlist{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.exlist li+li{border-top:1px solid var(--rule)}
+.exlist button{width:100%;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;text-align:left;border:0;background:transparent;padding:14px 16px}
+.exlist button[aria-current="true"]{background:var(--panel)} .exlist button[aria-current="true"] b{color:var(--accent)}
+.exlist .num{font:700 12.5px var(--body);color:var(--accent);font-variant-numeric:tabular-nums} .exlist b{display:block;font:700 14.5px var(--body)} .exlist small{font-size:13px;color:var(--muted)}
+.excard{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:30px 32px;display:grid;gap:14px;align-content:start}
+.excard .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.excard h3{font-size:clamp(30px,3.6vw,44px);line-height:1.05}
+.excard blockquote{margin:6px 0;font:400 clamp(19px,2vw,24px)/1.4 var(--quote);color:var(--ink)}
+.found{display:grid;grid-template-columns:120px 1fr;gap:6px 16px;border-top:1px solid var(--rule);padding-top:14px}
+.found span{font:700 12px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--accent)} .found p{font-size:16px} .found small{grid-column:2;font-size:13px;color:var(--muted)}
+
+/* missing */
+.missing{padding-block:64px;border-top:1px solid var(--rule);background:var(--panel)}
+.missing .cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px 48px;align-items:end}
+.missing h2{font-size:clamp(32px,4.4vw,52px);line-height:1.05}
+.mlist{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.mlist .card{display:grid;gap:6px;align-content:start} .mlist .card b{font:700 34px/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums} .mlist .card h3{font:700 16px/1.3 var(--body);letter-spacing:0} .mlist .card p{font-size:14px;color:var(--muted)}
+
+/* footer: the deck's cover again */
+footer{background:var(--cover);color:var(--cover-muted);padding-block:40px 56px}
+footer .wrap{display:grid;gap:12px;font-size:13px}
+footer img{display:block;height:26px;width:auto;margin-bottom:10px}
+footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:uppercase}
+.err{color:var(--hit);font-weight:700}
+@media (max-width:880px){ .rhead,.world,.year .cols,.exgrid,.missing .cols{grid-template-columns:1fr} .world .dial{border-right:0;border-bottom:1px solid var(--rule)} .stats{grid-template-columns:1fr} .steps{grid-template-columns:1fr;gap:18px} .steps li{border-left:0;border-top:1px solid var(--cover-rule);padding:16px 0 0} .orow{grid-template-columns:1fr} .cta .fine{text-align:left} }
+@media (max-width:560px){ .wrap{padding-inline:16px} .nav .wrap{min-height:60px} .nav nav,.snapchip{display:none} .hero{padding-block:40px 28px} textarea#risk-text{font-size:19px} .world .detail{padding:20px} .excard{padding:22px} }
+</style>
+<style>img{max-width:100%}</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Argent Research, home"><img src="assets/argent_research_logo_horizontal_small_dark.svg" alt="Argent Research" width="260" height="30"></a>
+  <nav aria-label="Sections"><a href="#how">How it works</a><a href="#examples">Examples</a><a href="#missing">Missing markets</a></nav>
+  <span class="snapchip" id="snapchip"></span>
+</div></header>
+
+<main>
+<section class="hero" id="top"><div class="wrap">
+  <p class="eyebrow">Argent Research / All-weather risk management</p>
+  <h1>What could hurt your next twelve months?</h1>
+  <span class="rule" aria-hidden="true"></span>
+  <p class="lede">Describe one risk, or upload your books. Argent finds the Kalshi contract that pays when it happens, sizes it to your loss, prices it against the order book, and shows your cash if you're right and if you're wrong.</p>
+  <div class="composer">
+    <div class="tabs" role="tablist" aria-label="How to start">
+      <button role="tab" id="tab-say" aria-selected="true" aria-controls="pane-say">Describe a risk</button>
+      <button role="tab" id="tab-books" aria-selected="false" aria-controls="pane-books">Upload your books</button>
+    </div>
+    <div class="pane" id="pane-say" role="tabpanel" aria-labelledby="tab-say">
+      <label class="lab" for="risk-text">Your risk, in a sentence</label>
+      <textarea id="risk-text" rows="3"></textarea>
+      <div class="composer-foot"><span class="hint">Numbers help. Leave out anything confidential.</span><span class="grow" id="ai-status" aria-live="polite"></span>
+        <button class="btn ghost" id="btn-stop" hidden>Stop</button><button class="btn primary" id="btn-build">Build my hedge <span aria-hidden="true">→</span></button></div>
+      <div class="chips" id="chips"><span>Try</span></div>
+    </div>
+    <div class="pane" id="pane-books" role="tabpanel" aria-labelledby="tab-books" hidden>
+      <div class="files">
+        <label>Ledger CSV<span>Date, Description, Amount. Currency and category columns help.</span><input type="file" id="f-ledger" accept=".csv,text/csv"></label>
+        <label>Forecast CSV <span>Optional: 12 months, one row per month.</span><input type="file" id="f-forecast" accept=".csv,text/csv"></label>
+      </div>
+      <div class="composer-foot"><span class="hint">Read in your browser. Nothing is uploaded.</span><span class="grow" id="books-status" aria-live="polite"></span>
+        <button class="btn primary" id="btn-books">Build from my books <span aria-hidden="true">→</span></button></div>
+    </div>
+  </div>
+  <button class="strip" id="btn-nimbus"><span class="tag">5 YRS</span><span class="grow"><b>See it on real-shaped books</b><br><small>Nimbus Home Goods, a cross-border seller: 9,065 ledger lines and a 12-month forecast</small></span><span aria-hidden="true">▶</span></button>
+  <div class="tape" id="tape" aria-label="Kalshi markets Argent reads"></div>
+</div></section>
+
+<section class="result" id="result" aria-labelledby="r-title"><div class="wrap">
+  <div class="rhead"><div><p class="eyebrow" id="r-eyebrow">Business risk</p><h2 id="r-title"></h2><div class="rsource" id="r-source"></div></div><p id="r-explain"></p></div>
+  <div class="stats" id="r-stats"></div>
+  <div class="sizer" id="r-sizer"></div>
+  <div class="worlds" id="r-worlds"></div>
+  <div class="cta" id="r-cta"></div>
+  <div id="r-orders"></div>
+  <div class="year" id="r-year"></div>
+  <div class="others" id="r-others"></div>
+</div></section>
+
+<section class="band" id="how"><div class="wrap">
+  <img class="logo" src="assets/argent_research_logo_stacked_dark.svg" alt="" width="260" height="64">
+  <p class="eyebrow">How it works</p><h2>Three steps. Both worlds.</h2>
+  <ol class="steps">
+    <li><b>01</b><h3>Say what could hurt</h3><p>One sentence with a number, or your bookkeeping export. From books, Argent finds the exposures itself: duties, freight, fuel, rates, currency.</p></li>
+    <li><b>02</b><h3>Price the closest contract</h3><p>Argent reads the Kalshi strike ladder, sizes contracts to shrink the swing in your year under each way your books say you might act, and walks the live order book for the real cost and fees.</p></li>
+    <li><b>03</b><h3>See right and wrong</h3><p>What you pay today, what comes back if the event lands, your cash if it doesn't, and with books, your whole year with and without the hedge.</p></li>
+  </ol>
+</div></section>
+
+<section class="examples" id="examples"><div class="wrap">
+  <div class="exhead"><div><p class="eyebrow">Worked examples</p><h2>Find a business like yours.</h2></div><p class="muted" style="max-width:44ch">Every number below is computed from the same Kalshi snapshot as your result. The businesses are fictional.</p></div>
+  <div class="exgrid"><ol class="exlist" id="exlist"></ol><article class="excard" id="excard" aria-live="polite"></article></div>
+</div></section>
+
+<section class="missing" id="missing"><div class="wrap">
+  <div class="cols"><div><p class="eyebrow">Missing markets</p><h2>No contract yet. The risk is still real.</h2></div>
+    <p class="muted">When nothing on Kalshi fits, Argent says so and shows what would have to exist. These gaps come straight out of the worked examples.</p></div>
+  <div class="mlist" id="mlist"></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <img src="assets/argent_research_logo_horizontal_small_dark.svg" alt="Argent Research" width="225" height="26">
+  <p>Argent Research, all-weather risk management. This MVP doesn't hold money, place trades or give investment advice; any order happens on Kalshi. Not affiliated with Kalshi.</p>
+  <p id="foot-snap"></p>
+  <p class="draft">Working draft</p>
+</div></footer>
+<script src="data/kalshi_snapshot.js"></script>
+<script src="data/nimbus_ledger.js"></script>
+<script src="data/nimbus_forecast.js"></script>
+<script>
+(function(){'use strict';
+const $=s=>document.querySelector(s);
+const SNAP=window.KALSHI_SNAPSHOT;
+const NS='http://www.w3.org/2000/svg';
+const svgEl=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const q in a)e.setAttribute(q,a[q]);if(p)p.appendChild(e);return e;};
+const money=v=>(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-US');
+const km=v=>{const a=Math.abs(v),s=v<0?'−':'';return a>=1e6?s+'$'+(a/1e6).toFixed(2)+'M':a>=1e4?s+'$'+Math.round(a/1e3)+'k':a>=1e3?s+'$'+(a/1e3).toFixed(1)+'k':s+'$'+Math.round(a);};
+const skm=v=>(v>0?'+':'')+km(v);
+const pct=(v,d=0)=>(v*100).toFixed(d)+'%';
+const mlabel=p=>{const [y,m]=p.split('-');return new Date(+y,+m-1,1).toLocaleString('en-US',{month:'short',year:'numeric'});};
+const mshort=p=>{const [y,m]=p.split('-');return new Date(+y,+m-1,1).toLocaleString('en-US',{month:'short'})+' ’'+y.slice(2);};
+const addMonths=(p,n)=>{let [y,m]=p.split('-').map(Number);m+=n;while(m>12){m-=12;y++;}while(m<1){m+=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- CSV, ledger, buckets, forecast ---------- */
+function parseCSV(text){ const rows=[];let row=[],f='',q=false;
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; } else f+=ch; }
+    else if(ch==='"') q=true; else if(ch===','){row.push(f);f='';}
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n')i++; row.push(f);rows.push(row);row=[];f=''; } else f+=ch; }
+  if(f.length||row.length){row.push(f);rows.push(row);} return rows.filter(r=>r.length>1||(r.length===1&&r[0]!=='')); }
+const norm=s=>String(s).trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+const ALIASES={date:['date','transaction_date','posted_date','post_date','booking_date','value_date'],description:['description','memo','details','narrative'],
+  amount:['amount','amount_usd','net_amount','transaction_amount'],debit:['debit','withdrawal','money_out','paid_out'],credit:['credit','deposit','money_in','paid_in'],
+  currency:['original_currency','invoice_currency','currency','ccy'],orig:['original_amount','invoice_amount','foreign_amount'],category:['category','expense_category','account_name','gl_account']};
+function parseDate(v){ const s=String(v).trim(); let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if(m){ const y=m[3].length===2?2000+ +m[3]:+m[3]; return new Date(y,+m[1]-1,+m[2]); } const d=new Date(s); return isNaN(d)?null:d; }
+function parseAmount(v){ if(v==null)return NaN; let t=String(v).trim(); if(!t)return NaN; let s=1; const u=t.toUpperCase();
+  if(u.endsWith('CR'))t=t.slice(0,-2); else if(u.endsWith('DR')){s=-1;t=t.slice(0,-2);} if(t.startsWith('(')&&t.endsWith(')')){s=-s;t=t.slice(1,-1);}
+  t=t.replace(/[,$\s]|usd/gi,''); if(t.startsWith('-')){s=-s;t=t.slice(1);} const n=parseFloat(t); return isNaN(n)?NaN:s*n; }
+function loadLedger(text){ const rows=parseCSV(text); if(rows.length<2) throw new Error('The ledger file is empty.');
+  const h=rows[0].map(norm), col={};
+  for(const k in ALIASES){ for(const a of ALIASES[k]){ const i=h.indexOf(a); if(i>=0&&!Object.values(col).includes(i)){col[k]=i;break;} } }
+  if(col.date==null) throw new Error('No date column found. Name it Date.');
+  if(col.amount==null&&col.debit==null&&col.credit==null) throw new Error('No amount column found. Name it Amount, or use Debit and Credit.');
+  const out=[];
+  for(const r of rows.slice(1)){ const d=parseDate(r[col.date]); if(!d)continue;
+    let amt=col.amount!=null?parseAmount(r[col.amount]):(Math.abs(parseAmount(r[col.credit])||0)-Math.abs(parseAmount(r[col.debit])||0));
+    if(!amt||isNaN(amt))continue;
+    out.push({month:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,day:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,desc:col.description!=null?r[col.description]:'',amount:amt,
+      ccy:(col.currency!=null&&r[col.currency])?String(r[col.currency]).toUpperCase():'USD',orig:col.orig!=null?parseAmount(r[col.orig]):NaN,cat:col.category!=null?r[col.category]:''}); }
+  if(!out.length) throw new Error('No rows with a readable date and amount.'); return out; }
+const RULES=[['nonop',/transfer|loan (proceeds|repayment|advance|payment)|working capital advance|owner|capital contribution|distribution/],
+  ['supplier',/inventory|supplier|purchase order|cost of goods|cogs|po#/],['duties',/dut(y|ies)|tariff|customs/],['freight',/freight|forwarding|ocean|air freight/],
+  ['interest',/interest (charge|expense)|finance charge/],['refunds',/refund|chargeback/],['ads',/advertis|facebk|\bads\b/],['revenue',/sales|settlement|payout|revenue|receipt/]];
+function bucketOf(t){ const s=(t.cat+' '+t.desc).toLowerCase(); if(t.ccy==='CNY'&&t.amount<0) return 'supplier';
+  for(const [b,re] of RULES){ if(re.test(s)){ if(b==='revenue'&&t.amount<0)continue; if(b==='refunds'&&t.amount>0)continue; return b; } } return t.amount>0?'revenue':'opex'; }
+function monthly(ledger){ const m={}; for(const t of ledger){ const b=bucketOf(t), r=(m[t.month]=m[t.month]||{}); r[b]=(r[b]||0)+t.amount;
+    if(b==='supplier'&&t.ccy==='CNY') r.cnyUSD=(r.cnyUSD||0)-t.amount; } return m; }
+const COST_KEYS=['supplier','duties','freight','interest','refunds','ads','opex'];
+function forecastFromModule(rows){ return rows.map(r=>({month:r.month,supplier:r['Inventory']||0,duties:r['Duties & tariffs']||0,freight:r['Freight']||0,interest:r['Interest']||0,
+  refunds:r['Refunds']||0,ads:r['Advertising']||0,revenue:r['Total inflows']||0,opex:(r['Drayage']||0)+(r['3PL']||0)+(r['People']||0)+(r['Overheads']||0)+(r['Taxes']||0),
+  tpl:r['3PL']||0,net:r['Net operating cash flow'],revLo:r['Inflows (band low)'],revHi:r['Inflows (band high)']})); }
+function forecastFromCSV(text){ const rows=parseCSV(text), h=rows[0].map(c=>c.trim()||'month');
+  const recs=rows.slice(1).map(r=>{const o={};h.forEach((c,i)=>o[c]=isNaN(parseFloat(r[i]))?r[i]:parseFloat(r[i]));return o;});
+  if(!recs.length||!recs[0].month) throw new Error('The forecast file needs a month column (YYYY-MM).'); return forecastFromModule(recs); }
+function naiveForecast(M){ const ms=Object.keys(M).sort(); if(ms.length<13) throw new Error('Without a forecast file the desk needs at least 13 months of history.');
+  const last=ms[ms.length-1], keys=['revenue',...COST_KEYS];
+  const tot=(a,b,k)=>ms.filter(x=>x>=a&&x<=b).reduce((s,x)=>s+Math.abs(M[x][k]||0),0);
+  const g=k=>{const a=tot(addMonths(last,-11),last,k),b=tot(addMonths(last,-23),addMonths(last,-12),k);return b>0?Math.max(-.5,Math.min(1,a/b-1)):0;};
+  const out=[]; for(let i=1;i<=12;i++){ const m=addMonths(last,i), r={month:m}; for(const k of keys) r[k]=Math.abs(M[addMonths(m,-12)]?.[k]||0)*(1+g(k));
+    r.net=r.revenue-COST_KEYS.reduce((s,k)=>s+r[k],0); out.push(r);} return out; }
+
+/* ---------- market helpers ---------- */
+function fairYes(m){ const bid=m.yes_bid_dollars||0, ask=(m.yes_ask_dollars&&m.yes_ask_dollars>0)?m.yes_ask_dollars:1;
+  if(bid>0&&ask<1&&ask-bid<=0.25) return (bid+ask)/2; if(bid<=0&&ask<1&&ask<=0.25) return ask/2; if(bid>0&&ask>=1&&bid>=0.75) return (bid+1)/2; return null; }
+function isotonic(v){ const b=[]; for(const x of v){ b.push([x,1]); while(b.length>1&&b[b.length-2][0]/b[b.length-2][1]<b[b.length-1][0]/b[b.length-1][1]){const [s,c]=b.pop();b[b.length-1][0]+=s;b[b.length-1][1]+=c;} }
+  const o=[]; for(const [s,c] of b) for(let i=0;i<c;i++)o.push(s/c); return o; }
+function ladderPoints(ms){ const pts={}; for(const m of ms){ const q=fairYes(m); if(q==null||m.floor_strike==null)continue; (pts[m.floor_strike]=pts[m.floor_strike]||[]).push(q); }
+  const xs=Object.keys(pts).map(Number).sort((a,b)=>a-b); const ys=isotonic(xs.map(x=>pts[x].reduce((a,b)=>a+b,0)/pts[x].length)); return xs.map((x,i)=>[x,ys[i]]); }
+// One event's 'greater' strike ladder, low to high (the event with the most strikes), so strikes for different dates never mix
+function ladderMarkets(series){ const by={}; for(const m of SNAP.markets[series]||[]) if((m.strike_type||'').startsWith('greater')&&m.floor_strike!=null) (by[m.event_ticker]=by[m.event_ticker]||[]).push(m);
+  return (Object.values(by).sort((x,y)=>y.length-x.length)[0]||[]).sort((x,y)=>x.floor_strike-y.floor_strike); }
+function fillFromBook(opp,n,limit){ let rem=n,filled=0,cost=0; for(const [bp,sz] of [...opp].sort((a,b)=>b[0]-a[0])){ if(rem<=1e-9)break; const price=Math.round((1-bp)*10000)/10000;
+  if(price>limit+1e-9)break; const take=Math.min(rem,sz); filled+=take; cost+=take*price; rem-=take; } return {filled,cost}; }
+const feeOf=(n,p)=>n>0?Math.ceil(0.07*n*p*(1-p)*100)/100:0;
+const settleMonth=m=>{ const a=m.close_time||'', b=m.expected_expiration_time||''; return (a>b?a:b).slice(0,7); };
+// restingFree: Kalshi charges taker fees only on orders matched on arrival; resting orders on 'quadratic' series pay none (fee schedule, 5 Feb 2026)
+function priceLeg(m,side,n,markup,bookOnly,restingFree){ const bid=m.yes_bid_dollars||0, ask=(m.yes_ask_dollars&&m.yes_ask_dollars>0)?m.yes_ask_dollars:1, fy=fairYes(m);
+  const p=side==='yes'?fy:1-fy, best=side==='yes'?ask:(bid>0?1-bid:1), limit=Math.min(0.99,Math.max(best,p+markup));
+  const book=SNAP.books[m.ticker];
+  let f; if(book) f=fillFromBook(side==='yes'?book.no:book.yes,n,limit);
+  else { const top=side==='yes'?(m.yes_ask_size_fp||0):(m.yes_bid_size_fp||0), take=best<=limit+1e-9?Math.min(n,top):0; f={filled:take,cost:take*best}; }
+  let nn=n, premium=f.cost+(n-f.filled)*limit; if(bookOnly){ nn=Math.floor(f.filled); premium=f.filled>0?f.cost*nn/f.filled:0; }
+  const avg=nn>0?premium/nn:limit, fee=restingFree?feeOf(Math.min(f.filled,nn),f.filled>0?f.cost/f.filled:limit):feeOf(nn,avg);
+  return {m,side,need:n,n:nn,onBook:Math.min(f.filled,n),p,best,limit,avg,premium,fee,settle:settleMonth(m)}; }
+
+/* ---------- random numbers ---------- */
+function mulberry(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function Phi(z){ const t=1/(1+0.2316419*Math.abs(z)), d=0.3989423*Math.exp(-z*z/2); const p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z>0?1-p:p; }
+const N=20000;
+const Z=(()=>{ const r=mulberry(20260913), g=()=>{let u=0,v=0;while(u===0)u=r();while(v===0)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const o={}; for(const k of ['tI','tE','fI','fE','rI','rE','cny','oth']){ o[k]=new Float64Array(N); for(let i=0;i<N;i++) o[k][i]=g(); } return o; })();
+const U=z=>Math.min(1-1e-9,Math.max(1e-9,Phi(z)));
+
+/* ---------- contract terms, public quotes and market curves ---------- */
+// Position accountability is a loss level (Rulebook v1.29 ch.1); above it Kalshi may ask about the position and require a cut (Rule 5.18).
+// TARIFFRATE and POLITICALSTAT terms: $25,000 per strike. NBERRECSS: hard Position Limit $25,000. ECONSTAT (SCFI): 7,000,000 contracts.
+const TERMS={KXTARIFFRATEPRC:{palUSD:25000},KXHORMUZNORM:{palUSD:25000},KXRECSSNBER:{palUSD:25000,hard:true},KXSCFI:{palN:7e6}};
+// Public spot quotes the page starts from; the user can overwrite both
+const QUOTES={rateNow:{v:7352,src:'Drewry World Container Index, 10 Sep 2026'},scfiNow:{v:3662,src:'Shanghai Shipping Exchange, 11 Sep 2026'}};
+// Public record: the general (country-wide) tariff on Chinese imports as announced by the White House: 10% from 4 Feb 2025, 20% from 4 Mar,
+// 30% from 5 Apr (the 10% reciprocal baseline), 104% on 9 Apr, 145% from 10 Apr, 30% from the Geneva cut on 14 May, 20% from 10 Nov 2025.
+// Argent reads the books against it (which rates you kept shipping through, which you waited out); it stops before the February 2026 court
+// ruling on these duties and is never used as today's rate.
+const GENERAL={steps:[['2025-02-04',10],['2025-03-04',20],['2025-04-05',30],['2025-04-09',104],['2025-04-10',145],['2025-05-14',30],['2025-11-10',20]],end:'2026-02-19'};
+const DAY=864e5, TODAY=new Date(SNAP.fetched_at);
+const dayNum=s=>Date.UTC(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10))/DAY, isoDay=d=>new Date(d*DAY).toISOString().slice(0,10);
+const daysIn=p=>{ const [y,m]=p.split('-').map(Number); return new Date(Date.UTC(y,m,0)).getUTCDate(); };
+const monthStart=p=>{ const [y,m]=p.split('-').map(Number); return new Date(Date.UTC(y,m-1,1)); };
+// S(x)=P(value ≥ x): fair mids at the strikes, falling log-linearly between strikes, from 1 one strike-step below the first,
+// and past the last strike at the last step's rate, truncated at cap (the top bucket keeps its market chance)
+function makeCurve(pts,cap){ return {x:[Math.max(0,2*pts[0][0]-pts[1][0]),...pts.map(p=>p[0])],s:[1,...pts.map(p=>p[1])],cap}; }
+function invCurve(c,u){ let t=1-u; const {x,s}=c, n=x.length, lin=(j,t)=>{ const r=s[j]/s[j-1]; return r>0&&r<1?Math.log(t/s[j-1])/Math.log(r):(s[j-1]-t)/(s[j-1]-s[j]); };
+  for(let j=1;j<n;j++) if(t>s[j]) return x[j-1]+lin(j,t)*(x[j]-x[j-1]);
+  const r=s[n-1]/s[n-2], w=x[n-1]-x[n-2]; if(!(r>0&&r<1)) return x[n-1]+(1-t/s[n-1])*(c.cap-x[n-1]);
+  const sCap=s[n-1]*Math.pow(r,(c.cap-x[n-1])/w); t=sCap+t*(s[n-1]-sCap)/s[n-1]; return x[n-1]+Math.log(t/s[n-1])/Math.log(r)*w; }
+function curveFor(r){ const v=parseFloat(state.a[r.key].view), c=r.curve; if(isNaN(v)||!r.legsDef.length) return c;   // a user view on the first strike rescales the curve
+  const k=c.x.indexOf(r.legsDef[0].K), sK=c.s[k], t=Math.min(0.99,Math.max(0.01,v/100));
+  return {...c,s:c.s.map((s,i)=>i===0?1:i>=k?s*t/sK:1-(1-s)*(1-t)/(1-sK))}; }
+const corr=(a,b)=>{ const n=a.length; if(n<6) return -1; const ma=a.reduce((s,x)=>s+x,0)/n, mb=b.reduce((s,x)=>s+x,0)/n; let ab=0,aa=0,bb=0;
+  for(let i=0;i<n;i++){ ab+=(a[i]-ma)*(b[i]-mb); aa+=(a[i]-ma)**2; bb+=(b[i]-mb)**2; } return aa&&bb?ab/Math.sqrt(aa*bb):-1; };
+function lagOf(M,k){ const ms=Object.keys(M).sort().slice(-36); let best=0,bc=-2;   // months by which bucket k follows supplier payments
+  for(let L=0;L<=3;L++){ const a=[],b=[]; for(const m of ms){ const p=addMonths(m,-L); if(M[p]){ a.push(M[m][k]||0); b.push(M[p].supplier||0); } } const c=corr(a,b); if(c>bc){ bc=c; best=L; } } return best; }
+
+/* ---------- ledger evidence ---------- */
+// Duty level now vs the forecast's 12-month average: mean duty per ocean customs entry in the ledger's last month ÷ its 12-month mean, per HTS code.
+function dutyRunRate(ledger,l12){ const last=l12[l12.length-1], inL=new Set(l12), by={};
+  for(const t of ledger){ const c=(t.desc.match(/HTS\s*([\d.]+)/i)||[])[1]; if(!c||t.amount>=0||!inL.has(t.month)||bucketOf(t)!=='duties'||/\bair\b/i.test(t.desc)) continue;
+    const g=by[c]=by[c]||{n:0,s:0,nL:0,sL:0}; g.n++; g.s-=t.amount; if(t.month===last){ g.nL++; g.sL-=t.amount; } }
+  let w=0,x=0,codes=0; for(const c in by){ const g=by[c]; if(g.nL){ w+=g.s; x+=g.sL/g.nL*g.n; codes++; } }
+  return {ratio:w>0?Math.min(1.6,Math.max(0.8,x/w)):1,codes}; }
+// What the books did at each general rate on the public record (GENERAL). A spell is a stretch of the record that stays inside one Kalshi strike
+// bucket and lasts at least 14 days. Ocean bookings during it against the pace of the 90 days before: 'shipped' (at least half the pace), 'held'
+// (none when two or more were due). A spell only counts if ordinary business shows up in the books while it lasts (sales deposits at half their
+// earlier pace or more), so a hole in the ledger is never read as a pause. Also: how long goods sit at sea (days from an ocean freight invoice to the
+// last invoice quoting the same booking reference, e.g. drayage on arrival), and for the held spell the duty on entries that cleared while it lasted.
+function shipEvidence(ledger,strikes){ const isOcean=t=>t.amount<0&&bucketOf(t)==='freight'&&/ocean|container|fcl|40hq/i.test(t.cat+' '+t.desc), dn=t=>dayNum(t.day);
+  const oc=ledger.filter(isOcean), days=oc.map(dn).sort((x,y)=>x-y), rev=ledger.filter(t=>t.amount>0&&bucketOf(t)==='revenue').map(dn);
+  const ref=t=>(t.desc.match(/\b[A-Z]{2,5}\d{5,}\b/)||[])[0], seen={};
+  for(const t of ledger) if(!isOcean(t)){ const k=ref(t); if(k&&!(seen[k]>=dn(t))) seen[k]=dn(t); }
+  const lags=oc.map(t=>{ const k=ref(t); return k&&seen[k]!=null?seen[k]-dn(t):null; }).filter(x=>x!=null&&x>=7&&x<=90).sort((x,y)=>x-y);
+  let first=Infinity,last=-Infinity; for(const t of ledger){ const d=dn(t); if(d<first) first=d; if(d>last) last=d; }
+  const cnt=(A,a,b)=>{ let c=0; for(const d of A) if(d>=a&&d<b) c++; return c; }, bk=v=>strikes.filter(K=>v>=K).length, end=Math.min(last+1,dayNum(GENERAL.end)+1), spells=[];
+  let cur={from:-Infinity,lo:0,hi:0};
+  for(const [d,v] of GENERAL.steps){ const x=dayNum(d); if(bk(v)===bk(cur.lo)){ cur.lo=Math.min(cur.lo,v); cur.hi=Math.max(cur.hi,v); continue; } spells.push({...cur,to:x}); cur={from:x,lo:v,hi:v}; }
+  spells.push({...cur,to:end});
+  for(const s of spells){ s.kind='outside'; if(!(s.from-90>=first&&s.to<=end&&s.to-s.from>=14)) continue; const L=s.to-s.from;
+    s.expected=cnt(days,s.from-90,s.from)/90*L; s.bookings=cnt(days,s.from,s.to); s.active=cnt(rev,s.from,s.to)>=0.5*cnt(rev,s.from-90,s.from)/90*L;
+    s.kind=!s.active||s.expected<2?'unclear':s.bookings===0?'held':s.bookings>=0.5*s.expected?'shipped':'unclear'; }
+  const sh=spells.filter(s=>s.kind==='shipped'), hd=spells.filter(s=>s.kind==='held'), shippedMax=sh.length?Math.max(...sh.map(s=>s.hi)):null, heldMin=hd.length?Math.min(...hd.map(s=>s.lo)):null;
+  const top=sh.filter(s=>s.hi===shippedMax).sort((x,y)=>(y.to-y.from)-(x.to-x.from))[0], h=hd.find(s=>s.lo===heldMin);
+  let held=null; if(h){ const a=h.from, b=h.to, prev=days.filter(d=>d<a).pop(), next=days.find(d=>d>=b);
+    const du=ledger.filter(t=>t.amount<0&&bucketOf(t)==='duties'&&/entry/i.test(t.desc)&&!/\bair\b/i.test(t.desc)), pre=du.filter(t=>dn(t)>=a-90&&dn(t)<a), spell=du.filter(t=>dn(t)>=a&&dn(t)<b);
+    const avg=pre.length?-pre.reduce((s,t)=>s+t.amount,0)/pre.length:0, paid=-spell.reduce((s,t)=>s+t.amount,0);
+    held={lo:h.lo,hi:h.hi,from:isoDay(a),to:isoDay(b),expected:h.expected,gapFrom:prev!=null?isoDay(prev):null,gapTo:next!=null?isoDay(next):null,entries:spell.length,paid,extra:Math.max(0,paid-avg*spell.length)}; }
+  return {sea:lags.length>=10?lags[Math.floor(lags.length/2)]:null,spells:spells.map(s=>({from:isFinite(s.from)?isoDay(s.from):null,to:isoDay(s.to),lo:s.lo,hi:s.hi,kind:s.kind,bookings:s.bookings,expected:s.expected})),
+    shippedMax,shipped:top?{rate:top.hi,from:isoDay(top.from),to:isoDay(top.to),bookings:top.bookings}:null,heldMin,held}; }
+// Own-sales uncertainty (no contract): monthly sigma from the forecast band; independent months plus the error of a 24-month trend fit;
+// times the share of a sales dollar left after goods, ads, refunds and 3PL.
+function otherRisk(F){ const rev=F.reduce((s,r)=>s+r.revenue,0), vc=F.reduce((s,r)=>s+r.supplier+r.ads+r.refunds+(r.tpl||0),0), flow=rev>0?Math.min(1,Math.max(0.1,1-vc/rev)):0.5;
+  if(!(rev>0)||!F.every(r=>r.revHi>0&&r.revenue>0)) return {sd:Math.max(0,rev)*0.10*flow,flow};
+  const sig=F.reduce((s,r)=>s+Math.log(r.revHi/r.revenue),0)/F.length/1.28, w=F.map(r=>r.revenue/rev);
+  const noise=sig*Math.sqrt(w.reduce((s,x)=>s+x*x,0)), xf=w.reduce((s,x,j)=>s+x*(24+j),0), trend=sig*Math.sqrt(1/24+(xf-11.5)**2/1150);
+  return {sd:rev*Math.hypot(noise,trend)*flow,flow,sigma:sig,noise,trend}; }
+// Your borrowing rate: interest charged on working-capital advances ÷ the balance outstanding (advances and repayments in the books), last 36 months.
+// A plan's premium sits on that line from the day you pay it until the contracts settle.
+function borrowRate(ledger){ const rows=[...ledger].sort((x,y)=>x.day<y.day?-1:x.day>y.day?1:0); if(!rows.length) return null;
+  const since=addMonths(rows[rows.length-1].month,-35); let bal=0,last=null,bd=0,int=0;
+  for(const t of rows){ const s=(t.cat+' '+t.desc).toLowerCase(), d=dayNum(t.day); if(last!=null&&t.month>=since) bd+=bal*(d-last); last=d;
+    if(t.amount>0&&/loan proceeds|working capital advance|line of credit draw/.test(s)) bal+=t.amount;
+    else if(t.amount<0&&/loan repayment|advance repayment|line of credit repayment/.test(s)) bal=Math.max(0,bal+t.amount);
+    else if(t.amount<0&&t.month>=since&&bucketOf(t)==='interest') int-=t.amount; }
+  return bd>0&&int>0?{rate:Math.min(0.4,int/(bd/365)),int}:null; }
+// Freight: sd of the lane-vs-index basis plus the index path around the fixing (a bridge to it, a random walk after), for elasticity b
+function freightSdN(r,b,basisSd){ let v=0; for(const p of r.rows){ if(p.t<=0) continue; v+=(p.B*basisSd)**2;
+    for(const q of r.rows){ if(q.t<=0) continue; const lo=Math.min(p.t,q.t), hi=Math.max(p.t,q.t); v+=p.B*q.B*(b*r.sigW)**2*(hi<=r.T?lo*(r.T-hi)/r.T:lo>=r.T?lo-r.T:0); } }
+  return Math.sqrt(v); }
+const freightLoss=(r,i,v,b,sdN)=>{ const x=Math.log(v/r.ref); let s=0; for(const q of r.rows) s+=q.B*(Math.exp(b*q.a*x)-1); return s+Math.exp(b*x)*sdN*Z.fE[i]; };
+
+/* ---------- state ---------- */
+const state={ledger:null,M:null,F:null,fsrc:'',name:'',risks:[],sim:null,res:null,known:null,
+  a:{lambda:0.5,markup:0,bookOnly:false,palCap:true,betCap:'view',countLater:false,floor:-100000,shortCost:0,cnyVol:0.04,sdOther:null,dutyRatio:null,sizes:{},shape:{},
+     tariff:{view:'',share:null,ref:null,holdAt:null},freight:{view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2},recession:{view:'',loss:0,inShare:0.5}}};
+
+/* ---------- risks from the data and the snapshot ---------- */
+function buildRisks(){ const F=state.F, M=state.M, a=state.a, months=F.map(r=>r.month), end=months[months.length-1];
+  const sumF=k=>F.reduce((s,r)=>s+(r[k]||0),0), l12=Object.keys(M).sort().slice(-12), hs=k=>l12.reduce((s,m)=>s+(M[m][k]||0),0);
+  const cost=(m,k)=>{ const i=months.indexOf(m); return i>=0?(F[i][k]||0):-(M[m]?.[k]||0); };
+  const dr=dutyRunRate(state.ledger,l12), risks=[], known={dutyLedger:dr.ratio,dutyCodes:dr.codes,dutyMonth:l12[l12.length-1],dutyRatio:a.dutyRatio!=null?a.dutyRatio:dr.ratio,freight:0};
+  known.duty=sumF('duties')*(known.dutyRatio-1);                       // duty already in force that the 12-month average misses
+  // tariff: KXTARIFFRATEPRC, general tariff on Chinese imports on 1 Jan 2027
+  const tms=ladderMarkets('KXTARIFFRATEPRC');
+  if(-hs('duties')>0&&tms.length>=3){
+    const pts=ladderPoints(tms); let mref=pts[0][0]; for(const [K,S] of pts) if(S>=0.5) mref=K;                // the market's no-change bucket
+    const ref=a.tariff.ref!=null&&isFinite(a.tariff.ref)?Math.max(0,+a.tariff.ref):mref, curve=makeCurve(pts,1.5*pts[pts.length-1][0]);   // today's rate, unless the user sets it; cap 150%: the highest general rate so far was 145% (Apr 2025)
+    let refLo=curve.x[0]; for(const K of curve.x) if(K<=ref) refLo=K;                                            // draws in today's bucket [refLo, refHi) mean no change
+    const above=K=>(pts.find(p=>p[0]>K)||[Infinity])[0], lag=lagOf(M,'duties'), days=Math.max(1,Math.round((new Date(tms[0].close_time)-TODAY)/DAY));
+    const cnyShare=Math.min(1,hs('cnyUSD')/Math.max(1,-hs('supplier'))); if(a.tariff.share==null) a.tariff.share=cnyShare>0.5?1:0.5;
+    // goods clear customs `lag` months after the supplier is paid; a new rate starts on a day spread evenly between today and 1 Jan and lasts to the window's end.
+    // cum[d] = customs value clearing from day d (0 = today) to the window's end
+    const cvDay=[]; for(let t=TODAY.getTime();;t+=DAY){ const m=new Date(t).toISOString().slice(0,7); if(m>end) break; cvDay.push(cost(addMonths(m,-lag),'supplier')/daysIn(m)); }
+    const cum=new Float64Array(cvDay.length+1); for(let d=cvDay.length-1;d>=0;d--) cum[d]=cum[d+1]+cvDay[d]*a.tariff.share;
+    const cvAfter=cum.slice(0,days+1);
+    // What you would do at a higher rate. A rate you wait out: goods already at sea when it starts pay it, new shipments wait until it comes down.
+    // The books bracket the rate from which you wait: above the highest rate you kept shipping through, at or below the lowest you waited out.
+    // tLo = the first strike above the rate you shipped through; tHi = the highest strike at or below the rate you waited out (Infinity: never seen).
+    // Unless you pick one, the plan is sized to hold up at both ends (optimize), and the numbers shown are the first (tLo, the smaller extra duty).
+    const ev=shipEvidence(state.ledger,pts.map(p=>p[0])), sea=ev.sea||30, lo=Math.max(ref,ev.shippedMax!=null?ev.shippedMax:ref);
+    const tLo=Math.min(above(lo),ev.heldMin!=null?ev.heldMin:Infinity), tHi=ev.heldMin==null?Infinity:pts.reduce((t,[K])=>K>lo&&K<=ev.heldMin?K:t,ev.heldMin);
+    const ch=a.tariff.holdAt, scen=ch!=null&&isFinite(+ch)?[+ch>0?+ch:Infinity]:tLo<tHi?[tLo,tHi]:[tHi];
+    const legsDef=pts.filter(([K,S])=>K>ref&&S>=0.02&&S<=0.98).map(([K])=>({m:tms.find(x=>x.floor_strike===K),side:'yes',K,nFull:0,unit:0}));
+    const st=((SNAP.settled||{}).KXTARIFFRATEPRC)||null;
+    risks.push({key:'tariff',kind:'ladder',series:'KXTARIFFRATEPRC',title:'Tariffs on Chinese imports rise',ref,refLo,refHi:above(ref),mref,mrefHi:above(mref),lag,days,cum,cvAfter,
+      scen,tLo,tHi,chosen:ch!=null,sea,ev,settled:st,expo:cvAfter.reduce((s,x)=>s+x,0)/(days+1),settle:settleMonth(tms[0]),close:tms[0].close_time,curve,legsDef,unit:'%'}); }
+  // freight: today's container quote re-prices the forecast; the KXSCFI end-2026 ladder carries the risk around it
+  const fz=a.freight, fr=state.ledger.filter(t=>t.amount<0&&l12.includes(t.month)&&bucketOf(t)==='freight'), oc=fr.filter(t=>/ocean|container|fcl|40hq/i.test(t.cat+' '+t.desc));
+  const sms=ladderMarkets('KXSCFI');
+  if(oc.length&&sumF('freight')>0&&fz.rateNow>0){ const rateOld=-oc.reduce((s,t)=>s+t.amount,0)/oc.length, share=oc.reduce((s,t)=>s+t.amount,0)/fr.reduce((s,t)=>s+t.amount,0);
+    Object.assign(known,{rateOld,boxes:sumF('freight')*share/rateOld}); known.freight=known.boxes*(fz.rateNow-rateOld);
+    if(sms.length>=3&&fz.scfiNow>0){ const pts=ladderPoints(sms), curve=makeCurve(pts,2*pts[pts.length-1][0]), T=(new Date(sms[0].close_time)-TODAY)/DAY/7;
+      const sigW=Math.log(invCurve(curve,0.75)/invCurve(curve,0.25))/1.349/Math.sqrt(T);        // index volatility per √week implied by the ladder
+      const rows=F.map(r=>{ const t=((monthStart(r.month)-TODAY)/DAY+7)/7; return {B:r.freight*share/rateOld*fz.rateNow,t,a:Math.min(1,Math.max(0,t/T))}; });   // sails ~8 days before it is paid
+      let refLo=pts[0][0]; for(const [K] of pts) if(K<=fz.scfiNow) refLo=K;
+      // strikes from the one just below today's index: unlike a tariff rate, the index has no 'no change' outcome, and a near-the-money strike
+      // (often the tightest quote) pays in every year freight ends near or above today, including a few where it ends slightly cheaper
+      const legsDef=pts.filter(([K,S])=>K>=refLo&&S>=0.02&&S<=0.98).map(([K])=>({m:sms.find(x=>x.floor_strike===K),side:'yes',K,nFull:0,unit:0}));
+      const fr={key:'freight',kind:'ladder',series:'KXSCFI',title:'Container freight rises further',ref:fz.scfiNow,refLo,refHi:Infinity,curve,rows,sigW,T,
+        settle:settleMonth(sms[0]),close:sms[0].close_time,legsDef,unit:''};
+      fr.sdN=freightSdN(fr,fz.beta,fz.basisSd); risks.push(fr); } }
+  // recession: no ledger evidence sizes the hit, so nothing is bought unless the user enters one
+  const rm=(SNAP.markets.KXRECSSNBER||[]).find(m=>m.ticker==='KXRECSSNBER-27');
+  if(rm&&fairYes(rm)!=null){ const loss=Math.max(0,+a.recession.loss||0);
+    risks.push({key:'recession',kind:'binary',series:'KXRECSSNBER',ticker:rm.ticker,title:'A recession hits sales',pMkt:fairYes(rm),hi:loss,lo:0,inShare:a.recession.inShare,settle:settleMonth(rm),
+      legsDef:loss>0?[{m:rm,side:'yes',nFull:Math.floor(loss),unit:Math.floor(loss)}]:[]}); }
+  for(const r of risks){ r.si=months.indexOf(r.settle); r.inWindow=r.settle>=months[0]&&r.settle<=end; }
+  state.risks=risks; state.known=known;
+  const cnyShare=Math.min(1,hs('cnyUSD')/Math.max(1,-hs('supplier')));
+  state.cny={expo:sumF('supplier')*cnyShare,share:cnyShare}; state.cny.sd=state.cny.expo*a.cnyVol;
+  const o=otherRisk(F); state.other={...o,sd:a.sdOther!=null?a.sdOther:o.sd};
+  const br=borrowRate(state.ledger); state.fund={rate:a.fundRate!=null?Math.max(0,a.fundRate):(br?br.rate:0),ledger:br?br.rate:null};
+  state.forecastNet=F.reduce((s,r)=>s+(r.net!=null?r.net:(r.revenue||0)-COST_KEYS.reduce((t,k)=>t+(r[k]||0),0)),0);
+  state.base=state.forecastNet-known.duty-known.freight;
+  for(const r of risks){ if(a.sizes[r.key]==null) a.sizes[r.key]=0; if(!a.shape[r.key]||a.shape[r.key].length!==r.legsDef.length) a.shape[r.key]=r.legsDef.map(()=>0); } }
+// The full ladder as multiples of each leg's search unit (legsFor sizes a leg as size x shape x unit)
+const fullShape=r=>r.legsDef.map(d=>d.unit>0?d.nFull/d.unit:0);
+function probsFor(r){ const v=parseFloat(state.a[r.key].view); return isNaN(v)?r.pMkt:Math.min(0.99,Math.max(0.01,v/100)); }
+
+/* ---------- simulation ---------- */
+// Extra duty in simulated year i at rate v: (v − today's rate) × customs value clearing from the day the new rate starts. At a rate of holdAt or more
+// you wait it out: only goods already at sea pay it (Infinity: you keep importing whatever the rate). revert>0 ends every new rate that many days after
+// the contract's date (a what-if, not the plan's assumption).
+function tariffLoss(r,i,v,holdAt,revert){ const k=Math.min(r.days,Math.floor(U(Z.tE[i])*(r.days+1))), last=r.cum.length-1, end=revert?Math.min(last,r.days+revert):last;
+  return (v-r.ref)/100*(r.cum[k]-r.cum[v>=holdAt?Math.min(end,k+r.sea):end]); }
+// One simulated set of years per tariff behaviour in r.scen (same draws; only the tariff loss differs). sim.raw, sim.loss.tariff: the first behaviour.
+function simulate(){ const sim={raw:new Float64Array(N).fill(state.base),loss:{},lossS:{},value:{},flag:{},mask:{}};
+  for(const r of state.risks){ const L=new Float64Array(N);
+    if(r.key==='tariff'){ const V=new Float64Array(N), c=curveFor(r), LS=r.scen.map(()=>new Float64Array(N));
+      for(let i=0;i<N;i++){ let v=invCurve(c,U(Z.tI[i])); if(v>=r.refLo&&v<r.refHi) v=r.ref; V[i]=v; for(let s=0;s<LS.length;s++) LS[s][i]=tariffLoss(r,i,v,r.scen[s],0); L[i]=LS[0][i]; }
+      sim.value[r.key]=V; sim.lossS[r.key]=LS; }
+    else if(r.key==='freight'){ const V=new Float64Array(N), c=curveFor(r), b=state.a.freight.beta;
+      for(let i=0;i<N;i++){ const v=invCurve(c,U(Z.fI[i])); V[i]=v; L[i]=freightLoss(r,i,v,b,r.sdN); }
+      sim.value[r.key]=V; }
+    else { const p=probsFor(r), fl=new Uint8Array(N); for(let i=0;i<N;i++){ fl[i]=U(Z.rI[i])<p?(r.inWindow||U(Z.rE[i])<r.inShare?2:1):0; L[i]=fl[i]?r.hi:r.lo; } sim.flag[r.key]=fl; }
+    sim.loss[r.key]=L; for(let i=0;i<N;i++) sim.raw[i]-=L[i]; }
+  const Lc=new Float64Array(N), Lo=new Float64Array(N);
+  for(let i=0;i<N;i++){ Lc[i]=state.cny.sd*Z.cny[i]; Lo[i]=-state.other.sd*Z.oth[i]; sim.raw[i]-=Lc[i]+Lo[i]; }
+  sim.loss.cny=Lc; sim.loss.other=Lo;
+  const tr=state.risks.find(r=>r.key==='tariff');     // the same years under each tariff behaviour: swap the first behaviour's tariff loss for the other's
+  sim.rawS=tr?tr.scen.map((h,s)=>s?Float64Array.from(sim.raw,(x,i)=>x+sim.loss.tariff[i]-sim.lossS.tariff[s][i]):sim.raw):[sim.raw];
+  state.sim=sim; for(const r of state.risks) if(r.kind==='ladder') bucketize(r); }
+const meets=(d,v)=>(d.m.strike_type==='greater_or_equal'?v>=d.K:v>d.K);
+// Per settlement bucket: market chance, average value and modelled cost under each tariff behaviour (lossS; meanLoss is the first).
+// A full ladder pays, in each bucket, the extra average cost over the bucket just below its first strike, using the larger cost across behaviours
+// and the running maximum from the first strike up (where the cost falls as the rate climbs, e.g. a rate you wait out, it keeps the higher level).
+// Each leg's search unit is the larger of its full-ladder size and its own minimum-variance size: the average cost in the years it pays minus the
+// years it does not (the most contracts that still lower the swing if it were the only leg).
+function bucketize(r){ const V=state.sim.value[r.key], LS=state.sim.lossS[r.key]||[state.sim.loss[r.key]], S=LS.length, c=curveFor(r), x=[...c.x,c.cap];
+  r.buckets=c.x.map((lo,j)=>({lo,hi:x[j+1],top:j===c.x.length-1,pMkt:c.s[j]-(c.s[j+1]||0),n:0,v:0,ls:new Array(S).fill(0)}));
+  for(let i=0;i<N;i++){ let j=c.x.length-1; while(j>0&&V[i]<c.x[j]) j--; const b=r.buckets[j]; b.n++; b.v+=V[i]; for(let s=0;s<S;s++) b.ls[s]+=LS[s][i]; }
+  for(const b of r.buckets){ b.rep=b.n?b.v/b.n:b.lo; b.lossS=b.ls.map(t=>b.n?t/b.n:0); b.meanLoss=b.lossS[0]; }
+  const avg=(bs,s)=>{ const n=bs.reduce((t,b)=>t+b.n,0); return n?bs.reduce((t,b)=>t+b.ls[s],0)/n:null; }, env=bs=>{ let m=-Infinity; for(let s=0;s<S;s++){ const v=avg(bs,s); if(v!=null&&v>m) m=v; } return isFinite(m)?m:null; };
+  const d0=r.legsDef[0], below=d0?r.buckets.filter(b=>b.hi<=d0.K):[]; let prev=below.length?(env(below.slice(-1))||0):0;
+  r.legsDef.forEach((d,k)=>{ const nx=r.legsDef[k+1]; let m=env(r.buckets.filter(b=>b.lo>=d.K&&(!nx||b.lo<nx.K))); if(m==null) m=env(r.buckets.filter(b=>b.lo>=d.K))||0;
+    d.nFull=Math.max(0,Math.round(m-prev)); prev=Math.max(prev,m);
+    const P=legPays(r,d); let uni=0; for(const L of LS){ let s1=0,n1=0,s0=0,n0=0; for(let i=0;i<N;i++){ if(P[i]){ s1+=L[i]; n1++; } else { s0+=L[i]; n0++; } } if(n1&&n0) uni=Math.max(uni,s1/n1-s0/n0); }
+    d.unit=Math.max(d.nFull,Math.round(uni)); }); }
+
+/* ---------- pricing, evaluation and sizing ---------- */
+function capOf(r,d){ const t=TERMS[r.series]||{}; if(!state.a.palCap&&!t.hard) return Infinity; if(!t.palUSD) return t.palN||Infinity;
+  let lo=0,hi=Math.ceil(t.palUSD/Math.max(0.01,d.m.yes_bid_dollars||0.01))+1; while(hi-lo>1){ const mid=(lo+hi)>>1, p=priceLeg(d.m,d.side,mid,state.a.markup,false,true); if(p.premium+p.fee<=t.palUSD) lo=mid; else hi=mid; } return lo; }
+// Interest on the premium: paid now, it sits on your borrowing line until the contract settles (the payout, if any, comes back then)
+const fundOf=(m,up)=>{ const f=state.fund, days=(new Date(m.expected_expiration_time||m.close_time)-TODAY)/DAY; return f&&f.rate>0&&up>0&&days>0?up*f.rate*days/365:0; };
+function legsFor(r,size){ const sh=state.a.shape[r.key]||[];
+  return r.legsDef.map((d,j)=>{ const cap=capOf(r,d), p=priceLeg(d.m,d.side,Math.min(cap,Math.round(size*(sh[j]??0)*(d.unit||0))),state.a.markup,state.a.bookOnly,true);
+    return {...p,K:d.K,d,cap,series:r.series,fund:fundOf(d.m,p.premium+p.fee)}; }).filter(l=>l.need>0); }
+function legPays(r,d){ const sim=state.sim, key=d.m.ticker; if(sim.mask[key]) return sim.mask[key]; const P=new Uint8Array(N);
+  if(r.kind==='ladder'){ const V=sim.value[r.key]; if(r.inWindow||state.a.countLater) for(let i=0;i<N;i++) P[i]=meets(d,V[i])?1:0; }
+  else { const fl=sim.flag[r.key]; for(let i=0;i<N;i++) P[i]=fl[i]===2||(fl[i]&&state.a.countLater)?1:0; }
+  return sim.mask[key]=P; }
+function payLookup(r,legs){ if(r.kind==='ladder') return r.buckets.map(b=>legs.reduce((s,l)=>s+(b.lo>=l.K?l.n:0),0)); return legs.reduce((s,l)=>s+l.n,0); }
+const shortfall=x=>x<state.a.floor?x-state.a.shortCost*(state.a.floor-x):x;
+function stats(arr){ const n=arr.length; let s=0,s2=0,neg=0; for(let i=0;i<n;i++){s+=arr[i];s2+=arr[i]*arr[i];if(arr[i]<0)neg++;}
+  const mean=s/n, sd=Math.sqrt(Math.max(0,s2/n-mean*mean)), c=Float64Array.from(arr).sort(), k=Math.floor(n*0.05); let t=0; for(let i=0;i<k;i++) t+=c[i];
+  return {mean,sd,p5:c[k],cvar5:t/k,p50:c[Math.floor(n*0.5)],p95:c[Math.floor(n*0.95)],pNeg:neg/n,sorted:c}; }
+function evaluate(){ const a=state.a, plan={}, pay=new Float64Array(N); let cost=0,fund=0;
+  for(const r of state.risks){ const legs=legsFor(r,a.sizes[r.key]||0), c=legs.reduce((s,l)=>s+l.premium+l.fee,0), f=legs.reduce((s,l)=>s+l.fund,0); plan[r.key]={legs,cost:c,fund:f,look:payLookup(r,legs)}; cost+=c; fund+=f;
+    for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) pay[i]+=l.n; } }
+  const out=cost+fund, cf0=new Float64Array(N), cf=new Float64Array(N), pnl=new Float64Array(N);   // cost: paid up front; fund: interest on it until settlement
+  for(let i=0;i<N;i++){ cf0[i]=shortfall(state.sim.raw[i]); cf[i]=shortfall(state.sim.raw[i]+pay[i]-out); pnl[i]=pay[i]-out; }
+  const s0=stats(cf0), bad=[], paidV=[]; let sumPaid=0,cover=0,coverBad=0;
+  for(let i=0;i<N;i++){ const back=cost>0&&pay[i]>=out-1e-6; if(pay[i]>0){ paidV.push(pay[i]); sumPaid+=pay[i]; } if(back) cover++; if(cf0[i]<=s0.p5){ bad.push(i); if(back) coverBad++; } }
+  paidV.sort((x,y)=>x-y); const paid=paidV.length;
+  // right vs wrong for the whole plan: how often nothing pays, pays less than it cost, or pays for itself (overall and in the worst 1-in-20 years);
+  // what comes back when something pays (mean and median), and in the worst 1-in-20 years; and what sinks a bad year: each component's extra loss in those years
+  const avg=(A,ix)=>ix?ix.reduce((s,i)=>s+A[i],0)/Math.max(1,ix.length):A.reduce((s,x)=>s+x,0)/A.length, tail={};
+  for(const k in state.sim.loss) tail[k]=avg(state.sim.loss[k],bad)-avg(state.sim.loss[k]);
+  const s1=stats(cf), gain=(x,y)=>(y.mean-a.lambda*y.sd)-(x.mean-a.lambda*x.sd);
+  // the same plan on the same years under each tariff behaviour the plan was sized for (scen[0] is the one shown)
+  const scen=state.sim.rawS.map((raw,s)=>{ if(!s) return {s0,s1,gain:gain(s0,s1)}; const c0=new Float64Array(N), c1=new Float64Array(N);
+    for(let i=0;i<N;i++){ c0[i]=shortfall(raw[i]); c1[i]=shortfall(raw[i]+pay[i]-out); } const x=stats(c0), y=stats(c1); return {s0:x,s1:y,gain:gain(x,y)}; });
+  state.res={plan,cost,fund,pay,cf0,cf,pnl,s0,s1,sp:stats(pnl),scen,pNoPay:1-paid/N,payWhenPaid:paid?sumPaid/paid:0,payMedWhenPaid:paid?paidV[Math.floor(paid/2)]:0,
+    pCover:cost>0?cover/N:0,pShort:cost>0?(paid-cover)/N:0,pCoverBad:cost>0&&bad.length?coverBad/bad.length:0,payBad:avg(pay,bad),tail}; }
+// The same plan and the same simulated years if tariffs behave differently from what the numbers shown assume: holdAt = the rate from which you wait a
+// new rate out (only goods at sea pay it; Infinity = you keep importing whatever the rate), revert = days after the contract's date when every new rate
+// is reversed (0 = it lasts). Stats with and without the plan, and the change in the swing-weighted score.
+// beta (optional) = how many times the index's move your container rate makes, in place of the plan's assumption. Also: how often the plan pays for
+// itself (payout ≥ premium + interest) in that case's worst 1-in-20 years without it.
+function planWhatIf(o){ const tr=state.risks.find(x=>x.key==='tariff'), fr=state.risks.find(x=>x.key==='freight'), res=state.res; if(!res) return null;
+  const tt=tr&&state.sim.value.tariff&&o.holdAt!==undefined, ff=fr&&state.sim.value.freight&&o.beta!=null&&o.beta!==state.a.freight.beta;
+  const sdN=ff?freightSdN(fr,o.beta,state.a.freight.basisSd):0, out=res.cost+(res.fund||0), lam=state.a.lambda, cf0=new Float64Array(N), cf=new Float64Array(N);
+  for(let i=0;i<N;i++){ let raw=state.sim.raw[i]; if(tt) raw+=state.sim.loss.tariff[i]-tariffLoss(tr,i,state.sim.value.tariff[i],o.holdAt,o.revert||0);
+    if(ff) raw+=state.sim.loss.freight[i]-freightLoss(fr,i,state.sim.value.freight[i],o.beta,sdN); cf0[i]=shortfall(raw); cf[i]=shortfall(raw+res.pay[i]-out); }
+  const s0=stats(cf0), s1=stats(cf); let bad=0,cov=0; for(let i=0;i<N;i++) if(cf0[i]<=s0.p5){ bad++; if(out>0&&res.pay[i]>=out-1e-6) cov++; }
+  return {...o,s0,s1,dP5:s1.p5-s0.p5,dSd:s0.sd-s1.sd,dCvar:s1.cvar5-s0.cvar5,dMean:s1.mean-s0.mean,gain:(s1.mean-lam*s1.sd)-(s0.mean-lam*s0.sd),pCoverBad:bad?cov/bad:0}; }
+function tariffWhatIf(holdAt,revert){ return state.risks.some(x=>x.key==='tariff')&&state.sim.value.tariff?planWhatIf({holdAt,revert}):null; }
+// The range the headline quotes: the plan on the same years across every tariff behaviour the books allow plus keep importing, a reversal three months
+// after the contract's date, and container rates that move 0.7×, the plan's assumption, or 0.9× the index (the spread seen since 2023)
+const BETAS=[0.7,0.9];
+function whatIfRange(){ const tr=state.risks.find(x=>x.key==='tariff'), fr=state.risks.find(x=>x.key==='freight'), res=state.res; if(!res||!(res.cost>0)) return null;
+  const hs=tr&&state.sim.value.tariff?[...new Set([...tr.scen,Infinity])].map(h=>({holdAt:h})).concat([{holdAt:tr.scen[0],revert:90}]):[{}];
+  const bs=fr&&state.sim.value.freight?[state.a.freight.beta,...BETAS.filter(b=>b!==state.a.freight.beta)]:[undefined], rows=[];
+  for(const h of hs) for(const b of bs) rows.push(planWhatIf({...h,beta:b}));
+  const lo=k=>Math.min(...rows.map(x=>x[k])), hi=k=>Math.max(...rows.map(x=>x[k]));
+  return {rows,n:rows.length,lo:lo('dP5'),hi:hi('dP5'),gainLo:lo('gain'),gainHi:hi('gain'),coverLo:lo('pCoverBad'),coverHi:hi('pCoverBad'),sdLo:lo('dSd'),sdHi:hi('dSd')}; }
+// The what-ifs the page shows: the other tariff behaviours the books allow and 'keep importing whatever the rate', then every new rate reversed
+// three months (90 days) after the contract's date under the behaviour the numbers shown assume
+function tariffWhatIfs(){ const r=state.risks.find(x=>x.key==='tariff'); if(!r||!state.res||!state.sim.value.tariff) return [];
+  const hs=[...new Set([...r.scen.slice(1),r.tLo,r.tHi,Infinity])].filter(h=>h!=null&&h!==r.scen[0]);
+  return [...hs.map(h=>({holdAt:h,revert:0,w:tariffWhatIf(h,0)})),{holdAt:r.scen[0],revert:90,w:tariffWhatIf(r.scen[0],90)}]; }
+// The plan if only part of each resting bid fills (0 = only what is on the book now, 1 = the plan), same limits and fees: cost, contracts, 12-month stats
+function partialFill(frac){ const pay=new Float64Array(N), cf=new Float64Array(N); let cost=0,fund=0,n=0;
+  for(const r of state.risks) for(const l of state.res.plan[r.key].legs){ const k=Math.floor(Math.min(l.onBook,l.n)+frac*Math.max(0,l.n-l.onBook)); if(k<1) continue;
+    const p=priceLeg(l.m,l.side,k,state.a.markup,false,true), P=legPays(r,l.d); cost+=p.premium+p.fee; fund+=fundOf(l.m,p.premium+p.fee); n+=k; for(let i=0;i<N;i++) if(P[i]) pay[i]+=k; }
+  for(let i=0;i<N;i++) cf[i]=shortfall(state.sim.raw[i]+pay[i]-cost-fund); return {cost,fund,n,s:stats(cf)}; }
+// Per-leg sizes: multiples 0-3 of each leg's search unit (steps of 0.05), within position caps, maximising the swing-weighted score (expected cash
+// − λ × typical swing). When the books allow more than one tariff behaviour (r.scen), the plan maximises the smallest score gain across them, so it
+// has to help whichever way you would act. Coordinate ascent, then moves of two legs at once where two behaviours tie (the worst case has kinks there).
+// Hedge, not bet: at Kalshi's prices every contract costs more than it is expected to pay back, so past the size that minimises your swing both the
+// average and the swing get worse, and the search never goes there. A view can make contracts worth more than they cost; then (or with betCap
+// 'always') each ladder pays no more in a settlement bucket than its largest extra cost from the first strike up, over the outcome where none pays.
+const viewOn=r=>!isNaN(parseFloat((state.a[r.key]||{}).view));
+function optimize(){ const a=state.a, G=61, step=0.05, X=state.sim.rawS.map(r=>Float64Array.from(r)), S=X.length, legs=[];
+  for(const r of state.risks) r.legsDef.forEach((d,j)=>{ if(d.unit>0) legs.push({r,d,j,P:legPays(r,d),cap:capOf(r,d),g:0}); });
+  for(const L of legs){ L.n=[]; L.c=[]; for(let g=0;g<G;g++){ const n=Math.min(L.cap,Math.round(g*step*L.d.unit)), p=n>0?priceLeg(L.d.m,L.d.side,n,a.markup,a.bookOnly,true):null; L.n.push(p?p.n:0); L.c.push(p?p.premium+p.fee+fundOf(L.d.m,p.premium+p.fee):0); } }
+  const room=L=>{ const r=L.r; if(r.kind!=='ladder'||!r.buckets||!(a.betCap==='always'||(a.betCap!=='never'&&viewOn(r)))) return Infinity;
+    const d0=r.legsDef[0], below=r.buckets.filter(b=>b.hi<=d0.K).pop(), base=below?Math.max(...below.lossS):0; let m=Infinity, run=-Infinity;
+    for(const b of r.buckets){ if(b.lo<d0.K) continue; run=Math.max(run,...b.lossS); if(b.lo<L.d.K) continue; let other=0; for(const M of legs) if(M!==L&&M.r===r&&M.d.K<=b.lo) other+=M.n[M.g];
+      m=Math.min(m,Math.max(0,run-base)-other); } return m; };
+  let cost=0; const scoreOf=(x,P,dn,c)=>{ let s=0,s2=0; for(let i=0;i<N;i++){ const v=shortfall(x[i]+(P&&P[i]?dn:0)-c); s+=v; s2+=v*v; } const m=s/N; return m-a.lambda*Math.sqrt(Math.max(0,s2/N-m*m)); };
+  const base=X.map(x=>scoreOf(x,null,0,0)), obj=(P,dn,dc)=>{ let m=Infinity; for(let s=0;s<S;s++){ const g=scoreOf(X[s],P,dn,cost+dc)-base[s]; if(g<m) m=g; } return m; };
+  const move=(L,g)=>{ const dn=L.n[g]-L.n[L.g]; if(dn) for(const x of X) for(let i=0;i<N;i++) if(L.P[i]) x[i]+=dn; cost+=L.c[g]-L.c[L.g]; L.g=g; };
+  for(let outer=0;outer<4;outer++){
+    for(let pass=0;pass<8;pass++){ let moved=false;
+      for(const L of legs){ const rm=room(L); let best=L.g, bs=-Infinity; for(let g=0;g<G;g++){ if(g>0&&L.n[g]>rm+0.5) continue; const v=obj(L.P,L.n[g]-L.n[L.g],L.c[g]-L.c[L.g]); if(v>bs+1e-6){ bs=v; best=g; } }
+        if(best!==L.g){ move(L,best); moved=true; } }
+      if(!moved) break; }
+    if(S<2) break;
+    let cur=obj(null,0,0), moved=false;
+    for(let p=0;p<legs.length;p++) for(let q=p+1;q<legs.length;q++) for(const [da,db] of [[1,-1],[-1,1],[1,1],[-1,-1]]){ const A=legs[p], B=legs[q], ga=A.g+da, gb=B.g+db;
+      if(ga<0||gb<0||ga>=G||gb>=G||(ga>0&&A.n[ga]>room(A)+0.5)||(gb>0&&B.n[gb]>room(B)+0.5)) continue; const ka=A.g, kb=B.g; move(A,ga); move(B,gb); const v=obj(null,0,0);
+      if(v>cur+1e-6){ cur=v; moved=true; } else { move(B,kb); move(A,ka); } }
+    if(!moved) break; }
+  for(const r of state.risks){ a.sizes[r.key]=0; a.shape[r.key]=r.legsDef.map(()=>0); }
+  for(const L of legs){ if(L.g) a.sizes[L.r.key]=1; a.shape[L.r.key][L.j]=L.g*step; } }
+
+/* ================= Argent: catalog, ladders, hedges ================= */
+const MARKUP=0.03;
+const SERIES_INFO={
+  KXTARIFFRATEPRC:{kind:'ladder',ge:true,step:null,label:'General tariff rate on Chinese imports on 1 Jan 2027',noun:'the tariff on Chinese imports',short:'Tariff on China, 1 Jan',fmt:v=>`${+(+v).toFixed(1)}%`},
+  KXDIESELMON:{kind:'ladder',step:null,label:'US average diesel price on 30 Sep 2026',noun:'diesel',short:'Diesel, 30 Sep',fmt:v=>`$${(+v).toFixed(2)}`},
+  KXAAAGASM:{kind:'ladder',step:null,label:'US average gasoline price on 30 Sep 2026',noun:'gasoline',short:'Gasoline, 30 Sep',fmt:v=>`$${(+v).toFixed(2)}`},
+  KXNATGASMON:{kind:'ladder',step:null,label:'Henry Hub natural gas price on 30 Sep 2026',noun:'natural gas',short:'Natural gas, 30 Sep',fmt:v=>`$${(+v).toFixed(2)}`},
+  KXPOWERKWH:{kind:'ladder',step:null,label:'US average electricity price for September 2026 (BLS)',noun:'electricity prices',short:'Electricity, Sep',fmt:v=>`${(+v).toFixed(1)}¢/kWh`},
+  KXRAINNYCM:{kind:'ladder',step:null,label:'Central Park rainfall in September 2026',noun:'September rain in Central Park',short:'NYC rain, Sep',fmt:v=>`${+(+v).toFixed(1)} in`},
+  KXFED:{kind:'ladder',step:0.25,event:'KXFED-26DEC',label:'Fed funds upper bound after the December 2026 meeting',noun:'the Fed rate',short:'Fed rate, Dec',fmt:v=>`${(+v).toFixed(2)}%`},
+  KXCPIYOY:{kind:'ladder',step:0.1,label:'CPI inflation for the 12 months to September 2026',noun:'inflation',short:'CPI, Sep',fmt:v=>`${(+v).toFixed(1)}%`},
+  KXU3:{kind:'ladder',step:0.1,event:'KXU3-26NOV',label:'US unemployment rate for November 2026',noun:'unemployment',short:'Unemployment, Nov',fmt:v=>`${(+v).toFixed(1)}%`},
+  KXSCFI:{kind:'ladder',step:null,label:'Shanghai Containerized Freight Index, final 2026 print',noun:'container freight rates',short:'Freight index, end-2026',fmt:v=>Math.round(v).toLocaleString('en-US')},
+  KXRECSSNBER:{kind:'binary',ticker:'KXRECSSNBER-27',side:'yes',label:'US recession: two negative GDP quarters between Q4 2026 and Q4 2027',noun:'a recession',short:'Recession, 2027',yes:'A recession is recorded',no:'No recession'},
+  KXHORMUZNORM:{kind:'binary',ticker:'KXHORMUZNORM-26MAR17-B270701',side:'no',label:'Strait of Hormuz traffic not back to normal by 1 Jul 2027',noun:'shipping disruption through Hormuz',short:'Hormuz still disrupted',yes:'Hormuz still disrupted on 1 Jul 2027',no:'Back to normal by 1 Jul 2027'},
+};
+const kalshiUrl=s=>`https://kalshi.com/markets/${s.toLowerCase()}`;
+function eventMarkets(series){ const info=SERIES_INFO[series]; const ms=(SNAP.markets[series]||[]).filter(m=>(m.strike_type||'').startsWith('greater')&&m.floor_strike!=null);
+  const ev=info.event||(ms[0]&&ms[0].event_ticker); return ms.filter(m=>m.event_ticker===ev).sort((a,b)=>a.floor_strike-b.floor_strike); }
+function ladder(series){ const info=SERIES_INFO[series]; if(!info||info.kind!=='ladder') return null; const ms=eventMarkets(series); const pts=[];
+  for(const m of ms){ const q=fairYes(m); if(q==null) continue; const v=(m.strike_type==='greater'&&info.step)?+(m.floor_strike+info.step).toFixed(4):m.floor_strike; pts.push({v,S:q,m}); }
+  if(pts.length<2) return null; pts.sort((a,b)=>a.v-b.v); const iso=isotonic(pts.map(p=>p.S)); pts.forEach((p,i)=>p.S=iso[i]);
+  const continuous=!info.step&&!info.ge; let ref;
+  if(continuous){ if(pts[0].S<=0.5) ref=pts[0].v; else if(pts[pts.length-1].S>=0.5) ref=pts[pts.length-1].v;
+    else for(let i=0;i<pts.length-1;i++){ const a=pts[i],b=pts[i+1]; if(a.S>=0.5&&b.S<=0.5){ ref=a.S===b.S?(a.v+b.v)/2:a.v+(a.S-0.5)/(a.S-b.S)*(b.v-a.v); break; } } }
+  else { ref=pts[0].S<0.5?pts[0].v-(info.step||0):pts[0].v; for(const p of pts) if(p.S>=0.5) ref=p.v; }
+  return {series,info,pts,ref,continuous,settle:settleMonth(ms[0])}; }
+function binaryMarket(series){ const info=SERIES_INFO[series]; const m=(SNAP.markets[series]||[]).find(x=>x.ticker===info.ticker); if(!m) return null; const fy=fairYes(m); if(fy==null) return null;
+  return {m,info,p:info.side==='yes'?fy:1-fy,settle:settleMonth(m)}; }
+function pickThreshold(L,target){ const c=L.pts.filter(p=>p.v>L.ref&&p.S>=0.02); const hit=c.find(p=>p.S<=target); return (hit||c[c.length-1]||L.pts[L.pts.length-1]).v; }
+function spreadPick(arr,k){ if(arr.length<=k) return arr; const idx=new Set(); for(let i=0;i<k;i++) idx.add(Math.round(i*(arr.length-1)/(k-1))); return [...idx].sort((a,b)=>a-b).map(i=>arr[i]); }
+const userLevel=(info,v)=>info.step?+(v-info.step).toFixed(4):v;
+
+/* A hedge is everything the result view needs. */
+function sentenceHedge(spec,size){ const info=SERIES_INFO[spec.series];
+  if(!spec.series||!info) return noFitHedge(spec);
+  const loss=spec.loss>0?spec.loss:10000, assumedLoss=!(spec.loss>0);
+  const base={mode:'sentence',spec,series:spec.series,info,size,assumedLoss,business:spec.business||'Your business',links:{series:kalshiUrl(spec.series),terms:(SNAP.series[spec.series]||{}).contract_url}};
+  if(info.kind==='binary'){ const B=binaryMarket(spec.series); if(!B) return noFitHedge(spec,'The market has no readable price right now.');
+    const need=Math.floor(loss), leg=priceLeg(B.m,info.side,Math.round(size*need),MARKUP,false), legs=leg.need>0?[leg]:[]; const cost=legs.reduce((s,l)=>s+l.premium+l.fee,0), n=legs.reduce((s,l)=>s+l.n,0);
+    return {...base,settle:B.settle,legs,cost,need,title:`${cap(info.noun)} could cost ${base.business==='Your business'?'this business':base.business} ${money(loss)}.`,
+      explain:`The contract pays $1 per contract if ${info.yes.toLowerCase()}. ${n?`${n.toLocaleString()} contracts cost ${money(cost)} today and pay ${money(n)} if it happens.`:'Move the size above zero to price it.'}${spec.basis?' '+spec.basis:''}`,
+      hitHeadline:loss,hitSub:'your estimate if it happens',payFirst:n,maxPay:n,paySub:`gross payout · settles ${mlabel(B.settle)}`,
+      worlds:[{key:'yes',label:info.yes,short:'Happens',p:B.p,hit:-loss,pay:n,right:true,text:'The loss lands and the contract pays.'},{key:'no',label:info.no,short:'Doesn\'t',p:1-B.p,hit:0,pay:0,right:false,text:'The contract expires. You keep your cash, minus what you paid.'}],
+      expBack:n*B.p}; }
+  const L=ladder(spec.series); if(!L) return noFitHedge(spec,'The market has no readable prices right now.');
+  const T=spec.threshold!=null&&isFinite(spec.threshold)?+spec.threshold:null, tol=T==null?0:Math.max(1e-9,Math.abs(T)*0.002), minV=T==null?null:(info.step?T+info.step-tol:T-tol);
+  if(T!=null&&T<L.ref-(info.step||0)*0.5-1e-9&&!L.pts.some(p=>p.v>=minV&&p.v>L.ref)) return inMoneyHedge(spec,L);
+  let cands=L.pts.filter(p=>p.v>L.ref+1e-9&&p.S>=0.02&&p.S<=0.6&&(minV==null||p.v>=minV));
+  if(T==null){ const lo=cands.filter(p=>p.S<=0.35); if(lo.length) cands=lo; }
+  if(!cands.length) return T!=null&&T<=L.ref?inMoneyHedge(spec,L):noFitHedge(spec,`No strike above ${info.fmt(T??L.ref)} has a usable price right now.`);
+  const chosen=[]; for(const c of cands){ if(!chosen.length||c.S<chosen[chosen.length-1].S-0.01) chosen.push(c); if(chosen.length===4) break; }
+  const v1=chosen[0].v, trig=T!=null?Math.max(info.step?T+info.step:T,L.ref+1e-9):v1;
+  const dpu=loss/Math.max(1e-9,trig-L.ref); let cum=0; const legsDef=[];
+  for(const c of chosen){ const n=Math.floor(dpu*(c.v-L.ref))-cum; if(n<1) continue; cum+=n; legsDef.push({c,nFull:n}); }
+  const legs=legsDef.map(d=>({...priceLeg(d.c.m,'yes',Math.round(size*d.nFull),MARKUP,false),v:d.c.v})).filter(l=>l.need>0);
+  const cost=legs.reduce((s,l)=>s+l.premium+l.fee,0), payAt=v=>legs.reduce((s,l)=>s+(l.v<=v+1e-9?l.n:0),0);
+  const worlds=[]; const trigs=legsDef.map(d=>d.c);
+  trigs.forEach((c,i)=>{ const nx=trigs[i+1], p=Math.max(0,c.S-(nx?nx.S:0));
+    const rep=L.continuous?(nx?(c.v+nx.v)/2:c.v+(i>0?(c.v-trigs[i-1].v)/2:(c.v-L.ref)/2)):c.v;
+    worlds.push({key:'w'+i,label:nx?`${info.fmt(c.v)} to ${info.fmt(nx.v)}`:`${info.fmt(c.v)} or higher`,short:nx?`${info.fmt(c.v)}–${info.fmt(nx.v)}`:`${info.fmt(c.v)}+`,p,hit:-dpu*(rep-L.ref),pay:payAt(c.v),right:true,
+      text:i===0?'The cost spike lands and the contract pays.':'A bigger move: more of the ladder pays.'}); });
+  const first=trigs[0]||chosen[0];
+  worlds.push({key:'below',label:`Stays below ${info.fmt(first.v)}`,short:`Below ${info.fmt(first.v)}`,p:1-first.S,hit:0,pay:0,right:false,
+    text:`The contract expires worthless. Smaller moves are yours to carry: up to ${money(dpu*(first.v-L.ref))} if ${info.noun} lands just under ${info.fmt(first.v)}.`});
+  const n=legs.reduce((s,l)=>s+l.n,0), payFirst=payAt(first.v), who=base.business==='Your business'?'this business':base.business;
+  return {...base,settle:L.settle,legs,cost,need:legsDef.reduce((s,d)=>s+d.nFull,0),ref:L.ref,dpu,
+    title:`${cap(info.noun)} above ${info.fmt(T!=null?T:userLevel(info,first.v))} could cost ${who} ${money(dpu*(first.v-L.ref))}.`,
+    explain:`The market expects ${info.fmt(L.ref)} (${info.label}). ${n?`${legs.length>1?`A ${legs.length}-strike ladder`:'One contract strike'} of ${n.toLocaleString()} contracts costs ${money(cost)} and pays ${money(payFirst)} if it reaches ${info.fmt(first.v)}${legs.length>1?`, up to ${money(n)} past ${info.fmt(legs[legs.length-1].v)}`:''}.`:'Move the size above zero to price it.'}${spec.basis?' '+spec.basis:''}`,
+    hitHeadline:dpu*(first.v-L.ref),hitSub:`at ${info.fmt(first.v)}, versus the ${info.fmt(L.ref)} the market expects`,payFirst,maxPay:n,paySub:legs.length>1?`up to ${money(n)} if it goes past ${info.fmt(legs[legs.length-1].v)}`:`gross payout · settles ${mlabel(L.settle)}`,
+    worlds,expBack:legs.reduce((s,l)=>s+l.n*l.p,0)}; }
+function inMoneyHedge(spec,L){ const info=L.info; return {mode:'sentence',spec,series:spec.series,info,noFit:true,business:spec.business||'Your business',
+  title:`${cap(info.noun)} is already expected above ${info.fmt(spec.threshold)}.`,
+  explain:`The market expects ${info.fmt(L.ref)} for ${info.label.toLowerCase()}, so protection that starts at ${info.fmt(spec.threshold)} would cost almost as much as it pays. Name a higher level (for example ${info.fmt(userLevel(info,pickThreshold(L,0.3)))}) and Argent prices the part of the move the market doesn't expect.`,
+  reasons:[['What the market expects',`${info.fmt(L.ref)}`],['Protection that is still insurance',`starts near ${info.fmt(pickThreshold(L,0.3))}, which the market gives about a 30% chance`]],links:{series:kalshiUrl(spec.series),terms:(SNAP.series[spec.series]||{}).contract_url}}; }
+function noFitHedge(spec,why){ return {mode:'sentence',spec,noFit:true,business:spec.business||'Your business',title:spec.noFitTitle||'No Kalshi contract fits this risk yet.',
+  explain:why||spec.noFitReason||'Nothing on Kalshi settles on a number that moves with this cost.',reasons:spec.alternatives||[],links:null}; }
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+
+/* ================= worked examples ================= */
+const EXAMPLES=[
+  {id:'nimbus',num:'01',cat:'Cross-border seller',name:'Nimbus Home Goods',place:'Los Angeles, CA',books:true,chip:null,
+   quote:'We import kitchenware and lamps from China and sell on Amazon, Shopify and TikTok. Here are five years of our books.'},
+  {id:'diesel',num:'02',cat:'Fuel costs',name:'Cordillera Haulers',place:'Denver, CO',chip:'Diesel costs',make(){ const L=ladder('KXDIESELMON'); const T=pickThreshold(L,0.3), gal=24000, loss=Math.round(gal*(T-L.ref)/100)*100;
+     return {series:'KXDIESELMON',threshold:T,loss,business:'Cordillera Haulers',text:`We run 14 trucks and buy about 24,000 gallons of diesel a month. If diesel ends September above ${SERIES_INFO.KXDIESELMON.fmt(T)}, that month costs us about ${money(loss)} more than planned.`,
+       basis:'It settles on the national average on 30 September, not on your fuel-card price.',others:[{name:'Haul volumes',series:'KXU3',note:'Loose link through the economy'},{name:'Truck loans',series:'KXFED',note:'If your financing floats'},{name:'Tires and parts',series:'KXCPIYOY',note:'General inflation, weak link'}]}; }},
+  {id:'rain',num:'03',cat:'Weather',name:'Pier 7 Rooftop',place:'New York, NY',chip:'A wet month',make(){ const L=ladder('KXRAINNYCM'); const T=pickThreshold(L,0.3);
+     return {series:'KXRAINNYCM',threshold:T,loss:18000,business:'Pier 7 Rooftop',text:`Our rooftop bar loses bookings when September is wet. If Central Park gets more than ${SERIES_INFO.KXRAINNYCM.fmt(T)} of rain this month, we lose about $18,000 of sales.`,
+       basis:'It settles on the Central Park gauge; your bookings depend on which evenings it rains.',others:[{name:'Food and drink costs',series:'KXCPIYOY',note:'Weak link'},{name:'Tourist demand',series:'KXU3',note:'Loose link'}]}; }},
+  {id:'fed',num:'04',cat:'Loan rate',name:'Harbor Point Dental',place:'Portland, ME',chip:'Loan rate',make(){ const L=ladder('KXFED'); const v=pickThreshold(L,0.5), T=userLevel(SERIES_INFO.KXFED,v);
+     return {series:'KXFED',threshold:T,loss:15000,business:'Harbor Point Dental',text:`We carry $6 million of floating-rate practice loans. If the Fed's rate is above ${SERIES_INFO.KXFED.fmt(T)} after December, each quarter point costs us about $15,000 over the next year.`,
+       basis:'It pays on the Fed\'s upper bound after the December meeting; your loans reset on your bank\'s schedule.',others:[{name:'Patient demand',series:'KXU3',note:'Loose link'},{name:'Supplies and wages',series:'KXCPIYOY',note:'Weak link'}]}; }},
+  {id:'recession',num:'05',cat:'Demand',name:'Lakeshore Furniture',place:'Grand Rapids, MI',chip:'A recession',make(){
+     return {series:'KXRECSSNBER',threshold:null,loss:150000,business:'Lakeshore Furniture',text:'Furniture is the first thing people stop buying. If a recession starts next year, we would lose about $150,000 of margin.',
+       basis:'It settles on GDP data in January 2028, long after the sales you would lose; the payout arrives late.',others:[{name:'Unemployment',series:'KXU3',note:'Overlaps with a recession'},{name:'Imported frames and fabric',series:'KXTARIFFRATEPRC',note:'If you import from China'}]}; }},
+  {id:'yuan',num:'06',cat:'Missing market',name:'Ming River Imports',place:'Oakland, CA',chip:'A stronger yuan',make(){
+     return {series:null,loss:60000,business:'Ming River Imports',text:'We pay about ¥12 million to factories in China this year. A stronger yuan could cost us about $60,000.',
+       noFitTitle:'No Kalshi contract settles on the yuan.',noFitReason:'Kalshi lists no USD/CNY market, so there is nothing to size. Argent logs it as a missing market and points to what works today.',
+       alternatives:[['A forward from your payment provider','Fixes the rate for each purchase order; most cross-border payment platforms offer one.'],['Invoice in dollars','Where suppliers accept it, the currency risk moves to them, usually for a price.'],['Tariffs and freight','These do have Kalshi contracts: map them below.']],
+       others:[{name:'Tariffs on Chinese imports',series:'KXTARIFFRATEPRC',note:'Listed, thin'},{name:'Container freight',series:'KXSCFI',note:'Listed, thin'}]}; }},
+];
+const TEMPLATES={
+  KXTARIFFRATEPRC:()=>'We import about $500,000 of goods from China over six months. If the tariff rate is above 30% on 1 January, it costs us about $50,000.',
+  KXDIESELMON:()=>{const L=ladder('KXDIESELMON');return `If diesel ends September above ${SERIES_INFO.KXDIESELMON.fmt(pickThreshold(L,0.3))}, it costs us about $10,000 more than planned.`;},
+  KXAAAGASM:()=>{const L=ladder('KXAAAGASM');return `Our delivery vans burn gasoline. If gas ends September above ${SERIES_INFO.KXAAAGASM.fmt(pickThreshold(L,0.3))}, it costs us about $4,000.`;},
+  KXNATGASMON:()=>{const L=ladder('KXNATGASMON');return `We heat greenhouses with gas. If natural gas ends September above ${SERIES_INFO.KXNATGASMON.fmt(pickThreshold(L,0.3))}, it costs us about $8,000.`;},
+  KXRAINNYCM:()=>'If Central Park gets more than 6 in of rain in September, we lose about $15,000 of sales.',
+  KXFED:()=>{const L=ladder('KXFED');return `If the Fed's rate is above ${SERIES_INFO.KXFED.fmt(userLevel(SERIES_INFO.KXFED,pickThreshold(L,0.5)))} after December, our floating-rate loans cost about $10,000 more.`;},
+  KXCPIYOY:()=>{const L=ladder('KXCPIYOY');return `If inflation is above ${SERIES_INFO.KXCPIYOY.fmt(userLevel(SERIES_INFO.KXCPIYOY,pickThreshold(L,0.3)))} in September, our supply costs rise about $20,000.`;},
+  KXU3:()=>{const L=ladder('KXU3');return `If unemployment is above ${SERIES_INFO.KXU3.fmt(userLevel(SERIES_INFO.KXU3,pickThreshold(L,0.3)))} in November, we lose about $40,000 of sales.`;},
+  KXSCFI:()=>'If the Shanghai freight index ends 2026 above 4,500, our container costs rise about $30,000.',
+  KXRECSSNBER:()=>'If a recession starts next year, we lose about $100,000 of margin.',
+  KXHORMUZNORM:()=>'If shipping through Hormuz is still disrupted next July, our freight costs about $60,000 more.',
+};
+
+const DEFAULT_OTHERS={
+  KXDIESELMON:[{name:'Loan rate',series:'KXFED',note:'If your financing floats'},{name:'Demand for hauling',series:'KXU3',note:'Loose link'}],
+  KXAAAGASM:[{name:'Loan rate',series:'KXFED',note:'If your financing floats'},{name:'Other costs',series:'KXCPIYOY',note:'Weak link'}],
+  KXNATGASMON:[{name:'Electricity',series:'KXPOWERKWH',note:'If you also run lights or cooling'},{name:'Loan rate',series:'KXFED',note:'If your financing floats'}],
+  KXPOWERKWH:[{name:'Natural gas',series:'KXNATGASMON',note:'If you heat with gas'},{name:'Other costs',series:'KXCPIYOY',note:'Weak link'}],
+  KXRAINNYCM:[{name:'Food and drink costs',series:'KXCPIYOY',note:'Weak link'},{name:'Demand',series:'KXU3',note:'Loose link'}],
+  KXFED:[{name:'Demand',series:'KXU3',note:'Loose link'},{name:'Other costs',series:'KXCPIYOY',note:'Weak link'}],
+  KXCPIYOY:[{name:'Loan rate',series:'KXFED',note:'If your financing floats'},{name:'A downturn',series:'KXRECSSNBER',note:'Pays late'}],
+  KXU3:[{name:'A recession',series:'KXRECSSNBER',note:'Overlaps'},{name:'Loan rate',series:'KXFED',note:'If your financing floats'}],
+  KXSCFI:[{name:'Tariffs on Chinese imports',series:'KXTARIFFRATEPRC',note:'If you import from China'},{name:'Shipping disruption',series:'KXHORMUZNORM',note:'Deeper market, looser link'}],
+  KXTARIFFRATEPRC:[{name:'Container freight',series:'KXSCFI',note:'Listed, thin'},{name:'A stronger yuan',series:null,note:'No Kalshi market'}],
+  KXRECSSNBER:[{name:'Unemployment',series:'KXU3',note:'Overlaps'},{name:'Loan rate',series:'KXFED',note:'If your financing floats'}],
+  KXHORMUZNORM:[{name:'Container freight',series:'KXSCFI',note:'Listed, thin'},{name:'Diesel',series:'KXDIESELMON',note:'If you truck goods'}],
+};
+/* ================= reading a sentence ================= */
+function parseLocal(text){ const t=text.toLowerCase();
+  const RULES=[[/yuan|renminbi|\brmb\b|\bcny\b|¥/,null],[/tariff|dut(y|ies)|imports? from china|chinese imports/,'KXTARIFFRATEPRC'],[/hormuz|strait/,'KXHORMUZNORM'],[/freight index|container|shipping rate|ocean freight|scfi/,'KXSCFI'],
+    [/diesel|truck|fleet|haul/,'KXDIESELMON'],[/natural gas|heating|greenhouse|boiler/,'KXNATGASMON'],[/gasoline|gas price|\bvans?\b|pump/,'KXAAAGASM'],[/electric|power bill|kwh|cold storage/,'KXPOWERKWH'],
+    [/rain|storm|\bwet\b|patio|rooftop/,'KXRAINNYCM'],[/\bfed\b|interest rate|floating|variable.rate|\bloans?\b|line of credit|prime rate/,'KXFED'],[/recession|downturn|slump/,'KXRECSSNBER'],
+    [/unemployment|layoff|\bjobs\b/,'KXU3'],[/inflation|\bcpi\b/,'KXCPIYOY']];
+  let m=null; for(const [re,s] of RULES){ if(re.test(t)){ m={series:s}; break; } }
+  const th=text.match(/(?:above|over|exceeds?|exceeding|tops?|higher than|more than|past|beyond)\s*\$?\s*(\d+(?:\.\d+)?)\s*(%|¢|cents?|inch(?:es)?|in\b|points?)?/i);
+  const threshold=th?parseFloat(th[1]):null;
+  const amts=[...text.matchAll(/\$\s?(\d[\d,]*(?:\.\d+)?)\s*(k|m|million|thousand)?\b/gi)].map(x=>{ let v=parseFloat(x[1].replace(/,/g,'')); const u=(x[2]||'').toLowerCase(); if(u==='k'||u==='thousand')v*=1e3; if(u==='m'||u==='million')v*=1e6;
+    const before=text.slice(Math.max(0,x.index-28),x.index).toLowerCase(); return {v,costy:/cost|lose|loss|hit|extra|spend|pay|more/.test(before),atThreshold:th&&x.index>=th.index&&x.index<=th.index+th[0].length}; }).filter(a=>!a.atThreshold);
+  const pick=amts.filter(a=>a.costy).sort((a,b)=>b.v-a.v)[0]||amts.sort((a,b)=>a.v-b.v)[0];
+  return {series:m?m.series:null,matched:!!m,threshold,loss:pick?pick.v:0,business:'Your business',basis:'',others:[],source:'keywords',
+    noFitTitle:m&&m.series===null?'No Kalshi contract settles on the yuan.':null,noFitReason:m?(m.series===null?'Kalshi lists no USD/CNY market. A forward from your payment provider fixes the rate per purchase order.':null):'Argent could not match this sentence to a market. Name the price, rate or event, and what it would cost you.'}; }
+function catalogPrompt(text){ const lines=Object.entries(SERIES_INFO).map(([s,info])=>{ if(info.kind==='binary'){ const B=binaryMarket(s); return `${s} | yes/no | ${info.label} | market chance ${B?pct(B.p):'n/a'}`; }
+    const L=ladder(s); return L?`${s} | index | ${info.label} | market expects ${info.fmt(L.ref)} | strikes from ${info.fmt(L.pts[0].v)} to ${info.fmt(L.pts[L.pts.length-1].v)}`:null; }).filter(Boolean);
+  return `You match one small-business risk to one Kalshi market for a hedging tool. Catalog (ticker | type | what it settles on | market level):
+${lines.join('\n')}
+
+Business sentence:
+"""${text.slice(0,1500)}"""
+
+Rules: pick the single market whose settlement moves most closely with the business's loss, or null if none is close. Only losses that grow when the index goes UP, or when the yes/no event in the catalog label happens, are supported. Use the sentence's own numbers and units; if no dollar loss is given use 0. threshold is the index level the business names after "above" (null for yes/no markets or if none is named).
+Reply with only JSON: {"business": string, "series": string or null, "threshold": number or null, "loss": number, "basis": string, "no_fit_reason": string, "others": [{"name": string, "series": string or null, "note": string}]}
+"basis" is one sentence on how the contract's settlement differs from the business's own cost. "others" lists up to 3 other exposures the business likely has, each with a catalog ticker or null and a note under 6 words.
+Example: {"business":"Your business","series":"KXDIESELMON","threshold":7.3,"loss":12000,"basis":"It settles on the national diesel average, not your fuel-card price.","no_fit_reason":"","others":[{"name":"Truck loans","series":"KXFED","note":"If your financing floats"}]}`; }
+function cleanClaude(j){ const ok=j&&typeof j==='object'; const series=ok&&typeof j.series==='string'&&SERIES_INFO[j.series]?j.series:null;
+  const others=ok&&Array.isArray(j.others)?j.others.slice(0,3).map(o=>({name:String(o&&o.name||'').slice(0,60),series:o&&SERIES_INFO[o.series]?o.series:null,note:String(o&&o.note||'').slice(0,60)})).filter(o=>o.name):[];
+  return {series,threshold:ok&&isFinite(parseFloat(j.threshold))?parseFloat(j.threshold):null,loss:ok&&isFinite(parseFloat(j.loss))?Math.max(0,parseFloat(j.loss)):0,
+    business:ok&&j.business?String(j.business).slice(0,60):'Your business',basis:ok&&j.basis?String(j.basis).slice(0,240):'',others,source:'claude',
+    noFitReason:ok&&j.no_fit_reason?String(j.no_fit_reason).slice(0,240):null}; }
+/*APP2*/
+/* ================= books mode adapter ================= */
+const view={mode:'sentence',spec:null,size:1,world:0,primary:null,hedge:null,exampleId:'diesel',full:null,tuned:{}};   // full: risk shown as a full ladder; tuned: risks sized by hand
+const booksShort=()=>String(state.name||'Your business').replace(/\s*\(.*\)\s*$/,'').replace(/\s+LLC$/,'');
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const mlong=p=>`${MONTHS[+p.slice(5,7)-1]} ${p.slice(0,4)}`, mname=p=>MONTHS[+p.slice(5,7)-1];
+const dmy=t=>{ const d=new Date(t); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()].slice(0,3)} ${d.getUTCFullYear()}`; }, dayMon=t=>{ const d=new Date(t); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`; };
+const andList=a=>a.length<2?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+const fmtN=v=>Math.round(v).toLocaleString('en-US'), yearOf=t=>t.slice(0,4), hasView=k=>!isNaN(parseFloat((state.a[k]||{}).view));
+const paysWhen=r=>r.inWindow?`The contract pays inside your 12 months, in ${mname(r.settle)}.`:`The contract pays in ${mlong(r.settle)}, after your 12 months, so its payout is not counted.`;
+// Plain-language copy per ladder risk. Buckets come from the engine (market chance, average value, modelled cost).
+const RISK_COPY={
+  tariff:{tab:'Tariffs',what:'tariff ladder',strike:'tariff strike',hitWord:'Extra duty',saveWord:'lower duty',short:b=>b.top?`${b.lo}%+`:`${b.lo}–${b.hi}%`,
+    label:(b,r)=>`the general tariff on Chinese imports is ${b.top?`${b.lo}% or higher`:`${b.lo}% to ${b.hi}%`} on ${dmy(r.close)}`,
+    rise:(r,K)=>K<Infinity?[`the rate rises to between ${r.refHi}% and ${K}% on ${dmy(r.close)}`,`${r.refHi}–${K}%`]:[`the rate rises to ${r.refHi}% or more on ${dmy(r.close)}`,`${r.refHi}%+`],
+    stay:r=>[`the rate stays at today's ${r.ref}%`,`Stays ${r.ref}%`,'Duties stay at today\'s rates.'],below:r=>[`the rate falls below ${r.refLo}%`,`Below ${r.refLo}%`],
+    view:(K,r)=>`Your view: chance the rate is ${K}% or higher on ${dmy(r.close)}`,
+    plain:r=>`${todayTxt(r)} Each point above it adds about ${km(r.expo/100)} of duty on goods clearing customs after a new rate starts (${r.lag?`${r.lag} month${r.lag>1?'s':''} after you pay the supplier`:'the month you pay the supplier'}). We assume a new rate starts on a day spread evenly between now and ${dayMon(r.close)} and lasts through ${mname(state.F[state.F.length-1].month)}. ${holdTxt(r)} ${timingTxt(r)} ${paysWhen(r)}`.replace(/\s+/g,' '),
+    atSea:(b,r)=>b.lo>=r.scen[0]?' on goods already at sea, before any sales lost while you wait the rate out':''},
+  freight:{tab:'Freight',what:'freight-index position',strike:'freight-index strike',hitWord:'Extra freight',saveWord:'cheaper freight',short:b=>b.top?`${fmtN(b.lo)}+`:`${fmtN(b.lo)}–${fmtN(b.hi)}`,
+    label:(b,r)=>`the Shanghai freight index ends ${yearOf(r.close)} ${b.top?`above ${fmtN(b.lo)}`:`between ${fmtN(b.lo)} and ${fmtN(b.hi)}`}`,
+    rise:(r,K)=>[`the index ends ${yearOf(r.close)} between ${fmtN(r.refHi)} and ${fmtN(K)}`,`${fmtN(r.refHi)}–${fmtN(K)}`],
+    stay:r=>[`the index ends ${yearOf(r.close)} near today's ${fmtN(r.ref)}`,'Near today','Freight costs about what today\'s quote implies.'],below:r=>[`the index ends ${yearOf(r.close)} below ${fmtN(r.refLo)}`,`Below ${fmtN(r.refLo)}`],
+    range:(r,lo,hi)=>[`the index ends ${yearOf(r.close)} between ${fmtN(lo)} and ${fmtN(hi)}`,`${fmtN(lo)}–${fmtN(hi)}`],
+    view:(K,r)=>`Your view: chance the index ends ${yearOf(r.close)} above ${fmtN(K)}`,
+    plain:r=>{ const nm=(state.res&&state.res.plan.freight?state.res.plan.freight.legs:[]).filter(l=>l.K<r.ref); return `Your container rate follows the Shanghai Containerized Freight Index (SCFI), now ${fmtN(r.ref)}${r.ref===QUOTES.scfiNow.v?` (${QUOTES.scfiNow.src})`:''}, but loosely: Argent assumes it moves ${state.a.freight.beta}× the index; since 2023 the Shanghai–Los Angeles rate has moved between about 0.7× and 0.9× the index over a quarter, with a wide spread, so this is a partial hedge and worth less at the loose end. Kalshi's end-${yearOf(r.close)} SCFI ladder moves with the rate you pay after ${mname(r.close)}, but only partly with your whole year: moves after the ${mname(r.close)} print stay yours.${nm.length?` The ${fmtN(nm[0].K)} strike sits just below today's index: it pays whenever the index ends above ${fmtN(nm[0].K)}, including years when it ends a little below today and your freight is slightly cheaper. It is used because its quote is the tightest on the ladder, so it lowers the swing for the least spread.`:''} ${paysWhen(r)}`; }}};
+// Today's rate: where it comes from, and Kalshi's last settlement of the same contract
+const todayTxt=r=>{ const s=r.settled, rng=s?(s.cap!=null&&s.floor!=null?`${s.floor}–${s.cap}%`:s.floor!=null?`${s.floor}% or more`:`below ${s.cap}%`):'', inS=s&&(s.floor==null||r.ref>=s.floor)&&(s.cap==null||r.ref<=s.cap);
+  const base=r.ref===r.mref?`Argent starts from a ${r.ref}% general tariff on Chinese imports today, reading Kalshi's most likely range for ${dayMon(r.close)} (${r.mrefHi<Infinity?`${r.mref}–${r.mrefHi}%`:`${r.mref}% or more`}) as no change.`
+    :`You put today's general tariff on Chinese imports at ${r.ref}%; Kalshi's most likely range for ${dayMon(r.close)} is ${r.mrefHi<Infinity?`${r.mref}–${r.mrefHi}%`:`${r.mref}% or more`}.`;
+  const synth=/synthetic/i.test(state.name||'');
+  return `${base}${s?` Kalshi last settled this contract at ${rng} on ${dmy(s.date)}${inS?'.':`, below the ${r.ref}% used here, so Kalshi may count today's rate lower than ${synth?'this synthetic example does (its ledger is made up; Kalshi prices the real world)':'you do'}: a 1 January rate in Kalshi's no-change range would then be a rise that costs duty. Duty bills place the general rate only roughly, so check today's rate before trading.`}`:''}`; };
+const holdName=h=>isFinite(h)?`wait out a rate of ${h}% or more`:'keep importing whatever the rate';
+const onlyIf=h=>{ const tr=state.risks.find(x=>x.key==='tariff'); return tr&&isFinite(h)&&h>tr.scen[0]?'only ':''; };
+// What the books show about waiting a rate out, and what Argent assumes because of it
+const holdTxt=r=>{ const e=r.ev||{}, h=e.held, s=e.shipped, [h0,h1]=r.scen;
+  const seen=[s?`kept shipping at ${s.rate}% (${dmy(s.from)} to ${dmy(s.to)})`:'',h&&h.gapFrom?`booked no ocean freight from ${dmy(h.gapFrom)} to ${dmy(h.gapTo)} while the rate was ${h.lo}–${h.hi}%, when the ${h.entries} entries already on the water paid about ${km(h.extra)} more duty than usual`:''].filter(Boolean);
+  const books=seen.length?`Your books show you ${andList(seen)}.`:'Your books show no general-rate change to learn from.';
+  const cost='A rate you wait out costs duty only on goods already at sea; holding stock back for months would cost sales, which neither your books nor Argent can price.';
+  if(r.chosen) return `You chose to ${holdName(h0)}. ${books} ${isFinite(h0)?`${cost} Below ${h0}% we assume you keep importing at the new rate through ${mname(state.F[state.F.length-1].month)}.`:''} The year's what-ifs show the same plan under the other choices.`;
+  if(h1==null) return `${books} Argent assumes you ${holdName(h0)}. ${isFinite(h0)?cost:''}`;
+  const gap=isFinite(h1)?`${h0}–${h1-1}%`:`${h0}% or more`;
+  return `${books} So your books don't show what you would do at ${gap}. The plan is sized to help both if you would ${holdName(h0)} and if you would ${isFinite(h1)?'only ':''}${holdName(h1)}; the numbers shown assume you would ${holdName(h0)}, the smaller extra duty. ${cost} Below ${h0}% we assume you keep importing at the new rate through ${mname(state.F[state.F.length-1].month)}.`; };
+// Cached what-ifs for the plan on the page (engine tariffWhatIfs), so every sentence quotes the same numbers
+const wifs=()=>{ const res=state.res; if(!res) return []; if(!res._wifs) res._wifs=tariffWhatIfs(); return res._wifs; };
+// The plan's tariff contracts on their own (no other legs), same years, under a tariff behaviour and reversal: does the tariff position earn its cost by itself?
+const tariffAlone=(holdAt,revert)=>{ const r=state.risks.find(x=>x.key==='tariff'), pl=state.res&&state.res.plan.tariff; if(!r||!pl||!pl.legs.length||!state.sim.value.tariff) return null;
+  const V=state.sim.value.tariff, L=state.sim.loss.tariff, pay=new Float64Array(N), c0=new Float64Array(N), c1=new Float64Array(N), lam=state.a.lambda; let cost=0;
+  for(const l of pl.legs){ const P=legPays(r,l.d); cost+=l.premium+l.fee+(l.fund||0); for(let i=0;i<N;i++) if(P[i]) pay[i]+=l.n; }
+  for(let i=0;i<N;i++){ const raw=state.sim.raw[i]+L[i]-tariffLoss(r,i,V[i],holdAt,revert); c0[i]=shortfall(raw); c1[i]=shortfall(raw+pay[i]-cost); }
+  const s0=stats(c0), s1=stats(c1); return {dP5:s1.p5-s0.p5,gain:(s1.mean-lam*s1.sd)-(s0.mean-lam*s0.sd)}; };
+const timingTxt=r=>{ const K=(state.res&&state.res.plan.tariff&&state.res.plan.tariff.legs[0]||r.legsDef[0]||{}).K, rv=wifs().find(x=>x.revert), on=state.res&&state.res.plan.tariff&&state.res.plan.tariff.legs.length;
+  return `${on?`If a new rate is reversed after ${dayMon(r.close)}, Kalshi still pays but your extra duty is smaller, so in that outcome the payout can exceed what the rate cost you, while your bad-year protection shrinks${rv?`: if every new rate were reversed three months after ${dayMon(r.close)}, the plan would change the bad year by ${skm(rv.w.dP5)} instead of ${skm(planTotals().dP5)}`:''}.`:''} A rise that is reversed before ${dayMon(r.close)}${K?`, stays below ${K}%,`:''} or starts after ${dayMon(r.close)} costs duty and pays nothing: tariff changes after ${dmy(r.close)} are not hedged.`; };
+function planTotals(){ const res=state.res, R=state.risks.filter(r=>res.plan[r.key].legs.length), legs=R.flatMap(r=>res.plan[r.key].legs), back=legs.reduce((s,l)=>s+l.n*l.p,0);
+  return {legs,keys:R.map(r=>r.key),cost:res.cost,fund:res.fund||0,back,spread:res.cost-back,expCost:res.cost+(res.fund||0)-back,n:legs.reduce((s,l)=>s+l.n,0),onBook:legs.reduce((s,l)=>s+Math.min(l.onBook,l.need),0),
+    dMean:res.s1.mean-res.s0.mean,dSd:res.s0.sd-res.s1.sd,dP5:res.s1.p5-res.s0.p5,dCvar:res.s1.cvar5-res.s0.cvar5,dNeg:res.s1.pNeg-res.s0.pNeg}; }
+// The plan's bad-year change across the assumptions the books can't settle (engine whatIfRange), cached per evaluation
+const rng=()=>{ const res=state.res; if(!res) return null; if(res._rng===undefined) res._rng=whatIfRange(); return res._rng; };
+// Nimbus is synthetic, so its default plan was also settled outside Argent, on years simulated from the generator that wrote its books: 21 sets of
+// tariff, freight-basis, growth and timing assumptions, 5,000-20,000 years each, interest on the premium included. Quoted only for that exact plan.
+const CHECKED={name:/^Nimbus Home Goods LLC \(synthetic/,legs:{'KXTARIFFRATEPRC-27JAN01-15':67558,'KXSCFI-26EOY-T3500':154805},sets:21,p5:[22642,60007],sd:[8.2,17.2],cost:[7730,7899]};
+const checkedTxt=T=>{ const c=CHECKED; if(!c.name.test(state.name||'')||T.legs.length!==Object.keys(c.legs).length||!T.legs.every(l=>c.legs[l.m.ticker]===l.n)) return '';
+  return `Checked outside Argent: settled on years simulated from the generator that wrote these synthetic books, under ${c.sets} sets of assumptions, this exact plan improved the bad year by ${km(c.p5[0])} to ${km(c.p5[1])}, cut the swing ${c.sd[0]}–${c.sd[1]}% and raised the swing-weighted score in every set, for ${km(c.cost[0])}–${km(c.cost[1])} of average cost.`; };
+const planPhrase=(T,dollars)=>{ const c=k=>state.res.plan[k]?state.res.plan[k].cost:0, one=k=>(state.res.plan[k]||{legs:[]}).legs.length===1;
+  return andList(T.keys.map(k=>`${RISK_COPY[k]?(one(k)?`a ${RISK_COPY[k].strike.replace(/ strike$/,' contract')}`:`a ${RISK_COPY[k].what}`):'a recession contract'}${dollars?` (${km(c(k))} up front)`:''}`)); };
+// The plan if only part of the resting orders fill: only what is on the book now, and half of each order
+const fillCases=()=>{ const p0=state.res.s0.p5, f0=partialFill(0), f5=partialFill(0.5); return {book:f0.s.p5-p0,half:f5.s.p5-p0,bookN:f0.n,bookCost:f0.cost}; };
+const knownTxt=()=>{ const kn=state.known.duty+state.known.freight; return kn>=500?`${km(kn)} of higher freight and duty costs are already in force and no contract can hedge them.`:kn<=-500?`Freight and duty costs already in force run ${km(-kn)} below your forecast.`:''; };
+function booksHedge(key){ const R=state.risks.filter(r=>r.kind==='ladder'), r=R.find(x=>x.key===key)||R[0], who=booksShort();
+  if(!r) return {mode:'books',noFit:true,business:who,title:'No cash flow in these books maps to a Kalshi contract.',explain:'Argent found no duties or freight exposure that a listed contract settles on.',reasons:[],links:null};
+  const C=RISK_COPY[r.key], pl=state.res.plan[r.key], legs=pl.legs, cost=pl.cost, T=planTotals(), K=legs.length?Math.min(...legs.map(l=>l.K)):r.legsDef.length?r.legsDef[0].K:Infinity, worlds=[];
+  r.buckets.forEach((b,j)=>{ if(b.lo<K) return; const pay=pl.look[j]||0, hit=b.meanLoss>=0?`${C.hitWord} of about ${km(b.meanLoss)} this year${C.atSea?C.atSea(b,r):''}`:`${cap(C.saveWord)} saves about ${km(-b.meanLoss)} this year`;
+    // the same outcome under the other tariff behaviours the plan was sized for, where its cost differs
+    const alt=(b.lossS||[]).slice(1).map((x,s)=>[x,r.scen[s+1]]).filter(([x])=>Math.abs(x-b.meanLoss)>Math.max(1000,0.05*Math.abs(b.meanLoss))).map(([x,h])=>`${km(x)} if you would ${h>r.scen[0]&&isFinite(h)?'only ':''}${holdName(h)}`);
+    const over=pay>Math.max(0,b.meanLoss)*1.05+500?', more than this outcome costs you':'', near=b.lo<=r.ref&&b.hi>r.ref&&r.key==='freight'?` (today's ${fmtN(r.ref)} is in this range)`:'';
+    worlds.push({key:'b'+j,label:C.label(b,r)+near,short:C.short(b),p:b.pMkt,hit:-b.meanLoss,pay,right:true,text:`${hit}${alt.length?` (${alt.join('; ')})`:''}; ${pay?`the ${C.what} pays ${km(pay)}${over}`:legs.length?'at this size nothing pays here':`the plan buys no ${C.what}`}.`}); });
+  const agg=bs=>{ const p=bs.reduce((s,b)=>s+b.pMkt,0); return {p,loss:p?bs.reduce((s,b)=>s+b.pMkt*b.meanLoss,0)/p:0}; };
+  const mid=agg(r.buckets.filter(b=>b.lo>=r.refHi&&b.lo<K)), st=agg(r.buckets.filter(b=>b.lo>=r.refLo&&b.lo<Math.min(r.refHi,K))), bl=agg(r.buckets.filter(b=>b.lo<r.refLo));
+  const out=legs.length?`The contracts expire worthless: you are out the ${km(cost)} you paid.`:`The plan buys no ${C.what}, so nothing pays.`, [sl,ss,stx]=C.stay(r), [bll,bls]=C.below(r);
+  if(mid.p>0){ const [ml,ms]=C.rise(r,K); worlds.push({key:'mid',label:ml,short:ms,p:mid.p,hit:-mid.loss,pay:0,right:false,text:`${out} ${C.hitWord} of about ${km(mid.loss)} lands ${K<Infinity?'below the first strike':'with no strike to cover it'}.`}); }
+  if(st.p>0) worlds.push({key:'stay',label:sl,short:ss,p:st.p,hit:-st.loss,pay:0,right:false,text:`${out} ${stx}`});
+  // below today's bucket: one outcome, except freight, whose nearest buckets differ most from each other (a near-the-money strike leaves them unpaid)
+  const blb=r.buckets.filter(b=>b.lo<r.refLo), groups=r.key==='freight'&&blb.length>2?[[blb[blb.length-1]],[blb[blb.length-2]],blb.slice(0,-2)]:[blb];
+  groups.forEach((g,gi)=>{ const x=agg(g); if(!(x.p>0)) return; const save=-x.loss, split=groups.length>1, last=gi===groups.length-1;
+    const [lab,sh]=!split?[bll,bls]:last?C.below({...r,refLo:g[g.length-1].hi}):C.range(r,g[0].lo,g[g.length-1].hi);
+    worlds.push({key:'below'+(split?gi:''),label:lab,short:sh,p:x.p,hit:-x.loss,pay:0,right:false,
+      text:save<=0?(split&&legs.length?`${out} ${C.hitWord} of about ${km(-save)} still lands.`:out):legs.length?`The contracts expire worthless, but ${C.saveWord} saves about ${km(save)}, ${save>=cost?'more':'less'} than the ${km(cost)} they cost.`:`${cap(C.saveWord)} saves about ${km(save)}; the plan buys no ${C.what}.`}); });
+  const usable=R.some(x=>x.legsDef.some(d=>d.nFull>0)), vw=R.some(x=>hasView(x.key)), fill=T.legs.length>0&&T.onBook<T.n-0.5, fc=fill?fillCases():null, rg=T.legs.length?rng():null;
+  // the headline is Argent's central case; the next sentence gives the same plan's range across the assumptions the books can't settle
+  const title=T.legs.length?(T.dP5>0?`${fill?'If these orders fill at today\'s prices, ':''}${who}'s bad year gets about ${km(T.dP5)} better, for about ${km(T.expCost)} on average${vw?' at Kalshi\'s prices':''}.`:`${who}'s plan costs about ${km(T.expCost)} on average and doesn't improve the bad year.`)
+    :!usable?`No listed strike fits ${who}'s risks right now.`:Object.keys(view.tuned).length?`${who}'s plan is empty at these sizes.`:`At this setting no hedge is worth its cost to ${who}.`;
+  const span=rg&&rg.n>1&&T.dP5>0?`That is Argent's central case. Across what the books can't pin down (what you would do if tariffs jump, whether a new rate lasts, how closely your container rate follows the index), the same plan changes the bad year by ${skm(rg.lo)} to ${skm(rg.hi)}.`:'';
+  const back=`You pay ${money(T.cost)} in ${mname(TODAY.toISOString())} and, at Kalshi's prices, about ${money(T.back)} comes back in ${andList([...new Set(T.legs.map(l=>mname(l.settle)))])}: the protection costs the ${money(T.spread)} difference (spread and fees)${T.fund>=1?` plus about ${money(T.fund)} of interest on the premium until then`:''}.`;
+  const explain=T.legs.length?`${span} The plan buys ${planPhrase(T,true)}. ${back} ${fill?'If every order fills, the':'The'} typical swing ${T.dSd>=0?'shrinks':'grows'} by ${km(Math.abs(T.dSd))} (${pct(Math.abs(T.dSd)/state.res.s0.sd)}) and the worst 1-in-20 years ${T.dCvar>=0?'improve':'get worse'} by ${km(Math.abs(T.dCvar))} on average.${fill?` Only ${fmtN(T.onBook)} of the ${fmtN(T.n)} contracts can fill from the book now; the rest wait as limit orders that may never fill.`:''} ${knownTxt()}`
+    :`${Object.keys(view.tuned).length?'Best plan for my year restores Argent\'s recommendation.':`A hedge bought at Kalshi's prices loses a little on average, and at "${lambdaLabel()}" the steadier year isn't worth that to you.`} ${knownTxt()}`;
+  return {mode:'books',riskKey:r.key,series:r.series,info:SERIES_INFO[r.series],legs,cost,fund:pl.fund||0,size:state.a.sizes[r.key]||0,settle:r.settle,inWindow:r.inWindow,business:who,worlds,T,C,r,
+    need:legs.reduce((s,l)=>s+l.need,0),expBack:legs.reduce((s,l)=>s+l.n*l.p,0),links:{series:kalshiUrl(r.series),terms:(SNAP.series[r.series]||{}).contract_url},title,explain:explain.replace(/\s+/g,' ').trim(),fc}; }
+const lambdaLabel=()=>(LAMBDAS.find(([v])=>v===state.a.lambda)||[0,'your setting'])[1];
+const LAMBDAS=[[0,'Not at all'],[0.25,'A little'],[0.5,'Medium'],[1,'A lot']];
+
+/* ================= render: result ================= */
+const byId=id=>document.getElementById(id);
+function dial(p,src='Kalshi prices'){ const R=92,C=2*Math.PI*R; return `<svg viewBox="0 0 240 240" role="img" aria-label="${pct(p)} chance according to ${src}">
+  <circle cx="120" cy="120" r="${R}" fill="none" stroke="var(--rule)" stroke-width="16"/>
+  <circle cx="120" cy="120" r="${R}" fill="none" stroke="var(--pay-bar)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${Math.max(0.001,C*p)} ${C}" transform="rotate(-90 120 120)"/>
+  <text x="120" y="126" text-anchor="middle" font-size="50" font-weight="760">${pct(p,p<0.1?1:0)}</text>
+  <text x="120" y="156" text-anchor="middle" font-size="13" style="fill:var(--muted);font-family:var(--body)">chance, per ${src}</text></svg>`; }
+function renderResult(){ const h=view.hedge, books=h.mode==='books';
+  byId('r-eyebrow').textContent=books?`Your plan · from ${booksShort()}'s books`:'Business risk';
+  byId('r-title').textContent=h.title; byId('r-explain').textContent=h.explain;
+  const src=[]; if(books) src.push(`<span class="pill acc">${state.ledger.length.toLocaleString()} ledger lines</span><span class="pill acc">${esc(state.fsrc)}</span>`);
+  else if(h.spec){ if(h.spec.text) src.push(`<span style="font:italic 400 17px/1.4 var(--quote);color:var(--muted)">“${esc(h.spec.text)}”</span>`);
+    src.push(h.spec.source==='claude'?'<span class="pill acc">Matched by Claude</span>':h.spec.source==='keywords'?'<span class="pill off">Matched by keywords</span>':'<span class="pill off">Worked example</span>');
+    if(h.assumedLoss) src.push('<span class="pill warn">No dollar amount found: assumed $10,000</span>'); }
+  byId('r-source').innerHTML=src.join(' ');
+  if(h.noFit){ byId('r-stats').innerHTML=(h.reasons||[]).map(([a,b])=>`<div class="stat"><span>${esc(a)}</span><small style="font-size:15px;color:var(--ink)">${esc(b)}</small></div>`).join('');
+    byId('r-sizer').hidden=true; byId('r-worlds').innerHTML=''; byId('r-orders').innerHTML='';
+    byId('r-cta').innerHTML=h.links?`<a class="btn primary" href="${h.links.series}" target="_blank" rel="noopener">Open this market on Kalshi ↗</a>`:`<a class="btn primary" href="#top" id="cta-books">Upload your books instead</a>`;
+    renderYear(); renderOthers(); wireResult(); return; }
+  if(books) renderBooksTop(h); else {
+  byId('r-stats').innerHTML=`<div class="stat"><span>You pay up front</span><b>${money(h.cost)}</b><small>${h.legs.reduce((s,l)=>s+l.n,0).toLocaleString()} contracts, known before anything happens</small></div>
+    <div class="stat"><span>Modelled hit if it happens</span><b>${money(h.hitHeadline)}</b><small>${esc(h.hitSub)}</small></div>
+    <div class="stat pay"><span>Kalshi pays if you're right</span><b>${money(h.payFirst)}</b><small>${esc(h.paySub)}</small></div>`;
+  const sz=byId('r-sizer'); sz.hidden=false; const onBook=h.legs.reduce((s,l)=>s+Math.min(l.onBook,l.need),0), need=h.legs.reduce((s,l)=>s+l.need,0);
+  sz.innerHTML=`<label for="size">Hedge size</label><input type="range" id="size" min="0" max="100" step="5" value="${Math.round(h.size*100)}"><span class="val">${Math.round(h.size*100)}%</span>
+    
+    <p class="note">100% pays your modelled loss at each strike. Expected cost of this protection: <b>${money(Math.max(0,h.cost-h.expBack))}</b> (you pay ${money(h.cost)}; Kalshi prices imply ${money(h.expBack)} back on average).${need&&onBook<need-0.5?` <span class="pill warn">${pct(onBook/need,onBook/need<0.1?1:0)} is on the book right now</span> the rest assumes limit orders at the prices shown.`:''}</p>`; }
+  const ws=h.worlds; if(view.world>=ws.length) view.world=0; const w=ws[view.world], net=w.hit+w.pay-h.cost;
+  const order=[...ws.keys()].filter(i=>!ws[i].right).reverse().concat([...ws.keys()].filter(i=>ws[i].right));
+  const riskTabs=books?`<div class="toggle risks" role="group" aria-label="Choose a risk">${state.risks.filter(r=>r.kind==='ladder').map(r=>`<button data-risk="${r.key}" aria-pressed="${r.key===h.riskKey}">${esc(RISK_COPY[r.key].tab)}<span class="p">${km(state.res.plan[r.key].cost)}</span></button>`).join('')}</div>`:'';
+  byId('r-worlds').innerHTML=`${riskTabs}<div class="toggle" role="group" aria-label="Choose an outcome">${ws.map((x,i)=>`<button data-w="${i}" aria-pressed="${i===view.world}">${x.right?'Right: ':'Wrong: '}${esc(x.short)}<span class="p">${pct(x.p,x.p<0.1?1:0)}</span></button>`).join('')}</div>
+    <div class="world"><div class="dial">${books&&hasView(h.riskKey)?dial(w.p,'your view'):books?dial(w.p,'Kalshi quotes'):dial(w.p)}</div><div class="detail"><p class="eyebrow">If ${esc(w.label)}</p><h3>${esc(w.text)}</h3>
+      <div class="lines"><div class="${w.hit<0?'hit':'payl'}"><span>${books?(w.hit>0.5?'Saving this year':'Extra cost this year'):w.hit<0?'Your hit':'Your saving'}</span><b>${(books?Math.abs(w.hit)<0.5:w.hit===0)?'$0':skm2(w.hit)}</b></div><div class="payl"><span>Kalshi pays</span><b>${w.pay?'+'+money(w.pay):'$0'}</b></div><div class="hit"><span>${books?`Paid up front for the ${esc(h.C.what)}`:'Paid up front'}</span><b>${h.cost?'−'+money(h.cost):'$0'}</b></div></div>
+      <div class="netline"><span>Net for your business in this world</span><b>${skm2(net)}</b></div></div></div>
+    <div class="dist"><h3>Every outcome, sized by its chance</h3><div class="segs">${order.map(i=>{ const x=ws[i], nx=x.hit+x.pay-h.cost; return `<button class="seg ${x.right?'right':''} ${i===view.world?'sel':''}" data-w="${i}" style="flex:${Math.max(x.p,0.09)} 1 0" title="${esc(x.label)}: ${pct(x.p,1)}, net ${money(nx)}"><small>${esc(x.short)} · ${pct(x.p,x.p<0.1?1:0)}</small><b>${skm2(nx)}</b></button>`; }).join('')}</div>
+      <p class="muted" style="font-size:13px;margin-top:8px">Net = your hit + what Kalshi pays − what you paid. Blue segments are the worlds where your bet is right. ${books?`Extra cost is the average for each outcome in ${N.toLocaleString('en-US')} simulated years. Your whole year, including risks no contract covers, is below.`:'This counts only the risk you described.'}</p>${books?`<details class="how"><summary>How Argent models ${esc(h.C.tab.toLowerCase())}</summary><p>${esc(h.C.plain(h.r))}</p></details>`:''}</div>`;
+  byId('r-cta').innerHTML=`<a class="btn primary" href="${h.links.series}" target="_blank" rel="noopener">Open this market on Kalshi ↗</a>${h.links.terms?`<a class="btn" href="${h.links.terms}" target="_blank" rel="noopener">Contract terms ↗</a>`:''}<p class="fine">Argent finds and sizes the trade. You place it on Kalshi, which holds the money. Prices from the snapshot of ${snapTime()}.</p>`;
+  const oLegs=books?h.T.legs:h.legs, pal=l=>(TERMS[l.series]||{}).palUSD;
+  const capPill=l=>!books||!pal(l)?'':state.a.palCap&&l.need>=l.cap?` <span class="pill warn">at ${km(pal(l))} level</span>`:l.premium+l.fee>pal(l)?` <span class="pill warn">above ${km(pal(l))} level</span>`:'';
+  let fills=''; if(books&&h.T.n&&h.T.onBook<h.T.n-0.5){ const fc=h.fc||fillCases();
+    fills=` If none of the resting bids fill, you hold ${fmtN(fc.bookN)} contracts that cost ${money(fc.bookCost)} and move the bad year by ${skm(fc.book)}; if half of each fills, by ${skm(fc.half)}, against ${skm(h.T.dP5)} for the whole plan.`; }
+  const taker=books?oLegs.reduce((s,l)=>s+feeOf(l.n,l.limit)-l.fee,0):0;
+  const palN=books?[...new Set(oLegs.filter(l=>(TERMS[l.series]||{}).palN&&l.premium+l.fee>25000).map(l=>l.series))]:[];
+  if(palN.length) fills+=` ${andList(palN)}'s current terms set the accountability level at ${fmtN(TERMS[palN[0]].palN)} contracts per member (the July 2025 certification said $25,000 per strike, which ${palN.length>1?'these orders exceed':'this order exceeds'}).`;
+  byId('r-orders').innerHTML=oLegs.length?`<details class="orders"${books?' open':''}><summary>Orders to place (${oLegs.length})${books?` · ${Math.round(h.T.onBook).toLocaleString()} of ${h.T.n.toLocaleString()} contracts can fill now`:''}</summary><div class="scroll"><table><thead><tr><th>Market</th><th>Buy</th><th>Pays if</th><th class="n">Contracts</th><th class="n">Up to</th><th class="n">On the book</th>${books?'<th class="n">Traded so far</th>':''}<th class="n">Cost incl. fee</th><th class="n">${books?'Quote midpoint':'Kalshi P'}</th></tr></thead><tbody>${oLegs.map(l=>`<tr><td class="mono" style="font-size:12.5px"><a href="${books?kalshiUrl(l.series):h.links.series}" target="_blank" rel="noopener">${l.m.ticker}</a></td><td>${l.side.toUpperCase()}</td><td>${esc(l.side==='yes'?(l.m.yes_sub_title||l.m.title):'Not: '+(l.m.yes_sub_title||l.m.title))}</td><td class="n">${l.n.toLocaleString()}</td><td class="n">${l.limit.toFixed(2)}</td><td class="n">${Math.round(Math.min(l.onBook,l.need)).toLocaleString()}</td>${books?`<td class="n">${Math.round(l.m.volume_fp||0).toLocaleString()}${(l.m.volume_fp||0)<10?' <span class="pill warn">no real trading yet</span>':''}</td>`:''}<td class="n">${money(l.premium+l.fee)}${capPill(l)}</td><td class="n">${l.p.toFixed(3)}</td></tr>`).join('')}</tbody></table></div>${books?`<p class="muted" style="font-size:13px;margin:8px 0 4px">Each order buys what is offered at or below its limit now and leaves the rest as a resting bid at that price. Kalshi's fee schedule (5 Feb 2026) charges no trading fee on resting orders outside its Maker Fees list, which does not include these series${taker>=1?`; if every contract paid the taker fee instead, fees would add about ${money(taker)}`:''}. Resting bids may never fill: "Traded so far" counts every contract that has changed hands on that strike since it listed. "Quote midpoint" is halfway between the best bid and ask; on strikes with no real trading it is a market maker's quote, not a traded price.${fills}</p>`:''}</details>`:'';
+  renderYear(); renderOthers(); wireResult(); }
+function renderBooksTop(h){ const T=h.T, res=state.res, k=state.known, a=state.a, r=h.r, C=h.C, end=state.F[state.F.length-1].month;
+  const ms=[...new Set(T.legs.map(l=>l.settle))].sort(), late=ms.some(m=>m>end), vw=state.risks.some(x=>x.kind==='ladder'&&hasView(x.key));
+  const lands=ms.length?`The payouts land in ${andList(ms.map(mlong))}${late?`; anything paid after ${mlong(end)} falls outside your 12 months and is not counted`:', inside your 12 months'}.`:'';
+  const fr=k.boxes?`Your forecast prices containers at last year's average of ${money(k.rateOld)}; ${a.freight.rateNow===QUOTES.rateNow.v?`today's Shanghai–Los Angeles spot rate is ${money(a.freight.rateNow)} (${QUOTES.rateNow.src})`:`you put today's rate at ${money(a.freight.rateNow)}`}: ${skm(k.freight)} over ${Math.round(k.boxes)} containers.`:'';
+  const ab=x=>`${pct(Math.abs(x-1))} ${x>=1?'above':'below'}`, dt=!k.dutyCodes?'':a.dutyRatio==null?`Your ${mname(k.dutyMonth)} customs entries ran ${ab(k.dutyRatio)} the 12-month average per entry (${skm(k.duty)} of duty; product codes with no entry that month are assumed to move by the same share, so this may be low).`
+    :`You put duty per entry at ${ab(k.dutyRatio)} the 12-month average (${skm(k.duty)} of duty); your ${mname(k.dutyMonth)} entries ran ${ab(k.dutyLedger)}.`;
+  const on=T.legs.length>0, fill=on&&T.onBook<T.n-0.5, fc=fill?(h.fc||fillCases()):null, rg=on?rng():null, frk=state.risks.find(x=>x.key==='freight');
+  const fundTxt=T.fund>=1?` plus ${money(T.fund)} of interest on the premium until ${andList(ms.map(mname))} at ${pct(state.fund.rate,1)}${a.fundRate==null&&state.fund.ledger!=null?', the rate on the credit line in your books':''}`:'';
+  const cover=rg&&rg.coverHi-rg.coverLo>=0.01?`${pct(rg.coverLo)} to ${pct(rg.coverHi)} of them, depending on the assumptions below`:`${pct(res.pCoverBad)} of them`;
+  const itm=frk?T.legs.filter(l=>l.series===frk.series&&l.K<frk.ref).map(l=>` The freight-index contract also pays in many ordinary years, whenever the index ends above ${fmtN(l.K)} (it is ${fmtN(frk.ref)} today), so a payout is not the same as a gain.`)[0]||'':'';
+  byId('r-stats').innerHTML=`<div class="stat"><span>You pay up front</span><b>${money(T.cost)}</b><small>${on?`${T.n.toLocaleString()} contracts, paid in ${mname(TODAY.toISOString())}; Kalshi prices imply ${km(T.back)} comes back${ms.length?` in ${andList(ms.map(mname))}`:''}, so your cash is that much lower until then`:'nothing is bought at this setting'}</small></div>
+    <div class="stat"><span>Costs you on average</span><b>${money(T.expCost)}</b><small>${!on?'no spread or fees to pay':`${money(T.spread)} of spread and fees at Kalshi's prices${fundTxt}. ${vw?`With your view the plan changes expected cash by ${skm(T.dMean)}`:'At Kalshi\'s prices no hedge raises expected cash'}.`}</small></div>
+    <div class="stat pay"><span>Your bad year (1 in 20)</span><b>${skm(T.dP5)}</b><small>${on?`In Argent's central case${fill?', if every order fills':''}: ${km(res.s0.p5)} without the plan, ${km(res.s1.p5)} with it.${rg&&rg.n>1?` ${skm(rg.lo)} to ${skm(rg.hi)} across the assumptions below.`:''}${fill?` ${skm(fc.half)} if half of each order fills; ${skm(fc.book)} with only what is on the book now.`:''}`:`${km(res.s0.p5)} with no plan`}</small></div>
+    ${on?`<div class="card wide"><p class="eyebrow">Right or wrong, for the whole plan</p><p><b>On average</b> the plan costs about ${km(T.expCost)}. <b>Wrong:</b> in ${pct(res.pNoPay)} of years nothing pays and you lose the whole ${km(T.cost)}${res.pShort>=0.005?`; in another ${pct(res.pShort)} something pays, but less than the plan cost`:''}. <b>Right:</b> in the worst 1-in-20 years Kalshi pays back about ${km(res.payBad)}, and the plan more than pays for itself in ${cover}.${itm} ${lands}</p></div>`:''}
+    ${on&&checkedTxt(T)?`<div class="card wide callout"><p class="eyebrow">Checked outside Argent</p><p>${esc(checkedTxt(T).replace(/^Checked outside Argent: s/,'S'))}</p></div>`:''}
+    ${fr||dt?`<div class="card wide"><p class="eyebrow">Already in force: not hedgeable</p><p>${fr} ${dt} ${fr&&dt?'Both are costs you already face, so they are in both columns below.':'It is a cost you already face, so it is in both columns below.'}</p>
+      <div class="knobs">${k.boxes?`<label>Container rate today ($)<input type="number" id="k-rate" min="1" step="50" value="${Math.round(a.freight.rateNow)}"></label><label>SCFI today<input type="number" id="k-scfi" min="1" step="10" value="${Math.round(a.freight.scfiNow)}"></label>`:''}${k.dutyCodes?`<label>Duty per entry vs 12-month average (%)<input type="number" id="k-duty" step="1" value="${Math.round((k.dutyRatio-1)*100)}"></label>`:''}</div></div>`:''}`;
+  const t=TERMS[r.series]||{}, legs=h.legs, sc=Math.round(h.size*100), d0=r.legsDef[0], sz=byId('r-sizer'); sz.hidden=false;
+  const some=(n,v1,vN)=>n===legs.length?`${n>1?'Each':'The'} ${C.strike} ${v1}`:`${n} of the ${legs.length} ${C.strike}s ${n===1?v1:vN}`;
+  const atCap=a.palCap&&t.palUSD?legs.filter(l=>l.need>=l.cap).length:0, over=!a.palCap&&t.palUSD?legs.filter(l=>l.premium+l.fee>t.palUSD).length:0;
+  const capTxt=atCap?`${some(atCap,'stops','stop')} at Kalshi's ${money(t.palUSD)} accountability level: above it Kalshi can ask about the position and require you to cut it. `
+    :over?`${some(over,'costs','cost')} more than Kalshi's ${money(t.palUSD)} accountability level: Kalshi can ask about the position and require you to cut it. `
+    :t.palN&&legs.some(l=>l.premium+l.fee>25000)?`Kalshi's current terms for this series set the accountability level at ${fmtN(t.palN)} contracts per member (its July 2025 certification said $25,000 per strike). `:'';
+  const costTxt=`costs about ${money(Math.max(0,h.cost+h.fund-h.expBack))} on average (you pay ${money(h.cost)}; Kalshi prices imply ${money(h.expBack)} back${h.fund>=1?`; ${money(h.fund)} of the cost is interest on the premium`:''})`;
+  const sizeTxt=view.full===r.key?`Showing ${sc===100?'a full':`${sc}% of a full`} ${C.what}, which pays the average extra cost in each outcome: it ${costTxt}. Best plan for my year restores Argent's recommendation.`
+    :!legs.length?(!r.legsDef.some(d=>d.nFull>0)?'No listed strike fits this risk right now.':view.tuned[r.key]?`You set the ${C.what} to ${sc}%. Best plan for my year restores Argent's recommendation.`:`Argent's plan buys no ${C.what} at this setting: at Kalshi's prices it doesn't earn its cost in a steadier year. Drag the size to price one.`)
+    :`100% is the ${C.what} Argent recommends for your year${sc===100?': it':`; at ${sc}% it`} ${costTxt}.`;
+  const vol=Math.round(legs.reduce((s,l)=>s+(l.m.volume_fp||0),0)), onB=T.n?T.onBook/T.n:1;
+  const bookTxt=onB<1&&T.onBook<T.n-0.5?`<span class="pill warn">${pct(onB,onB<0.1?1:0)} of the plan is on the book right now</span> The rest are limit orders at the prices shown${legs.length?`; ${legs.length>1?`these ${C.strike}s have`:`this ${C.strike} has`} traded ${vol.toLocaleString()} contract${vol===1?'':'s'} in all since ${legs.length>1?'they':'it'} listed`:''}.`:'';
+  sz.innerHTML=`<label for="size">${esc(cap(C.what))} size</label><input type="range" id="size" min="0" max="150" step="5" value="${sc}"><span class="val">${sc}%</span>
+    <button class="btn" id="btn-best">Best plan for my year</button>
+    <label class="check"><input type="checkbox" id="pal" ${a.palCap?'checked':''}> Keep each tariff strike within Kalshi's $25,000 accountability level</label>
+    <p class="note">${sizeTxt} ${capTxt}${bookTxt}${hasView(r.key)?' With your view the plan can raise expected cash; at Kalshi\'s prices it cannot.':''}${(()=>{ if(r.key!=='tariff'||!legs.length||T.keys.length<2) return '';
+      const xs=[...r.scen.map(hh=>[hh,0]),[r.scen[0],90]].map(([hh,rv])=>({hh,rv,x:tariffAlone(hh,rv),cond:rv?`if every new rate is reversed three months after ${dayMon(r.close)}`:`if you would ${onlyIf(hh)}${holdName(hh)}`})).filter(z=>z.x), neg=xs.filter(z=>z.x.gain<0);
+      return xs.length?` On its own, without the other contracts, the tariff position changes your swing-weighted score by ${andList(xs.map(z=>`${skm(z.x.gain)} ${z.cond}`))}${neg.length?`: it does not earn its cost by itself ${andList(neg.map(z=>z.cond))}`:''}.`:''; })()}</p>
+    <div class="knobs">${r.key==='tariff'?`<label>Today's general rate (%)<input type="number" id="k-ref" min="0" step="0.5" value="${r.ref}"></label>`:''}${d0?`<label>${esc(C.view(d0.K,r))} (Kalshi quotes: ${(r.curve.s[r.curve.x.indexOf(d0.K)]*100).toFixed(1)}%)<input type="number" id="k-view" min="1" max="99" step="1" value="${esc(a[r.key].view)}" placeholder="${(r.curve.s[r.curve.x.indexOf(d0.K)]*100).toFixed(1)}"></label>`:''}</div>
+    ${r.key==='tariff'?(()=>{ const e=r.ev||{}, both=!r.chosen&&r.scen.length>1, ks=r.legsDef.map(d=>d.K), cur=r.chosen?String(isFinite(r.scen[0])?r.scen[0]:0):'';
+      const lbl=both?`Plan for both: ${holdName(r.scen[0])}, or ${isFinite(r.scen[1])?`only ${holdName(r.scen[1])}`:holdName(r.scen[1])}${e.shippedMax!=null||e.heldMin!=null?` (your books: ${[e.shippedMax!=null?`shipped at ${e.shippedMax}%`:'',e.heldMin!=null?`waited out ${e.heldMin}%`:''].filter(Boolean).join(', ')})`:''}`:'Plan for what your books allow';
+      return `<label class="check" style="display:grid;gap:4px">If the tariff on Chinese goods jumped, what would you do?<select id="k-hold" style="font:500 14px var(--body);padding:6px 8px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)"><option value="" ${cur===''?'selected':''}>${esc(lbl)}</option>${ks.map(K=>`<option value="${K}" ${cur===String(K)?'selected':''}>${esc(cap(holdName(K)))}</option>`).join('')}<option value="0" ${cur==='0'?'selected':''}>Keep importing whatever the rate</option></select></label>`; })():''}
+    ${r.key==='tariff'?`<details class="how"><summary>About today's tariff rate</summary><p>${r.ref===r.mref?'Today\'s rate starts at the market\'s no-change level.':`You set today's rate to ${r.ref}%; the market's no-change level is ${r.mref}%.`}${r.settled?` Kalshi last settled this contract at ${r.settled.floor!=null&&r.settled.cap!=null?`${r.settled.floor}–${r.settled.cap}%`:r.settled.floor!=null?`${r.settled.floor}% or more`:`below ${r.settled.cap}%`} on ${dmy(r.settled.date)}.`:''} Kalshi has not yet ruled whether the 12.5% forced-labour tariff counts as a general rate${(()=>{ const fl=r.mref+12.5, k=r.legsDef.find(d=>d.K<=fl); return r.ref!==r.mref?'':`; if it does, today's rate would be ${fl}%${k?` and the ${k.K}% strike would pay even with no change`:''} (set today's rate to ${fl} to see that plan)`; })()}. Set today's rate to what your duty bills show. Leave your view blank to use Kalshi's prices.</p></details>`:d0?'<p class="note">Leave your view blank to use Kalshi\'s prices.</p>':''}`; }
+const skm2=v=>(v>0?'+':v<0?'−':'')+money(Math.abs(v));
+const snapTime=()=>new Date(SNAP.fetched_at).toISOString().slice(0,16).replace('T',' ')+' UTC';
+
+/* ================= render: whole year (books) ================= */
+function niceStep(range,target){ const raw=range/target, mag=Math.pow(10,Math.floor(Math.log10(raw))); for(const m of [1,2,2.5,5,10]) if(m*mag>=raw) return m*mag; return 10*mag; }
+function hist(host,tipEl,series){ host.innerHTML=''; const W=760,H=270,ml=50,mr=14,mt=14,mb=34,B=40; let lo=Infinity,hi=-Infinity;
+  for(const s of series){ lo=Math.min(lo,s.st.sorted[Math.floor(N*0.005)]); hi=Math.max(hi,s.st.sorted[Math.floor(N*0.995)]); } if(hi-lo<1) hi=lo+1;
+  const w=(hi-lo)/B, counts=series.map(s=>{ const c=new Array(B).fill(0); for(const v of s.st.sorted){ let b=Math.floor((v-lo)/w); b=Math.max(0,Math.min(B-1,b)); c[b]++; } return c.map(x=>x/N); });
+  const ymax=Math.max(...counts.flat())*1.1, x=v=>ml+(v-lo)/(hi-lo)*(W-ml-mr), y=v=>mt+(1-v/ymax)*(H-mt-mb);
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Distribution of 12-month operating cash flow with and without the hedge'},host);
+  const ys=niceStep(ymax,4); for(let v=0;v<=ymax;v+=ys){ svgEl('line',{x1:ml,x2:W-mr,y1:y(v),y2:y(v),class:v===0?'al':'gl'},svg); svgEl('text',{x:ml-7,y:y(v)+4,class:'tk','text-anchor':'end'},svg).textContent=pct(v,v<0.1&&v>0?1:0); }
+  const xs=niceStep(hi-lo,6); for(let v=Math.ceil(lo/xs)*xs;v<=hi;v+=xs){ svgEl('text',{x:x(v),y:H-mb+18,class:'tk','text-anchor':'middle'},svg).textContent=km(v); }
+  if(lo<0&&hi>0) svgEl('line',{x1:x(0),x2:x(0),y1:mt,y2:H-mb,class:'al'},svg);
+  series.forEach((s,k)=>{ let d=`M${x(lo)},${y(0)}`; counts[k].forEach((c,b)=>{ d+=`V${y(c)}H${x(lo+(b+1)*w)}`; }); d+=`V${y(0)}`; svgEl('path',{d:d+'Z',class:s.area},svg); svgEl('path',{d,class:s.line},svg);
+    const px=x(s.st.p5); svgEl('line',{x1:px,x2:px,y1:mt+2,y2:H-mb,class:s.mark},svg); svgEl('text',{x:px+(k?6:-6),y:mt+12+k*15,class:'tk','text-anchor':k?'start':'end'},svg).textContent=`1 in 20: ${km(s.st.p5)}`; });
+  for(let b=0;b<B;b++){ const r=svgEl('rect',{x:x(lo+b*w),y:mt,width:(W-ml-mr)/B,height:H-mt-mb,class:'hitr'},svg);
+    r.addEventListener('mousemove',e=>{ tipEl.innerHTML=`<b>${km(lo+b*w)} to ${km(lo+(b+1)*w)}</b>`+series.map((s,k)=>`<br>${s.name}: ${pct(counts[k][b],1)}`).join(''); tipEl.style.display='block';
+      const hr=host.parentElement.getBoundingClientRect(); let left=e.clientX-hr.left+12; if(left+tipEl.offsetWidth>hr.width-6) left=e.clientX-hr.left-tipEl.offsetWidth-12; tipEl.style.left=left+'px'; tipEl.style.top=(e.clientY-hr.top-10)+'px'; });
+    r.addEventListener('mouseleave',()=>tipEl.style.display='none'); } }
+function renderYear(){ const host=byId('r-year'), h=view.hedge;
+  if(h.mode!=='books'){ host.innerHTML=`<div class="card yearcta"><div><p class="eyebrow">Your whole year</p><h3 style="margin-top:6px">One risk is one bet. Your books show the whole year.</h3><p class="muted" style="margin-top:6px;max-width:60ch">Upload a ledger and Argent finds every exposure, sizes the hedges together, and shows your next 12 months of cash with and without them.</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" id="y-upload">Upload your books</button><button class="btn" id="y-nimbus">See it on Nimbus's books</button></div></div>`; return; }
+  const a=state.a, {s0,s1}=state.res, sc0=s0.mean-a.lambda*s0.sd, sc1=s1.mean-a.lambda*s1.sd, gain=sc1-sc0, material=Math.max(1000,0.01*Math.abs(sc0)), T=planTotals();
+  const row=(l,v0,v1,isP,up,big)=>{ const d=v1-v0, tiny=Math.abs(d)<(isP?0.0005:1), good=up?d>0:d<0, f=isP?(x=>pct(x,1)):km;
+    return `<tr class="${big?'big':''}"><td>${l}</td><td class="n">${f(v0)}</td><td class="n">${f(v1)}</td><td class="n ${tiny?'':good?'up':'down'}">${tiny?'—':(d>0?'+':'−')+(isP?(Math.abs(d)*100).toFixed(1)+' pts':km(Math.abs(d)))}</td></tr>`; };
+  const anyHedge=T.legs.length>0, vw=state.risks.some(r=>r.kind==='ladder'&&hasView(r.key)), kn=state.known.duty+state.known.freight;
+  const verdict=(g,m)=>g>m?['good','better']:g>=-m?['warn','about even']:['warn','worse'], [pc,pw]=verdict(gain,material);
+  const pill=!anyHedge?'<span class="pill off">no hedge in the plan</span>':`<span class="pill ${pc}">${pw} on the swing-weighted score (expected − ${a.lambda} × swing): ${skm(gain)}</span>`;
+  const mean=T.dMean<0?(vw?`With your view the plan loses about ${km(-T.dMean)} on average`:`At Kalshi's prices no hedge raises expected cash; this plan trades about ${km(-T.dMean)} of it (spread, fees${T.fund>=1?' and interest on the premium':''}) for a steadier year`):vw?`With your view the plan adds about ${km(T.dMean)} on average`:'The plan about breaks even on average';
+  const neg=T.dNeg>0.0005?` The chance of a negative year rises about ${(T.dNeg*100).toFixed(1)} points because the premium is paid in every year, including years with nothing to hedge.`:T.dNeg<-0.0005?` The chance of a negative year falls ${(-T.dNeg*100).toFixed(1)} points.`:'';
+  const fill=anyHedge&&T.onBook<T.n-0.5, tr=state.risks.find(r=>r.key==='tariff'), fr=state.risks.find(r=>r.key==='freight');
+  // how much the result rests on what the books can't settle: the same plan and the same years under each other tariff behaviour, with every new rate
+  // reversed after three months, and with container rates that follow the index more or less closely; last, the range over every combination
+  let wif=''; if(anyHedge&&(tr||fr)){ const W=tr?wifs():[], rg=rng(), mat=w=>Math.max(1000,0.01*Math.abs(w.s0.mean-a.lambda*w.s0.sd));
+    const line=(lab,s0x,s1x,g,cls)=>{ const [c,w]=verdict(g,mat({s0:s0x})); return `<tr${cls?` class="${cls}"`:''}><td>${lab}</td><td class="n">${km(s0x.p5)}</td><td class="n">${skm(s1x.p5-s0x.p5)}</td><td class="n">${skm(s1x.sd-s0x.sd)} (${pct(Math.abs(s1x.sd-s0x.sd)/s0x.sd)})</td><td class="n"><span class="pill ${c}" style="white-space:nowrap">${w}: ${skm(g)}</span></td></tr>`; };
+    const fb=fr&&state.sim.value.freight?BETAS.filter(b=>b!==a.freight.beta).map(b=>planWhatIf({beta:b})):[];
+    const central=[tr?`you would ${holdName(tr.scen[0])} and new rates last through ${mname(state.F[state.F.length-1].month)}`:'',fr?`your container rate moves ${a.freight.beta}× the freight index`:''].filter(Boolean);
+    wif=`<div class="scroll" style="margin-top:14px"><table class="score"><thead><tr><th>How much this rests on (same plan, same years)</th><th class="n">Bad year, no hedge</th><th class="n">Plan's change</th><th class="n">Swing change</th><th class="n">Score change</th></tr></thead><tbody>
+      ${line(`Argent's central case: ${central.join('; ')} (the numbers above)`,s0,s1,gain,'big')}
+      ${W.map(x=>line(x.revert?`Every new rate reversed three months after ${dayMon(tr.close)}`:`You would ${onlyIf(x.holdAt)}${holdName(x.holdAt)}`,x.w.s0,x.w.s1,x.w.gain)).join('')}
+      ${fb.map(x=>line(`Your container rate moves ${x.beta}× the freight index`,x.s0,x.s1,x.gain)).join('')}
+      ${rg&&rg.n>fb.length+W.length+1?`<tr><td>Every combination of the rows above</td><td class="n">—</td><td class="n">${skm(rg.lo)} to ${skm(rg.hi)}</td><td class="n">${skm(-rg.sdHi)} to ${skm(-rg.sdLo)}</td><td class="n">${skm(rg.gainLo)} to ${skm(rg.gainHi)}</td></tr>`:''}</tbody></table></div>`; }
+  host.innerHTML=`<div class="yearcta"><div><p class="eyebrow">Your whole year</p><h3 style="font:650 clamp(24px,3vw,34px)/1.1 var(--display);margin-top:6px">Next 12 months, with and without the plan</h3></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end"><label style="display:grid;gap:3px;font-size:12.5px;color:var(--muted)">How much do swings matter to you?<select id="y-lambda" style="font:500 14px var(--body);padding:7px 9px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)">${LAMBDAS.map(([v,l])=>`<option value="${v}" ${v===a.lambda?'selected':''}>${l}</option>`).join('')}</select></label>
+      <label style="display:grid;gap:3px;font-size:12.5px;color:var(--muted)">Borrowing rate (%)<input type="number" id="y-fund" min="0" max="40" step="0.25" value="${(state.fund.rate*100).toFixed(2)}" style="width:8em;font:500 14px var(--body);padding:7px 9px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)"></label></div></div>
+    <div class="cols"><div class="card"><div class="scroll"><table class="score"><thead><tr><th>12 months of cash</th><th class="n">No hedge</th><th class="n">With the plan</th><th class="n">Change</th></tr></thead><tbody>
+      ${row('Expected',s0.mean,s1.mean,false,true)}${row('Typical swing',s0.sd,s1.sd,false,false)}${row('Bad year (1 in 20)',s0.p5,s1.p5,false,true)}${row('Worst 1-in-20 years, average',s0.cvar5,s1.cvar5,false,true)}${row('Chance of a negative year',s0.pNeg,s1.pNeg,true,false)}${row(`Score: expected − ${a.lambda} × swing`,sc0,sc1,false,true,true)}</tbody></table></div>
+      <p style="margin-top:12px">${pill}</p><p class="muted" style="font-size:13.5px;margin-top:8px">${anyHedge?`Argent scores a plan by expected cash minus ${a.lambda} × the typical swing: a better bad year and a smaller swing for a small average cost. ${mean}: ${fill?'if every order fills, ':''}the bad year ${T.dP5>=0?'improves':'gets worse'} by ${km(Math.abs(T.dP5))} and the swing ${T.dSd>=0?'shrinks':'grows'} by ${km(Math.abs(T.dSd))}.${neg}${vw?' With your view the plan can raise expected cash; at Kalshi\'s prices it cannot.':''}`:'A hedge bought at market prices loses a little on average, so it only wins when a steadier year is worth more to you than its cost, or when you think the event is likelier than Kalshi does.'} "How much do swings matter to you?" sets how many dollars of expected cash one dollar less swing is worth: ${LAMBDAS.map(([v,l])=>`${l} ${v}`).join(', ')}.</p></div>
+      <div class="card chart"><p class="legend"><span><i class="k-no"></i>no hedge</span><span><i class="k-yes"></i>with the plan</span></p><div class="scroll" id="y-hist"></div><div class="tip" id="y-tip"></div>
+        <p class="muted" style="font-size:13px;margin-top:6px">${N.toLocaleString('en-US')} simulated years. Tariffs and freight use ${vw?'your view where you set one and Kalshi\'s prices elsewhere':'Kalshi\'s prices'}${Math.abs(kn)>=500?`; both columns include ${km(Math.abs(kn))} of ${kn>0?'higher':'lower'} costs already in force`:''}. Your own sales swings (about ${km(state.other.sd)})${state.cny.sd>0?` and yuan moves (about ${km(state.cny.sd)}, assuming your suppliers price in yuan)`:''} are included and no contract covers them.${tr?` Tariff rises the ${dayMon(tr.close)} contract cannot see, reversed before it or starting after it, are not in these years.`:''}</p></div></div>${wif?`<div class="card" style="margin-top:14px">${wif}</div>`:''}`;
+  hist(byId('y-hist'),byId('y-tip'),[{name:'no hedge',st:s0,area:'a-no',line:'l-no',mark:'m-no'},{name:'with the plan',st:s1,area:'a-yes',line:'l-yes',mark:'m-yes'}]); }
+
+/* ================= render: other exposures ================= */
+function renderOthers(){ const host=byId('r-others'), h=view.hedge; let rows=[], title;
+  if(h.mode==='books'){ title=`What ${booksShort()}'s books show, and what a contract can do about it`;
+    const yrs=Math.round(Object.keys(state.M).length/12), yw=['no','one','two','three','four','five','six','seven','eight','nine','ten'][yrs]||String(yrs);
+    for(const r of state.risks){ const cur=r.key===h.riskKey, sized=state.res.plan[r.key].legs.length>0;
+      if(r.kind==='ladder'){ const status=cur?'<span class="pill acc">Shown above</span>':sized?'<span class="pill good">In the plan</span>':r.legsDef.some(d=>d.nFull>0)?'<span class="pill off">Not worth it at this setting</span>':'<span class="pill off">No usable strike</span>';
+        rows.push(`<div class="orow"><div><b>${esc(r.title)}</b><div style="margin-top:4px">${status}</div></div><p>${esc(RISK_COPY[r.key].plain(r))}</p>${cur?'<span></span>':`<button data-map-risk="${r.key}">Show it</button>`}</div>`); }
+      else rows.push(`<div class="orow"><div><b>${esc(r.title)}</b><div style="margin-top:4px">${sized?'<span class="pill good">In the plan</span>':'<span class="pill off">Not sized</span>'}</div></div><p>Nothing in ${yw} year${yrs===1?'':'s'} of books shows how a recession would hit your sales, so Argent buys no recession contract. The contract (${esc(r.ticker)}) would also pay late for your year: it pays early only if the two negative quarters are recorded by late July 2027, so about ${pct(r.inShare)} of its payouts would land inside your 12 months.</p><span></span></div>`); }
+    if((SNAP.markets.KXHORMUZNORM||[]).length&&state.risks.some(r=>r.key==='freight')) rows.push(`<div class="orow"><div><b>Strait of Hormuz traffic</b><div style="margin-top:4px"><span class="pill off">Not used</span></div></div><p>A deep Kalshi market, but Shanghai–Los Angeles freight doesn't pass through Hormuz and nothing in your books ties your container rate to it.</p><span></span></div>`);
+    if(state.cny.expo>0) rows.push(`<div class="orow"><div><b>A stronger yuan</b><div style="margin-top:4px"><span class="pill off">No Kalshi market</span></div></div><p>${km(state.cny.expo)} of next year's purchases are paid in CNY; if your suppliers price in yuan, a ${pct(state.a.cnyVol)} move is about ${km(state.cny.sd)}. A forward from your payment provider fixes the rate.</p><span></span></div>`);
+    rows.push(`<div class="orow"><div><b>Your own sales swings</b><div style="margin-top:4px"><span class="pill off">No Kalshi market</span></div></div><p>About ${km(state.other.sd)} of net cash either way: month-to-month noise plus the chance your growth trend is off, after the cost of the goods you sell.</p><span></span></div>`); }
+  else { const others=(h.spec&&h.spec.others)||[]; if(!others.length){ host.innerHTML=''; return; } title='This business probably has other exposures. Want to map them?';
+    rows=others.map(o=>`<div class="orow"><div><b>${esc(o.name)}</b><div style="margin-top:4px">${o.series?`<span class="pill good">${esc(SERIES_INFO[o.series].short)}</span>`:'<span class="pill off">No Kalshi market</span>'}</div></div><p>${esc(o.note||'')}</p>${o.series?`<button data-map-series="${o.series}">Map it</button>`:'<span></span>'}</div>`); }
+  host.innerHTML=`<p class="eyebrow">Other exposures</p><h3>${esc(title)}</h3><div class="olist">${rows.join('')}</div>`; }
+/*APP3*/
+
+/* ================= loading ================= */
+let sampleFn=null, nimbusStats=null, aiCtl=null;
+function resetA(){ const a=state.a; a.sizes={}; a.shape={}; a.sdOther=null; a.dutyRatio=null; a.fundRate=null; a.lambda=0.5; a.palCap=true; a.bookOnly=false; a.betCap='view'; a.tariff={view:'',share:null,ref:null,holdAt:null}; a.freight={view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2}; a.recession={view:'',loss:0,inShare:0.5}; }
+function rebuildHedge(){ view.hedge=view.mode==='books'?booksHedge(view.primary):sentenceHedge(view.spec,view.size); }
+function loadSentence(spec,opts={}){ view.mode='sentence'; view.spec=spec; view.size=1; view.world=0; rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
+function runBooks(ledgerText,F,name,fsrc){ state.ledger=loadLedger(ledgerText); state.M=monthly(state.ledger); state.F=F||naiveForecast(state.M); state.name=name; state.fsrc=fsrc; resetA(); buildRisks(); simulate(); optimize(); evaluate(); }
+function showBooks(opts={}){ const sized=state.risks.filter(r=>state.a.sizes[r.key]>0); view.mode='books'; view.primary=(sized[0]||state.risks.find(r=>r.key==='tariff')||state.risks[0]||{}).key; view.world=0; view.full=null; view.tuned={};
+  rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
+function loadNimbus(opts){ runBooks(window.NIMBUS_LEDGER_CSV,forecastFromModule(window.NIMBUS_FORECAST),'Nimbus Home Goods LLC (synthetic example)','Nimbus forecast, 12 months'); showBooks(opts); }
+// Argent's recommendation for the current inputs (replan), after re-reading the books and quotes first (rebase); focus returns to the control that changed
+function replan(focusId){ view.full=null; view.tuned={}; optimize(); evaluate(); rebuildHedge(); renderResult(); const el=focusId&&byId(focusId); if(el) el.focus(); }
+function rebase(focusId){ buildRisks(); simulate(); replan(focusId); }
+
+/* ================= wiring the result ================= */
+function selectTab(which){ const say=which==='say'; byId('tab-say').setAttribute('aria-selected',say); byId('tab-books').setAttribute('aria-selected',!say); byId('pane-say').hidden=!say; byId('pane-books').hidden=say; }
+function wireResult(){ const on=(id,ev,fn)=>{const el=byId(id); if(el) el.addEventListener(ev,fn);};
+  document.querySelectorAll('#r-worlds [data-w]').forEach(b=>b.addEventListener('click',()=>{ view.world=+b.dataset.w; renderResult(); }));
+  const s=byId('size'); if(s){ s.addEventListener('input',()=>{ s.nextElementSibling.textContent=s.value+'%'; });
+    s.addEventListener('change',()=>{ const v=+s.value/100; if(view.mode==='books'){ const k=view.hedge.riskKey||view.primary, r=state.risks.find(x=>x.key===k);
+        if(r&&!(state.a.shape[k]||[]).some(x=>x>0)){ state.a.shape[k]=fullShape(r); view.full=k; }   // nothing recommended here: the slider scales the full ladder
+        state.a.sizes[k]=v; view.tuned[k]=true; evaluate(); } else view.size=v; rebuildHedge(); renderResult(); const n=byId('size'); if(n) n.focus(); }); }
+  on('btn-best','click',()=>replan('btn-best'));
+  on('y-lambda','change',e=>{ state.a.lambda=+e.target.value; replan('y-lambda'); });
+  on('pal','change',e=>{ state.a.palCap=e.target.checked; replan('pal'); });
+  const num=(id,set)=>on(id,'change',e=>{ const v=parseFloat(e.target.value); set(isFinite(v)?v:null); rebase(id); });
+  num('k-rate',v=>{ if(v>0) state.a.freight.rateNow=v; }); num('k-scfi',v=>{ if(v>0) state.a.freight.scfiNow=v; });
+  num('k-duty',v=>{ state.a.dutyRatio=v==null?null:Math.min(3,Math.max(0.2,1+v/100)); }); num('k-ref',v=>{ state.a.tariff.ref=v==null?null:Math.min(200,Math.max(0,v)); });
+  num('k-view',v=>{ state.a[view.hedge.riskKey].view=v==null?'':String(Math.min(99,Math.max(1,v))); });
+  num('y-fund',v=>{ state.a.fundRate=v==null?null:Math.min(40,Math.max(0,v))/100; });
+  on('k-hold','change',e=>{ const v=e.target.value; state.a.tariff.holdAt=v===''?null:+v; rebase('k-hold'); });
+  on('y-upload','click',()=>{ selectTab('books'); byId('top').scrollIntoView({behavior:'smooth'}); });
+  on('cta-books','click',e=>{ e.preventDefault(); selectTab('books'); byId('top').scrollIntoView({behavior:'smooth'}); });
+  on('y-nimbus','click',()=>loadNimbus());
+  // risk tabs only switch the view; 'Show it' on a risk outside the plan also prices its full ladder, and the page says so
+  const showRisk=(k,full)=>{ view.primary=k; view.world=0; const r=state.risks.find(x=>x.key===k);
+    if(full&&r&&!state.res.plan[k].legs.length&&r.legsDef.some(d=>d.nFull>0)){ state.a.sizes[k]=1; state.a.shape[k]=fullShape(r); view.full=k; view.tuned[k]=true; evaluate(); }
+    rebuildHedge(); renderResult(); if(full) byId('result').scrollIntoView({behavior:'smooth'}); };
+  document.querySelectorAll('[data-map-risk]').forEach(b=>b.addEventListener('click',()=>showRisk(b.dataset.mapRisk,true)));
+  document.querySelectorAll('#r-worlds [data-risk]').forEach(b=>b.addEventListener('click',()=>showRisk(b.dataset.risk,false)));
+  document.querySelectorAll('[data-map-series]').forEach(b=>b.addEventListener('click',()=>{ const t=TEMPLATES[b.dataset.mapSeries]; if(!t) return; selectTab('say'); byId('risk-text').value=t(); byId('top').scrollIntoView({behavior:'smooth'}); setTimeout(()=>byId('risk-text').focus({preventScroll:true}),400);
+    byId('ai-status').textContent='Edit the numbers, then build.'; })); }
+
+/* ================= tape, examples, missing markets ================= */
+function renderTape(){ const items=[]; const add=(s,t,p)=>{ if(p!=null&&isFinite(p)) items.push({s,t,p}); };
+  const Lt=ladder('KXTARIFFRATEPRC'); if(Lt){ const p=Lt.pts.find(x=>x.v===30); add('KXTARIFFRATEPRC','Tariff on China at 30%+ on 1 Jan',p&&p.S); }
+  const Ld=ladder('KXDIESELMON'); if(Ld){ const v=pickThreshold(Ld,0.3); add('KXDIESELMON',`Diesel above ${SERIES_INFO.KXDIESELMON.fmt(v)} on 30 Sep`,Ld.pts.find(x=>x.v===v).S); }
+  const Lf=ladder('KXFED'); if(Lf){ const v=pickThreshold(Lf,0.5); add('KXFED',`Fed above ${SERIES_INFO.KXFED.fmt(userLevel(SERIES_INFO.KXFED,v))} after December`,Lf.pts.find(x=>x.v===v).S); }
+  const Br=binaryMarket('KXRECSSNBER'); if(Br) add('KXRECSSNBER','Recession recorded in 2027',Br.p);
+  const Bh=binaryMarket('KXHORMUZNORM'); if(Bh) add('KXHORMUZNORM','Hormuz still disrupted on 1 Jul 2027',Bh.p);
+  const Ls=ladder('KXSCFI'); if(Ls){ const p=Ls.pts.find(x=>x.v===4500); add('KXSCFI','Freight index above 4,500 at end-2026',p&&p.S); }
+  const Lc=ladder('KXCPIYOY'); if(Lc){ const v=pickThreshold(Lc,0.3); add('KXCPIYOY',`CPI above ${SERIES_INFO.KXCPIYOY.fmt(userLevel(SERIES_INFO.KXCPIYOY,v))} for September`,Lc.pts.find(x=>x.v===v).S); }
+  const Lr=ladder('KXRAINNYCM'); if(Lr){ const v=pickThreshold(Lr,0.3); add('KXRAINNYCM',`Central Park rain above ${SERIES_INFO.KXRAINNYCM.fmt(v)} in September`,Lr.pts.find(x=>x.v===v).S); }
+  byId('tape').innerHTML=items.map(i=>`<a class="tick-card" href="${kalshiUrl(i.s)}" target="_blank" rel="noopener"><small>${i.s}</small><b>${esc(i.t)}</b><div class="bar"><i style="width:${(i.p*100).toFixed(1)}%"></i></div><em>${pct(i.p,i.p<0.1?1:0)} chance</em></a>`).join(''); }
+function renderExamples(){ byId('exlist').innerHTML=EXAMPLES.map(e=>`<li><button data-ex="${e.id}" aria-current="${e.id===view.exampleId}"><span class="num">${e.num}</span><span><b>${esc(e.cat)}</b><small>${esc(e.name)} · ${esc(e.place)}</small></span><span aria-hidden="true">→</span></button></li>`).join('');
+  const e=EXAMPLES.find(x=>x.id===view.exampleId); let quote,found,fine='';
+  if(e.books){ const n=nimbusStats; quote=e.quote;
+    found=!n?'Five years of books, mapped to every exposure a Kalshi contract settles on.':n.plan?`From ${n.lines.toLocaleString()} ledger lines: ${n.plan} ${n.planN>1?'cost':'costs'} ${money(n.cost)} up front and about ${money(n.expCost)} on average. ${n.fill?'If the orders fill at today\'s prices, ':''}Nimbus's bad year (1 in 20) improves by about ${km(n.dP5)}${n.lo!=null?` (${km(n.lo)} to ${km(n.hi)} across the assumptions its books can't settle)`:''} and its typical swing shrinks by ${pct(n.sdPct)}.`
+      :`From ${n.lines.toLocaleString()} ledger lines: at Kalshi's prices no hedge is worth its cost at the default setting.`;
+    fine=!n?'':`${n.checked?`${n.checked} `:''}${n.fill?`Only ${pct(n.onBookPct,1)} of the contracts are on the book today; if none of the limit orders fill, the bad year moves by ${skm(n.fillBook)} (${skm(n.fillHalf)} if half of each fills). `:''}${n.known>=500?`${km(n.known)} of higher freight and duty costs are already in force and no contract covers them.`:''}`.trim(); }
+  else { const spec=e.make(); quote=spec.text; const h=sentenceHedge(spec,1);
+    if(h.noFit){ found=`${h.title} ${h.explain}`; }
+    else { found=`${h.legs.length>1?`A ${h.legs.length}-strike ladder`:'One strike'} on ${h.info.short.toLowerCase()} costs ${money(h.cost)} and pays ${money(h.payFirst)} if it happens${h.maxPay>h.payFirst?`, up to ${money(h.maxPay)}`:''}.`;
+      fine=`${(h.worlds.find(w=>!w.right)||{}).text||''} ${spec.basis||''}`.trim(); } }
+  byId('excard').innerHTML=`<div class="top"><p class="eyebrow">${esc(e.cat)}</p><span class="pill acc">${e.books?'From books':'From a sentence'}</span></div><div><h3>${esc(e.name)}</h3><p class="muted" style="margin-top:6px">${esc(e.place)} · example business</p></div>
+    <blockquote>“${esc(quote)}”</blockquote><div class="found"><span>Argent found</span><p>${esc(found)}</p>${fine?`<small>${esc(fine)}</small>`:''}</div>
+    <div><button class="btn primary" id="ex-use">Use this example <span aria-hidden="true">→</span></button></div>`;
+  byId('exlist').querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ view.exampleId=b.dataset.ex; renderExamples(); }));
+  byId('ex-use').addEventListener('click',()=>useExample(e.id)); }
+function useExample(id){ const e=EXAMPLES.find(x=>x.id===id); if(e.books){ loadNimbus(); return; } const spec={...e.make(),source:'example'}; selectTab('say'); byId('risk-text').value=spec.text; loadSentence(spec); }
+function renderMissing(){ const n=nimbusStats; if(!n){ byId('mlist').innerHTML=''; return; }
+  const cards=[[km(n.cny),'of yuan purchases a year at Nimbus','Kalshi lists no USD/CNY contract, so the most precisely measured exposure in the books has nothing to size.'],
+    [`Up to ${pct(n.otherShare)}`,"of the year's uncertainty is Nimbus's own sales, by Argent's estimate",'No market settles on demand for one seller\'s products; recession and unemployment contracts track it loosely. The estimate comes from the forecast\'s own range and errs high.'],
+    ...(n.n?[[`${Math.round(n.onBook).toLocaleString()} of ${Math.round(n.n/1000).toLocaleString()}k`,'contracts in Nimbus\'s plan are on the book today','The tariff and freight-index ladders are priced but thin: the rest of the plan waits as limit orders that may never fill.']]:[]),
+    ...(n.recInShare?[[`About ${pct(n.recInShare)}`,'of recession payouts would land inside the 12 months','The contract pays as soon as two negative quarters are recorded, but only the first two chances fall before September 2027, so this share is an estimate; and nothing in the books says how a recession would hit sales.']]:[])];
+  byId('mlist').innerHTML=cards.map(([b,h,p])=>`<div class="card"><b>${esc(b)}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join(''); }
+
+/* ================= composer ================= */
+function aiNote(){ byId('ai-status').textContent=sampleFn?'Claude reads your sentence.':'Matching by keywords.'; }
+async function build(){ const text=byId('risk-text').value.trim(); if(!text){ byId('ai-status').textContent='Write one sentence about the risk first.'; return; }
+  const ex=EXAMPLES.find(e=>e.make&&e.make().text===text); if(ex){ loadSentence({...ex.make(),source:'example'}); return; }
+  const local=()=>{ const spec=parseLocal(text); spec.text=text; if(spec.series===null&&/yuan|renminbi|\brmb\b|\bcny\b|¥/i.test(text)) spec.alternatives=EXAMPLES.find(e=>e.id==='yuan').make().alternatives;
+    if(!spec.others.length&&spec.series) spec.others=DEFAULT_OTHERS[spec.series]||[]; return spec; };
+  if(!sampleFn){ loadSentence(local()); return; }
+  aiCtl=new AbortController(); const btn=byId('btn-build'), stop=byId('btn-stop'); btn.disabled=true; stop.hidden=false; byId('ai-status').textContent='Reading your sentence…';
+  try{ const j=await sampleFn.json(catalogPrompt(text),{modelTier:'quick',signal:aiCtl.signal}); const spec=cleanClaude(j); spec.text=text; if(!spec.others.length&&spec.series) spec.others=DEFAULT_OTHERS[spec.series]||[];
+    if(!spec.series){ spec.noFitReason=spec.noFitReason||'Nothing on Kalshi settles on a number that moves with this cost.'; if(/yuan|renminbi|\brmb\b|\bcny\b|¥/i.test(text)) spec.alternatives=EXAMPLES.find(e=>e.id==='yuan').make().alternatives; }
+    byId('ai-status').textContent='Matched by Claude.'; loadSentence(spec); }
+  catch(e){ if(e&&e.code==='cancelled'){ byId('ai-status').textContent='Stopped.'; }
+    else { if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code)) sampleFn=null;
+      byId('ai-status').textContent=e&&e.code==='rate_limited'?'Claude is busy; matched by keywords instead.':'Claude could not answer; matched by keywords.'; loadSentence(local()); } }
+  finally{ btn.disabled=false; stop.hidden=true; } }
+function wireComposer(){ byId('tab-say').addEventListener('click',()=>selectTab('say')); byId('tab-books').addEventListener('click',()=>selectTab('books'));
+  const chips=byId('chips'); for(const e of EXAMPLES.filter(x=>x.chip)){ const b=document.createElement('button'); b.textContent=e.chip; b.addEventListener('click',()=>useExample(e.id)); chips.appendChild(b); }
+  byId('btn-build').addEventListener('click',build); byId('btn-stop').addEventListener('click',()=>aiCtl&&aiCtl.abort());
+  byId('risk-text').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) build(); });
+  byId('btn-nimbus').addEventListener('click',()=>loadNimbus());
+  byId('btn-books').addEventListener('click',async()=>{ const lf=byId('f-ledger').files[0], ff=byId('f-forecast').files[0], st=byId('books-status');
+    if(!lf){ st.innerHTML='<span class="err">Choose a ledger CSV first.</span>'; return; }
+    try{ const lt=await lf.text(); const F=ff?forecastFromCSV(await ff.text()):null; runBooks(lt,F,lf.name,ff?ff.name:'same month last year × growth'); st.textContent=`Read ${state.ledger.length.toLocaleString()} lines.`; showBooks(); }
+    catch(err){ st.innerHTML=`<span class="err">${esc(err.message||String(err))}</span>`; } }); }
+
+/* ================= start ================= */
+function init(){ byId('snapchip').textContent=`Kalshi snapshot · ${snapTime()}`;
+  byId('foot-snap').textContent=`Prices, order-book depth and rules come from Kalshi's public API, captured ${snapTime()}. They change continuously: check the live price, size, fees and eligibility on Kalshi before any order.`;
+  try{ runBooks(window.NIMBUS_LEDGER_CSV,forecastFromModule(window.NIMBUS_FORECAST),'Nimbus Home Goods LLC (synthetic example)','Nimbus forecast, 12 months');
+    const T=planTotals(), rec=state.risks.find(r=>r.key==='recession'), fill=T.legs.length>0&&T.onBook<T.n-0.5, fc=fill?fillCases():null, rg=T.legs.length?rng():null;
+    // the Examples card carries the result title's numbers: the central case, the range across what the books can't settle, and the outside check
+    nimbusStats={lines:state.ledger.length,cny:state.cny.expo,otherShare:Math.min(1,state.other.sd**2/state.res.s0.sd**2),plan:planPhrase(T,false),planN:T.keys.length,cost:T.cost,expCost:T.expCost,dP5:T.dP5,sdPct:T.dSd/state.res.s0.sd,
+      known:state.known.duty+state.known.freight,onBook:T.onBook,n:T.n,onBookPct:T.n?T.onBook/T.n:1,recInShare:rec&&!rec.inWindow?rec.inShare:0,
+      fill,fillBook:fc?fc.book:0,fillHalf:fc?fc.half:0,lo:rg&&rg.n>1?rg.lo:null,hi:rg&&rg.n>1?rg.hi:null,checked:checkedTxt(T)}; }
+  catch(err){ console.error(err); }
+  renderTape(); renderMissing(); wireComposer();
+  const d=EXAMPLES.find(e=>e.id==='diesel').make(); byId('risk-text').value=d.text; loadSentence({...d,source:'example'},{scroll:false});
+  view.exampleId='nimbus'; renderExamples(); aiNote();
+  if(window.claude&&typeof window.claude.use==='function') window.claude.use('sample').then(s=>{ sampleFn=s||null; aiNote(); }).catch(()=>{ sampleFn=null; aiNote(); }); }
+init();
+})();
+</script>
+</body>
+</html>
