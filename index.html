@@ -206,6 +206,39 @@ svg text{font-family:var(--body);fill:var(--ink)} .tk{font-size:11.5px;fill:var(
 .mlist{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
 .mlist .card{display:grid;gap:6px;align-content:start} .mlist .card b{font:700 34px/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums} .mlist .card h3{font:700 16px/1.3 var(--body);letter-spacing:0} .mlist .card p{font-size:14px;color:var(--muted)}
 
+/* case study: a run of content slides */
+.case{padding-block:64px;border-top:1px solid var(--rule)}
+.case .exhead{border-bottom:1px solid var(--rule);padding-bottom:22px}
+.case-profile{margin-top:26px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.case-profile.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px}
+.case-profile .stat b{font-size:clamp(26px,2.8vw,36px)}
+.case-block{margin-top:52px;display:grid;gap:16px}
+.case-block>*,.case-2>*,.scen>*,.case-profile>*,.bridge>*{min-width:0}
+.case-block>h3{font:700 clamp(22px,2.6vw,30px)/1.2 var(--display);max-width:36ch}
+.case-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px 32px;align-items:center}
+.case-2>p{font-size:16px}
+.case-2.wide-left{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start}
+.bridge{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch}
+.bridge .stat{padding:14px}
+.bridge .stat b{font-size:clamp(20px,2.2vw,26px)}
+.bridge .op{align-self:center;font:700 22px var(--body);color:var(--muted)}
+.scen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.scen-card{display:grid;gap:10px;align-content:start}
+.scen-card.right{border-color:var(--accent)}
+.scen-card h4{margin:0;font:700 19px/1.3 var(--display)}
+.scen-card>p:last-child{font-size:14px;color:var(--muted)}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.vs div{display:grid;gap:2px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px}
+.vs div.w{border-color:var(--accent)}
+.vs span{font:700 11px var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.vs b{font:700 clamp(20px,2.2vw,26px)/1.15 var(--display);font-variant-numeric:tabular-nums}
+.case-plan td{font-size:14px;vertical-align:middle}
+.case-list{margin:0;padding-left:18px;display:grid;gap:8px;max-width:82ch} .case-list li{font-size:15px}
+.case-note{font-size:13px;color:var(--muted)}
+.case .cta{margin-top:4px}
+@media (max-width:880px){ .case-profile{grid-template-columns:repeat(2,minmax(0,1fr))} .case-profile.three,.case-2,.case-2.wide-left,.scen{grid-template-columns:1fr} .bridge{grid-template-columns:1fr} .bridge .op{display:none} }
+@media (max-width:560px){ .case-profile{grid-template-columns:1fr} .vs{grid-template-columns:1fr} }
+
 /* footer: the deck's cover again */
 footer{background:var(--cover);color:var(--cover-muted);padding-block:40px 56px}
 footer .wrap{display:grid;gap:12px;font-size:13px}
@@ -220,7 +253,7 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
 <body>
 <header class="nav"><div class="wrap">
   <a class="brand" href="#top" aria-label="Argent Research, home"><img src="assets/argent_research_logo_horizontal_small_dark.svg" alt="Argent Research" width="260" height="30"></a>
-  <nav aria-label="Sections"><a href="#how">How it works</a><a href="#examples">Examples</a><a href="#missing">Missing markets</a></nav>
+  <nav aria-label="Sections"><a href="#case">Case study</a><a href="#how">How it works</a><a href="#examples">Examples</a><a href="#missing">Missing markets</a></nav>
   <span class="snapchip" id="snapchip"></span>
 </div></header>
 
@@ -251,11 +284,11 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
         <button class="btn primary" id="btn-books">Build from my books <span aria-hidden="true">→</span></button></div>
     </div>
   </div>
-  <button class="strip" id="btn-nimbus"><span class="tag">5 YRS</span><span class="grow"><b>See it on real-shaped books</b><br><small>Nimbus Home Goods, a cross-border seller: 9,065 ledger lines and a 12-month forecast</small></span><span aria-hidden="true">▶</span></button>
+  <button class="strip" id="btn-nimbus"><span class="tag">CASE STUDY</span><span class="grow"><b>How a cross-border seller hedges its next 12 months</b><br><small>Nimbus Home Goods: five years of books, two Kalshi contracts and a better bad year</small></span><span aria-hidden="true">↓</span></button>
   <div class="tape" id="tape" aria-label="Kalshi markets Argent reads"></div>
 </div></section>
 
-<section class="result" id="result" aria-labelledby="r-title"><div class="wrap">
+<section class="result" id="result" aria-labelledby="r-title" hidden><div class="wrap">
   <div class="rhead"><div><p class="eyebrow" id="r-eyebrow">Business risk</p><h2 id="r-title"></h2><div class="rsource" id="r-source"></div></div><p id="r-explain"></p></div>
   <div class="stats" id="r-stats"></div>
   <div class="sizer" id="r-sizer"></div>
@@ -264,6 +297,11 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
   <div id="r-orders"></div>
   <div class="year" id="r-year"></div>
   <div class="others" id="r-others"></div>
+</div></section>
+
+<section class="case" id="case" aria-labelledby="case-title"><div class="wrap">
+  <div class="exhead"><div><p class="eyebrow">Case study</p><h2 id="case-title">How a cross-border seller hedges its next twelve months.</h2></div><p class="muted" style="max-width:46ch">Nimbus Home Goods imports kitchenware and lamps from China and sells on Amazon, Shopify and TikTok. Argent read five years of its books and built a plan for the year ahead.</p></div>
+  <div id="case-body"></div>
 </div></section>
 
 <section class="band" id="how"><div class="wrap">
@@ -1051,7 +1089,7 @@ function hist(host,tipEl,series){ host.innerHTML=''; const W=760,H=270,ml=50,mr=
     r.addEventListener('mouseleave',()=>tipEl.style.display='none'); } }
 function renderYear(){ const host=byId('r-year'), h=view.hedge;
   if(h.mode!=='books'){ host.innerHTML=`<div class="card yearcta"><div><p class="eyebrow">Your whole year</p><h3 style="margin-top:6px">One risk is one bet. Your books show the whole year.</h3><p class="muted" style="margin-top:6px;max-width:60ch">Upload a ledger and Argent finds every exposure, sizes the hedges together, and shows your next 12 months of cash with and without them.</p></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" id="y-upload">Upload your books</button><button class="btn" id="y-nimbus">See it on Nimbus's books</button></div></div>`; return; }
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" id="y-upload">Upload your books</button><button class="btn" id="y-nimbus">Read the Nimbus case study</button></div></div>`; return; }
   const a=state.a, {s0,s1}=state.res, sc0=s0.mean-a.lambda*s0.sd, sc1=s1.mean-a.lambda*s1.sd, gain=sc1-sc0, material=Math.max(1000,0.01*Math.abs(sc0)), T=planTotals();
   const row=(l,v0,v1,isP,up,big)=>{ const d=v1-v0, tiny=Math.abs(d)<(isP?0.0005:1), good=up?d>0:d<0, f=isP?(x=>pct(x,1)):km;
     return `<tr class="${big?'big':''}"><td>${l}</td><td class="n">${f(v0)}</td><td class="n">${f(v1)}</td><td class="n ${tiny?'':good?'up':'down'}">${tiny?'—':(d>0?'+':'−')+(isP?(Math.abs(d)*100).toFixed(1)+' pts':km(Math.abs(d)))}</td></tr>`; };
@@ -1102,11 +1140,11 @@ function renderOthers(){ const host=byId('r-others'), h=view.hedge; let rows=[],
 let sampleFn=null, nimbusStats=null, aiCtl=null;
 function resetA(){ const a=state.a; a.sizes={}; a.shape={}; a.sdOther=null; a.dutyRatio=null; a.fundRate=null; a.lambda=0.5; a.palCap=true; a.bookOnly=false; a.betCap='view'; a.tariff={view:'',share:null,ref:null,holdAt:null}; a.freight={view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2}; a.recession={view:'',loss:0,inShare:0.5}; }
 function rebuildHedge(){ view.hedge=view.mode==='books'?booksHedge(view.primary):sentenceHedge(view.spec,view.size); }
-function loadSentence(spec,opts={}){ view.mode='sentence'; view.spec=spec; view.size=1; view.world=0; rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
+function loadSentence(spec,opts={}){ view.mode='sentence'; view.spec=spec; view.size=1; view.world=0; byId('result').hidden=false; rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
 function runBooks(ledgerText,F,name,fsrc){ state.ledger=loadLedger(ledgerText); state.M=monthly(state.ledger); state.F=F||naiveForecast(state.M); state.name=name; state.fsrc=fsrc; resetA(); buildRisks(); simulate(); optimize(); evaluate(); }
 function showBooks(opts={}){ const sized=state.risks.filter(r=>state.a.sizes[r.key]>0); view.mode='books'; view.primary=(sized[0]||state.risks.find(r=>r.key==='tariff')||state.risks[0]||{}).key; view.world=0; view.full=null; view.tuned={};
-  rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
-function loadNimbus(opts){ runBooks(window.NIMBUS_LEDGER_CSV,forecastFromModule(window.NIMBUS_FORECAST),'Nimbus Home Goods LLC (synthetic example)','Nimbus forecast, 12 months'); showBooks(opts); }
+  byId('result').hidden=false; rebuildHedge(); renderResult(); if(opts.scroll!==false) byId('result').scrollIntoView({behavior:'smooth',block:'start'}); }
+function showCase(){ byId('case').scrollIntoView({behavior:'smooth',block:'start'}); }
 // Argent's recommendation for the current inputs (replan), after re-reading the books and quotes first (rebase); focus returns to the control that changed
 function replan(focusId){ view.full=null; view.tuned={}; optimize(); evaluate(); rebuildHedge(); renderResult(); const el=focusId&&byId(focusId); if(el) el.focus(); }
 function rebase(focusId){ buildRisks(); simulate(); replan(focusId); }
@@ -1130,7 +1168,7 @@ function wireResult(){ const on=(id,ev,fn)=>{const el=byId(id); if(el) el.addEve
   on('k-hold','change',e=>{ const v=e.target.value; state.a.tariff.holdAt=v===''?null:+v; rebase('k-hold'); });
   on('y-upload','click',()=>{ selectTab('books'); byId('top').scrollIntoView({behavior:'smooth'}); });
   on('cta-books','click',e=>{ e.preventDefault(); selectTab('books'); byId('top').scrollIntoView({behavior:'smooth'}); });
-  on('y-nimbus','click',()=>loadNimbus());
+  on('y-nimbus','click',showCase);
   // risk tabs only switch the view; 'Show it' on a risk outside the plan also prices its full ladder, and the page says so
   const showRisk=(k,full)=>{ view.primary=k; view.world=0; const r=state.risks.find(x=>x.key===k);
     if(full&&r&&!state.res.plan[k].legs.length&&r.legsDef.some(d=>d.nFull>0)){ state.a.sizes[k]=1; state.a.shape[k]=fullShape(r); view.full=k; view.tuned[k]=true; evaluate(); }
@@ -1154,25 +1192,92 @@ function renderTape(){ const items=[]; const add=(s,t,p)=>{ if(p!=null&&isFinite
 function renderExamples(){ byId('exlist').innerHTML=EXAMPLES.map(e=>`<li><button data-ex="${e.id}" aria-current="${e.id===view.exampleId}"><span class="num">${e.num}</span><span><b>${esc(e.cat)}</b><small>${esc(e.name)} · ${esc(e.place)}</small></span><span aria-hidden="true">→</span></button></li>`).join('');
   const e=EXAMPLES.find(x=>x.id===view.exampleId); let quote,found,fine='';
   if(e.books){ const n=nimbusStats; quote=e.quote;
-    found=!n?'Five years of books, mapped to every exposure a Kalshi contract settles on.':n.plan?`From ${n.lines.toLocaleString()} ledger lines: ${n.plan} ${n.planN>1?'cost':'costs'} ${money(n.cost)} up front and about ${money(n.expCost)} on average. ${n.fill?'If the orders fill at today\'s prices, ':''}Nimbus's bad year (1 in 20) improves by about ${km(n.dP5)}${n.lo!=null?` (${km(n.lo)} to ${km(n.hi)} across the assumptions its books can't settle)`:''} and its typical swing shrinks by ${pct(n.sdPct)}.`
-      :`From ${n.lines.toLocaleString()} ledger lines: at Kalshi's prices no hedge is worth its cost at the default setting.`;
-    fine=!n?'':`${n.checked?`${n.checked} `:''}${n.fill?`Only ${pct(n.onBookPct,1)} of the contracts are on the book today; if none of the limit orders fill, the bad year moves by ${skm(n.fillBook)} (${skm(n.fillHalf)} if half of each fills). `:''}${n.known>=500?`${km(n.known)} of higher freight and duty costs are already in force and no contract covers them.`:''}`.trim(); }
+    found=!n?'Five years of books, mapped to every exposure a Kalshi contract settles on.':n.plan?`From ${n.lines.toLocaleString()} ledger lines: ${n.plan} ${n.planN>1?'cost':'costs'} ${money(n.cost)} up front and about ${money(n.expCost)} on average, and improve Nimbus's bad year (1 in 20) by about ${km(n.dP5)}.`
+      :`From ${n.lines.toLocaleString()} ledger lines: at Kalshi's prices no hedge is worth its cost this year.`;
+    fine=n&&n.plan?'The case study walks through what the books show, the plan, and how it plays out when each bet comes true and when it does not.':''; }
   else { const spec=e.make(); quote=spec.text; const h=sentenceHedge(spec,1);
     if(h.noFit){ found=`${h.title} ${h.explain}`; }
     else { found=`${h.legs.length>1?`A ${h.legs.length}-strike ladder`:'One strike'} on ${h.info.short.toLowerCase()} costs ${money(h.cost)} and pays ${money(h.payFirst)} if it happens${h.maxPay>h.payFirst?`, up to ${money(h.maxPay)}`:''}.`;
       fine=`${(h.worlds.find(w=>!w.right)||{}).text||''} ${spec.basis||''}`.trim(); } }
   byId('excard').innerHTML=`<div class="top"><p class="eyebrow">${esc(e.cat)}</p><span class="pill acc">${e.books?'From books':'From a sentence'}</span></div><div><h3>${esc(e.name)}</h3><p class="muted" style="margin-top:6px">${esc(e.place)} · example business</p></div>
     <blockquote>“${esc(quote)}”</blockquote><div class="found"><span>Argent found</span><p>${esc(found)}</p>${fine?`<small>${esc(fine)}</small>`:''}</div>
-    <div><button class="btn primary" id="ex-use">Use this example <span aria-hidden="true">→</span></button></div>`;
+    <div><button class="btn primary" id="ex-use">${e.books?'Read the case study':'Use this example'} <span aria-hidden="true">${e.books?'↑':'→'}</span></button></div>`;
   byId('exlist').querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ view.exampleId=b.dataset.ex; renderExamples(); }));
   byId('ex-use').addEventListener('click',()=>useExample(e.id)); }
-function useExample(id){ const e=EXAMPLES.find(x=>x.id===id); if(e.books){ loadNimbus(); return; } const spec={...e.make(),source:'example'}; selectTab('say'); byId('risk-text').value=spec.text; loadSentence(spec); }
+function useExample(id){ const e=EXAMPLES.find(x=>x.id===id); if(e.books){ showCase(); return; } const spec={...e.make(),source:'example'}; selectTab('say'); byId('risk-text').value=spec.text; loadSentence(spec); }
 function renderMissing(){ const n=nimbusStats; if(!n){ byId('mlist').innerHTML=''; return; }
   const cards=[[km(n.cny),'of yuan purchases a year at Nimbus','Kalshi lists no USD/CNY contract, so the most precisely measured exposure in the books has nothing to size.'],
     [`Up to ${pct(n.otherShare)}`,"of the year's uncertainty is Nimbus's own sales, by Argent's estimate",'No market settles on demand for one seller\'s products; recession and unemployment contracts track it loosely. The estimate comes from the forecast\'s own range and errs high.'],
     ...(n.n?[[`${Math.round(n.onBook).toLocaleString()} of ${Math.round(n.n/1000).toLocaleString()}k`,'contracts in Nimbus\'s plan are on the book today','The tariff and freight-index ladders are priced but thin: the rest of the plan waits as limit orders that may never fill.']]:[]),
     ...(n.recInShare?[[`About ${pct(n.recInShare)}`,'of recession payouts would land inside the 12 months','The contract pays as soon as two negative quarters are recorded, but only the first two chances fall before September 2027, so this share is an estimate; and nothing in the books says how a recession would hit sales.']]:[])];
   byId('mlist').innerHTML=cards.map(([b,h,p])=>`<div class="card"><b>${esc(b)}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join(''); }
+
+/* ================= case study ================= */
+// Nimbus Home Goods told as a case study, from the same run as the tool: what its books show, the costs already in force, the plan,
+// each contract when its bet comes true and when it does not, and the whole year. Outcomes only: the modelling stays out of this section.
+let caseStats=null;
+function collectCase(){ const T=planTotals(), res=state.res, k=state.known, tr=state.risks.find(r=>r.key==='tariff'), fr=state.risks.find(r=>r.key==='freight');
+  const pos=key=>res.plan[key]&&res.plan[key].legs.length?(({worlds,cost})=>({worlds,cost}))(booksHedge(key)):null;
+  return {lines:state.ledger.length,years:Math.round(Object.keys(state.M).length/12),sales:state.F.reduce((s,r)=>s+(r.revenue||0),0),cny:state.cny.expo,cnyShare:state.cny.share,cnySd:state.cny.sd,cnyVol:state.a.cnyVol,
+    boxes:k.boxes||0,rateOld:k.rateOld||0,rateNow:state.a.freight.rateNow,dutyPct:k.dutyRatio-1,dutyMonth:k.dutyMonth,known:k.duty+k.freight,forecastNet:state.forecastNet,base:state.base,
+    tariffPt:tr?tr.expo/100:0,tariffRef:tr?tr.ref:null,tariffClose:tr?tr.close:null,freightClose:fr?fr.close:null,otherSd:state.other.sd,
+    legs:T.legs.map(l=>({ticker:l.m.ticker,series:l.series,side:l.side,sub:l.m.yes_sub_title||'',n:l.n,price:l.limit,up:l.premium+l.fee,settle:l.settle})),
+    cost:T.cost,back:T.back,expCost:T.expCost,n:T.n,onBook:T.onBook,dP5:T.dP5,dSd:T.dSd,dMean:T.dMean,s0:res.s0,s1:res.s1,tariff:pos('tariff'),freight:pos('freight')}; }
+function renderCase(c){ const host=byId('case-body');
+  if(!c||!c.legs.length){ host.innerHTML='<p class="muted">At today\'s prices no plan is worth its cost for this business, so there is no case study to show.</p>'; return; }
+  const NUM=['No','One','Two','Three','Four','Five'], yearOf=t=>t?new Date(t).getUTCFullYear():'';
+  const what=l=>l.series==='KXTARIFFRATEPRC'?['Tariffs on Chinese imports rise',`General tariff on Chinese imports ${l.sub.toLowerCase()} on ${dmy(c.tariffClose)}`]
+    :l.series==='KXSCFI'?['Container freight stays high',`Shanghai Containerized Freight Index ${l.sub.toLowerCase()} at the end of ${yearOf(c.freightClose)}`]:[l.series,l.sub];
+  const row=(name,text,cls,tag)=>`<div class="orow"><div><b>${esc(name)}</b><div style="margin-top:4px"><span class="pill ${cls}">${esc(tag)}</span></div></div><p>${esc(text)}</p><span></span></div>`;
+  const stat=(label,value,note,cls)=>`<div class="stat${cls?' '+cls:''}"><span>${esc(label)}</span><b>${esc(value)}</b><small>${esc(note)}</small></div>`;
+  const card=(right,p,title,without,withPlan,text)=>`<div class="card scen-card${right?' right':''}"><p class="eyebrow">${right?'The bet comes true':'The bet does not'} · ${pct(p,p<0.1?1:0)} chance</p><h4>${esc(title)}</h4>
+    <div class="vs"><div><span>Without the plan</span><b>${skm(without)}</b></div><div class="w"><span>With this contract</span><b>${skm(withPlan)}</b></div></div><p>${esc(text)}</p></div>`;
+  const above=w=>/\+$/.test(w.short)?`above ${w.short.slice(0,-1)}`:w.short;
+  const scen=[], t=c.tariff, f=c.freight;
+  if(t){ const up=t.worlds.find(w=>w.right), stay=t.worlds.find(w=>w.key==='stay');
+    if(up) scen.push(card(true,up.p,`Tariffs rise to ${up.short} by 1 January`,up.hit,up.hit+up.pay-t.cost,`Duty rises about ${km(-up.hit)} over the year; the tariff contract pays ${km(up.pay)} for ${km(t.cost)} up front.`));
+    if(stay) scen.push(card(false,stay.p,`Tariffs stay at ${c.tariffRef}%`,stay.hit,stay.hit+stay.pay-t.cost,`Duty does not change. The contract expires, and Nimbus is out the ${km(t.cost)} it paid.`)); }
+  if(f){ const rights=f.worlds.filter(w=>w.right), top=rights[rights.length-1], down=f.worlds.find(w=>w.key==='below0')||f.worlds.find(w=>!w.right);
+    if(top) scen.push(card(true,top.p,`Freight stays high: the index ends ${yearOf(c.freightClose)} ${above(top)}`,top.hit,top.hit+top.pay-f.cost,`Freight costs about ${km(-top.hit)} more than today's quotes imply; the freight contract pays ${km(top.pay)} for ${km(f.cost)} up front.`));
+    if(down) scen.push(card(false,down.p,`Freight eases: the index ends ${yearOf(c.freightClose)} at ${down.short}`,down.hit,down.hit+down.pay-f.cost,down.hit>0?`Freight is about ${km(down.hit)} cheaper, but the contract expires: ${km(f.cost)} spent on protection Nimbus did not need.`:`The contract expires, and Nimbus is out the ${km(f.cost)} it paid.`)); }
+  const paid=[...new Set(c.legs.map(l=>mname(l.settle)))];
+  host.innerHTML=`<div class="case-profile">
+      ${stat('Cash from sales, next 12 months',km(c.sales),'Amazon US and EU, Shopify and TikTok Shop')}
+      ${stat('Bought from China a year',km(c.cny),`kitchenware, lamps and storage, ${c.cnyShare>0.95?'paid in yuan':'mostly paid in yuan'}`)}
+      ${stat('Containers a year',fmtN(c.boxes),'Shanghai to Los Angeles')}
+      ${stat('Books read',fmtN(c.lines),`ledger lines over ${c.years} years, and a 12-month forecast`)}</div>
+    <div class="case-block"><p class="eyebrow">01 · What the books show</p><h3>Four exposures move Nimbus's year. Two of them trade on Kalshi.</h3>
+      <div class="olist">${row('Tariffs on Chinese imports',`Each point on the general China tariff adds about ${km(c.tariffPt)} of duty over the next 12 months.`,'good','Kalshi tariff contracts')}
+      ${row('Container freight',`Each $1,000 on the Shanghai–Los Angeles container rate adds about ${km(c.boxes*1000)} of freight over the year.`,'good','Kalshi freight index')}
+      ${row('Its own sales',`A typical year's cash lands about ${km(c.otherSd)} above or below plan.`,'off','No contract')}
+      ${row('The yuan',`${km(c.cny)} of purchases go to Chinese factories; a ${pct(c.cnyVol)} move in the yuan is about ${km(c.cnySd)}.`,'off','Not on Kalshi')}</div></div>
+    <div class="case-block"><p class="eyebrow">02 · Before hedging</p><h3>${km(c.known)} of higher costs are already locked in. No contract can hedge them.</h3>
+      <div class="case-2"><p>The forecast still priced containers at last year's average of ${money(c.rateOld)}; today's Shanghai–Los Angeles quote is ${money(c.rateNow)}. ${esc(mname(c.dutyMonth))}'s customs entries ran ${pct(Math.abs(c.dutyPct))} ${c.dutyPct>=0?'above':'below'} their 12-month average. Argent moves both into the forecast before sizing anything, so the plan protects Nimbus against what could still change, not against what already has.</p>
+        <div class="bridge">${stat('Forecast cash',skm(c.forecastNet),'operating cash, next 12 months')}<div class="op" aria-hidden="true">−</div>${stat('Already in force',km(c.known),'freight quotes and duty')}<div class="op" aria-hidden="true">=</div>${stat('Starting point',skm(c.base),'before anything that could still change','pay')}</div></div></div>
+    <div class="case-block"><p class="eyebrow">03 · The plan</p><h3>${NUM[c.legs.length]||c.legs.length} Kalshi contract${c.legs.length>1?'s':''}, ${money(c.cost)} up front.</h3>
+      <div class="scroll"><table class="score case-plan"><thead><tr><th>Protects against</th><th>Contract</th><th class="n">Contracts</th><th class="n">Price</th><th class="n">Up front</th><th class="n">Pays up to</th><th>Pays out</th></tr></thead><tbody>
+        ${c.legs.map(l=>{ const [risk,desc]=what(l); return `<tr><td><b>${esc(risk)}</b></td><td>${l.side.toUpperCase()} · ${esc(desc)}<br><a class="mono" style="font-size:12px" href="${kalshiUrl(l.series)}" target="_blank" rel="noopener">${esc(l.ticker)}</a></td><td class="n">${fmtN(l.n)}</td><td class="n">${Math.round(l.price*100)}¢</td><td class="n">${money(l.up)}</td><td class="n">${money(l.n)}</td><td>${esc(mlong(l.settle))}</td></tr>`; }).join('')}
+        <tr class="big"><td>Total</td><td></td><td class="n">${fmtN(c.n)}</td><td></td><td class="n">${money(c.cost)}</td><td></td><td></td></tr></tbody></table></div>
+      <div class="case-profile three">${stat('Paid up front',money(c.cost),`about ${km(c.back)} comes back on average when the contracts settle in ${andList(paid)}`)}
+        ${stat('Costs on average',km(c.expCost),'spreads, fees and the cost of carrying the premium')}
+        ${stat('Bad year (1 in 20)',skm(c.dP5),`better: from ${km(c.s0.p5)} to ${km(c.s1.p5)}`,'pay')}</div></div>
+    <div class="case-block"><p class="eyebrow">04 · Right or wrong</p><h3>What each contract does when its bet comes true, and when it does not.</h3>
+      <div class="scen">${scen.join('')}</div><p class="case-note">Each card shows one contract on its own against the cost it protects; chances come from Kalshi's prices.</p></div>
+    <div class="case-block"><p class="eyebrow">05 · The whole year</p><h3>A better bad year for a small average cost.</h3>
+      <div class="case-2 wide-left"><div class="card chart"><p class="legend"><span><i class="k-no"></i>without the plan</span><span><i class="k-yes"></i>with the plan</span></p><div class="scroll" id="case-hist"></div><div class="tip" id="case-tip"></div>
+          <p class="case-note">Nimbus's operating cash over the next 12 months, across the years Kalshi's prices make possible.</p></div>
+        <div><div class="scroll"><table class="score"><thead><tr><th>12 months of cash</th><th class="n">Without</th><th class="n">With the plan</th></tr></thead><tbody>
+          <tr><td>Bad year (1 in 20)</td><td class="n">${km(c.s0.p5)}</td><td class="n">${km(c.s1.p5)}</td></tr><tr><td>Typical year</td><td class="n">${km(c.s0.p50)}</td><td class="n">${km(c.s1.p50)}</td></tr>
+          <tr><td>Good year (1 in 20)</td><td class="n">${km(c.s0.p95)}</td><td class="n">${km(c.s1.p95)}</td></tr><tr><td>Typical swing</td><td class="n">${km(c.s0.sd)}</td><td class="n">${km(c.s1.sd)}</td></tr></tbody></table></div>
+          <p class="case-note" style="margin-top:12px">Hedging gives up part of the good years to protect the bad ones. At market prices it costs a little on average, here about ${km(Math.max(0,-c.dMean))}; in return the bad year improves by ${km(c.dP5)} and the swing narrows by ${pct(c.dSd/c.s0.sd)}.</p></div></div></div>
+    <div class="case-block"><p class="eyebrow">06 · What stays with Nimbus</p>
+      <ul class="case-list"><li><b>Its own sales and the yuan.</b> No listed contract covers them, so the plan leaves them alone.</li>
+        <li><b>Fills.</b> Only ${fmtN(c.onBook)} of the ${fmtN(c.n)} contracts are on Kalshi's order book today; the rest wait as limit orders at these prices and may not fill.</li>
+        ${c.tariffClose?`<li><b>Timing.</b> The tariff contract counts the rate on ${dmy(c.tariffClose)}, so a rise after that date is not covered. The contracts pay in ${andList(paid)}; until then the premium is out of Nimbus's cash.</li>`:''}</ul>
+      <div class="cta"><button class="btn primary" id="case-books">Build a plan from your books <span aria-hidden="true">↑</span></button><a class="btn" href="#examples">See one-risk examples</a></div>
+      <p class="case-note">Nimbus Home Goods is fictional: its books are synthetic, built from public tariff, freight and currency history. Prices from Kalshi's public API, ${snapTime()}. An illustration, not investment advice.</p></div>`;
+  hist(byId('case-hist'),byId('case-tip'),[{name:'without the plan',st:c.s0,area:'a-no',line:'l-no',mark:'m-no'},{name:'with the plan',st:c.s1,area:'a-yes',line:'l-yes',mark:'m-yes'}]);
+  byId('case-books').addEventListener('click',()=>{ selectTab('books'); byId('top').scrollIntoView({behavior:'smooth'}); }); }
 
 /* ================= composer ================= */
 function aiNote(){ byId('ai-status').textContent=sampleFn?'Claude reads your sentence.':'Matching by keywords.'; }
@@ -1193,7 +1298,7 @@ function wireComposer(){ byId('tab-say').addEventListener('click',()=>selectTab(
   const chips=byId('chips'); for(const e of EXAMPLES.filter(x=>x.chip)){ const b=document.createElement('button'); b.textContent=e.chip; b.addEventListener('click',()=>useExample(e.id)); chips.appendChild(b); }
   byId('btn-build').addEventListener('click',build); byId('btn-stop').addEventListener('click',()=>aiCtl&&aiCtl.abort());
   byId('risk-text').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) build(); });
-  byId('btn-nimbus').addEventListener('click',()=>loadNimbus());
+  byId('btn-nimbus').addEventListener('click',showCase);
   byId('btn-books').addEventListener('click',async()=>{ const lf=byId('f-ledger').files[0], ff=byId('f-forecast').files[0], st=byId('books-status');
     if(!lf){ st.innerHTML='<span class="err">Choose a ledger CSV first.</span>'; return; }
     try{ const lt=await lf.text(); const F=ff?forecastFromCSV(await ff.text()):null; runBooks(lt,F,lf.name,ff?ff.name:'same month last year × growth'); st.textContent=`Read ${state.ledger.length.toLocaleString()} lines.`; showBooks(); }
@@ -1207,11 +1312,13 @@ function init(){ byId('snapchip').textContent=`Kalshi snapshot · ${snapTime()}`
     // the Examples card carries the result title's numbers: the central case, the range across what the books can't settle, and the outside check
     nimbusStats={lines:state.ledger.length,cny:state.cny.expo,otherShare:Math.min(1,state.other.sd**2/state.res.s0.sd**2),plan:planPhrase(T,false),planN:T.keys.length,cost:T.cost,expCost:T.expCost,dP5:T.dP5,sdPct:T.dSd/state.res.s0.sd,
       known:state.known.duty+state.known.freight,onBook:T.onBook,n:T.n,onBookPct:T.n?T.onBook/T.n:1,recInShare:rec&&!rec.inWindow?rec.inShare:0,
-      fill,fillBook:fc?fc.book:0,fillHalf:fc?fc.half:0,lo:rg&&rg.n>1?rg.lo:null,hi:rg&&rg.n>1?rg.hi:null,checked:checkedTxt(T)}; }
+      fill,fillBook:fc?fc.book:0,fillHalf:fc?fc.half:0,lo:rg&&rg.n>1?rg.lo:null,hi:rg&&rg.n>1?rg.hi:null};
+    caseStats=collectCase(); }
   catch(err){ console.error(err); }
-  renderTape(); renderMissing(); wireComposer();
-  const d=EXAMPLES.find(e=>e.id==='diesel').make(); byId('risk-text').value=d.text; loadSentence({...d,source:'example'},{scroll:false});
-  view.exampleId='nimbus'; renderExamples(); aiNote();
+  renderTape(); renderMissing(); renderCase(caseStats); wireComposer();
+  // the result stays hidden until someone builds a hedge; the case study is the example at rest
+  const d=EXAMPLES.find(e=>e.id==='diesel').make(); byId('risk-text').value=d.text;
+  view.exampleId='diesel'; renderExamples(); aiNote();
   if(window.claude&&typeof window.claude.use==='function') window.claude.use('sample').then(s=>{ sampleFn=s||null; aiNote(); }).catch(()=>{ sampleFn=null; aiNote(); }); }
 init();
 })();
