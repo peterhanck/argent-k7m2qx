@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Argent Research · All-weather risk management</title>
-<meta name="description" content="Add your transaction history and a forecast, or link your bank, and see where your cash-flow risk comes from, how much each risk moves your next 12 months, what Kalshi contracts can hedge and what that would do.">
+<meta name="description" content="Add your transaction history and a forecast, or link your bank, and see where your cash-flow risk comes from, how much each risk moves your next 12 months, and what Kalshi contracts and currency forwards can hedge.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Argent Research">
 <meta property="og:title" content="Argent Research · All-weather risk management">
-<meta property="og:description" content="Add your transaction history and a forecast, or link your bank, and see where your cash-flow risk comes from, how much each risk moves your next 12 months, what Kalshi contracts can hedge and what that would do.">
+<meta property="og:description" content="Add your transaction history and a forecast, or link your bank, and see where your cash-flow risk comes from, how much each risk moves your next 12 months, and what Kalshi contracts and currency forwards can hedge.">
 <meta property="og:url" content="https://peterhanck.github.io/argent-research/">
 <meta name="twitter:card" content="summary">
 <link rel="canonical" href="https://peterhanck.github.io/argent-research/">
@@ -96,6 +96,8 @@ a.pill.acc:hover{text-decoration:underline}
 .linked{font-size:13.5px;font-weight:700;color:var(--good)}
 .connect-foot{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;border-top:1px solid var(--rule);padding:14px 22px}
 .connect-foot .hint{flex:1;min-width:220px;font-size:13px;color:var(--muted)}
+.homeccy{display:flex;align-items:center;gap:8px;font:700 13px var(--body);color:var(--ink)}
+.homeccy select{font:600 14px var(--body);padding:9px 10px;border-radius:6px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)}
 .status{flex-basis:100%;font-size:14px} .status:empty{display:none}
 
 /* report: a run of content slides */
@@ -147,7 +149,10 @@ tr.big td{font-weight:700;border-top:1px solid var(--rule-strong)}
 details.more summary{cursor:pointer;font:700 14px var(--body);color:var(--accent);width:fit-content}
 details.more[open] summary{margin-bottom:8px}
 .card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
-.known{display:grid;gap:8px;border-color:var(--accent);background:var(--panel)} .known h4{font:700 18px/1.3 var(--display)} .known p{font-size:14.5px}
+.known,.alt{display:grid;gap:8px;border-color:var(--accent);background:var(--panel)} .known h4,.alt h4{font:700 18px/1.3 var(--display)} .known p,.alt p{font-size:14.5px}
+.alt{border-style:dashed}
+td.pills{white-space:normal} td.pills .pill{margin:0 4px 4px 0}
+.sub-eyebrow{margin-top:14px}
 .vlist{display:grid;border-top:1px solid var(--rule)}
 .vrow{display:grid;grid-template-columns:minmax(0,16rem) minmax(0,1fr) 5.5rem;gap:6px 20px;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
 .vrow>*{min-width:0}
@@ -158,10 +163,11 @@ details.more[open] summary{margin-bottom:8px}
 .track{position:relative;height:16px;background:var(--shade);border-radius:3px;overflow:hidden}
 .track i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:0 4px 4px 0}
 .track i.best{background:var(--accent-tint);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.track i.all{background:repeating-linear-gradient(135deg,var(--accent-tint) 0 4px,var(--surface) 4px 8px);box-shadow:inset 0 0 0 1.5px var(--rule-strong)}
 .hrow .what{grid-column:1/-1;font-size:13.5px;line-height:1.7}
 .hrow .what .pill{margin-right:4px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)} .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-.k-plan{background:var(--accent)} .k-best{background:var(--accent-tint);box-shadow:inset 0 0 0 1.5px var(--accent)} .k-no{background:var(--no-bar)} .k-yes{background:var(--pay-bar)}
+.k-plan{background:var(--accent)} .k-best{background:var(--accent-tint);box-shadow:inset 0 0 0 1.5px var(--accent)} .k-all{background:repeating-linear-gradient(135deg,var(--accent-tint) 0 3px,var(--surface) 3px 6px);box-shadow:inset 0 0 0 1.5px var(--rule-strong)} .k-no{background:var(--no-bar)} .k-yes{background:var(--pay-bar)}
 .two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px 32px;align-items:start} .two>*{min-width:0}
 .scen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px} .scen>*{min-width:0}
 .scen-card{display:grid;gap:10px;align-content:start}
@@ -227,22 +233,22 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
   <p class="eyebrow">Argent Research / All-weather risk management</p>
   <h1>What could hurt your next twelve months?</h1>
   <span class="rule" aria-hidden="true"></span>
-  <p class="lede">Add your transaction history and a forecast, or link your bank. Argent traces every source of cash to the risk behind it, measures how much each risk could swing your next 12 months, and shows how much of that Kalshi contracts can hedge.</p>
+  <p class="lede">Add your transaction history and a forecast, or link your bank. Argent traces every source of cash to the risk behind it, measures how much each risk could swing your next 12 months, and shows what Kalshi contracts and currency forwards can hedge.</p>
   <div class="connect">
     <h2 class="sr">Add your data</h2>
     <div class="slots">
       <div class="slot"><p class="lab"><span class="n" aria-hidden="true">1</span>Transaction history</p>
-        <label class="drop" id="drop-ledger" data-state="empty"><input type="file" id="f-ledger" accept=".csv,text/csv"><b id="ledger-name">Choose a CSV or drop it here</b><span>Date, description and amount, exported from your bank or accounting software. Category and currency columns help.</span></label>
+        <label class="drop" id="drop-ledger" data-state="empty"><input type="file" id="f-ledger" accept=".csv,.xlsx,.xls,text/csv"><b id="ledger-name">Choose a CSV or Excel file, or drop it here</b><span>A transaction export (date, description, amount), or a daily summary with sales, refunds, ads and logistics columns. Currency columns help.</span></label>
         <button class="linkbtn" id="clear-ledger" hidden>Remove</button></div>
       <div class="slot"><p class="lab"><span class="n" aria-hidden="true">2</span>Forecast <span class="opt">Optional</span></p>
-        <label class="drop" id="drop-forecast" data-state="empty"><input type="file" id="f-forecast" accept=".csv,text/csv"><b id="forecast-name">Choose a CSV or drop it here</b><span>One row per month: sales and the main costs. Without one, Argent projects your next 12 months from the last 12.</span></label>
+        <label class="drop" id="drop-forecast" data-state="empty"><input type="file" id="f-forecast" accept=".csv,.xlsx,.xls,text/csv"><b id="forecast-name">Choose a CSV or Excel file, or drop it here</b><span>One row per month: sales and the main costs. Without one, Argent projects your next 12 months from your history.</span></label>
         <button class="linkbtn" id="clear-forecast" hidden>Remove</button></div>
       <div class="slot bank"><p class="lab">Or link your bank</p>
         <p class="sub">Pull transactions straight from your business account instead of exporting a file. Read-only.</p>
         <button class="btn" id="btn-plaid">Link with Plaid</button>
         <p class="linked" id="bank-status" hidden>Linked: sample bank feed (Nimbus Home Goods, synthetic)</p></div>
     </div>
-    <div class="connect-foot"><p class="hint">Files are read in your browser. Nothing is uploaded.</p>
+    <div class="connect-foot"><label class="homeccy" for="home-ccy">Your books are kept in <select id="home-ccy"><option value="USD">US dollars (USD)</option><option value="CNY">Chinese yuan (CNY)</option></select></label><p class="hint">Files are read in your browser. Nothing is uploaded.</p>
       <button class="btn" id="btn-sample">Use sample data</button><button class="btn primary" id="btn-analyze">Analyze my cash flow <span aria-hidden="true">→</span></button>
       <p class="status" id="connect-status" aria-live="polite"></p></div>
   </div>
@@ -263,8 +269,8 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
   <p class="eyebrow">How it works</p><h2>Connect. Analyze. Hedge.</h2>
   <ol class="steps">
     <li><b>01</b><h3>Connect</h3><p>Add a transaction export and, if you have one, a 12-month forecast. Or link your bank. Argent reads categories, counterparties and currencies.</p></li>
-    <li><b>02</b><h3>Analyze</h3><p>Argent ties each source of cash to the price, rate or demand that moves it, then measures how much each risk could swing your next 12 months, taking the odds from Kalshi's own prices.</p></li>
-    <li><b>03</b><h3>Hedge</h3><p>It shows how much of each risk listed Kalshi contracts can offset, sizes a hedge against the live order book, and projects your year with and without it.</p></li>
+    <li><b>02</b><h3>Analyze</h3><p>Argent ties each source of cash to the price, rate or demand that moves it, then measures how much each risk could swing your next 12 months, taking the odds from Kalshi's own prices and exchange-rate history.</p></li>
+    <li><b>03</b><h3>Hedge</h3><p>It shows how much of each risk Kalshi contracts and currency forwards can offset, sizes one plan across both, and projects your year with and without it.</p></li>
   </ol>
 </div></section>
 </main>
@@ -281,22 +287,30 @@ footer .draft{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:up
 
 <footer><div class="wrap">
   <img src="assets/argent_research_logo_horizontal_small_dark.svg" alt="Argent Research" width="225" height="26">
-  <p>Argent Research, all-weather risk management. This MVP doesn't hold money, place trades or give investment advice; any order happens on Kalshi. Not affiliated with Kalshi or Plaid.</p>
+  <p>Argent Research, all-weather risk management. This MVP doesn't hold money, place trades or give investment advice; any order happens on Kalshi, and any forward with your bank or payment provider. Not affiliated with Kalshi or Plaid.</p>
   <p id="foot-snap"></p>
   <p class="draft">Working draft</p>
 </div></footer>
 <script src="data/kalshi_snapshot.js"></script>
 <script src="data/nimbus_ledger.js"></script>
 <script src="data/nimbus_forecast.js"></script>
+<script src="data/fx_snapshot.js"></script>
 <script>
 (function(){'use strict';
 const $=s=>document.querySelector(s);
 const SNAP=window.KALSHI_SNAPSHOT;
 const NS='http://www.w3.org/2000/svg';
 const svgEl=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const q in a)e.setAttribute(q,a[q]);if(p)p.appendChild(e);return e;};
-const money=v=>(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-US');
-const km=v=>{const a=Math.abs(v),s=v<0?'−':'';return a>=1e6?s+'$'+(a/1e6).toFixed(2)+'M':a>=1e4?s+'$'+Math.round(a/1e3)+'k':a>=1e3?s+'$'+(a/1e3).toFixed(1)+'k':s+'$'+Math.round(a);};
+// Exchange rates: spot in units per US dollar, and each currency's volatility and correlations measured in each home currency (data/fx_snapshot.js)
+const FXS=window.FX_SNAPSHOT||{spot:{USD:1},vol:{USD:{}},corr:{USD:{}},kalshi:{pairs:{}}};
+const CCY_SYM={USD:'$',CNY:'¥',EUR:'€',GBP:'£',JPY:'¥',CAD:'C$',AUD:'A$',MXN:'MX$',HKD:'HK$',SGD:'S$',KRW:'₩',INR:'₹',BRL:'R$',CHF:'CHF ',TWD:'NT$'};
+// The engine computes in US dollars at today's spot; report figures show in the home currency (DISPLAY), contract amounts in dollars (usd, ukm)
+const DISPLAY={ccy:'USD',sym:'$',rate:1};
+const fmtK=(x,y)=>{const a=Math.abs(x),s=x<0?'−':'';return a>=1e6?s+y+(a/1e6).toFixed(2)+'M':a>=1e4?s+y+Math.round(a/1e3)+'k':a>=1e3?s+y+(a/1e3).toFixed(1)+'k':s+y+Math.round(a);};
+const money=v=>(v<0?'−':'')+DISPLAY.sym+Math.round(Math.abs(v*DISPLAY.rate)).toLocaleString('en-US');
+const km=v=>fmtK(v*DISPLAY.rate,DISPLAY.sym);
 const skm=v=>(v>0?'+':'')+km(v);
+const usd=v=>(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-US'), ukm=v=>fmtK(v,'$');
 const pct=(v,d=0)=>(v*100).toFixed(d)+'%';
 const mlabel=p=>{const [y,m]=p.split('-');return new Date(+y,+m-1,1).toLocaleString('en-US',{month:'short',year:'numeric'});};
 const mshort=p=>{const [y,m]=p.split('-');return new Date(+y,+m-1,1).toLocaleString('en-US',{month:'short'})+' ’'+y.slice(2);};
@@ -319,7 +333,11 @@ function parseDate(v){ const s=String(v).trim(); let m=s.match(/^(\d{4})-(\d{1,2
 function parseAmount(v){ if(v==null)return NaN; let t=String(v).trim(); if(!t)return NaN; let s=1; const u=t.toUpperCase();
   if(u.endsWith('CR'))t=t.slice(0,-2); else if(u.endsWith('DR')){s=-1;t=t.slice(0,-2);} if(t.startsWith('(')&&t.endsWith(')')){s=-s;t=t.slice(1,-1);}
   t=t.replace(/[,$\s]|usd/gi,''); if(t.startsWith('-')){s=-s;t=t.slice(1);} const n=parseFloat(t); return isNaN(n)?NaN:s*n; }
-function loadLedger(text){ const rows=parseCSV(text); if(rows.length<2) throw new Error('The ledger file is empty.');
+// Amount is in the books' home currency; a currency column, when present, says what currency the cash itself moved in.
+// Every amount is carried in US dollars at today's spot, so a yuan-based and a dollar-based ledger run through the same engine.
+const ccyCode=v=>{ const c=String(v||'').trim().toUpperCase(); return c==='RMB'||c==='CNH'||c==='人民币'||c==='元'?'CNY':c==='美元'?'USD':c; };
+const toUSD=(v,ccy)=>ccy==='USD'?v:v/((FXS.spot||{})[ccy]||1);
+function loadLedger(text,home='USD'){ const rows=parseCSV(text); if(rows.length<2) throw new Error('The ledger file is empty.');
   const h=rows[0].map(norm), col={};
   for(const k in ALIASES){ for(const a of ALIASES[k]){ const i=h.indexOf(a); if(i>=0&&!Object.values(col).includes(i)){col[k]=i;break;} } }
   if(col.date==null) throw new Error('No date column found. Name it Date.');
@@ -328,13 +346,14 @@ function loadLedger(text){ const rows=parseCSV(text); if(rows.length<2) throw ne
   for(const r of rows.slice(1)){ const d=parseDate(r[col.date]); if(!d)continue;
     let amt=col.amount!=null?parseAmount(r[col.amount]):(Math.abs(parseAmount(r[col.credit])||0)-Math.abs(parseAmount(r[col.debit])||0));
     if(!amt||isNaN(amt))continue;
-    out.push({month:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,day:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,desc:col.description!=null?r[col.description]:'',amount:amt,
-      ccy:(col.currency!=null&&r[col.currency])?String(r[col.currency]).toUpperCase():'USD',orig:col.orig!=null?parseAmount(r[col.orig]):NaN,cat:col.category!=null?r[col.category]:''}); }
+    out.push({month:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,day:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,desc:col.description!=null?r[col.description]:'',amount:toUSD(amt,home),
+      ccy:(col.currency!=null&&r[col.currency])?ccyCode(r[col.currency]):home,orig:col.orig!=null?parseAmount(r[col.orig]):NaN,cat:col.category!=null?r[col.category]:''}); }
   if(!out.length) throw new Error('No rows with a readable date and amount.'); return out; }
-const RULES=[['nonop',/transfer|loan (proceeds|repayment|advance|payment)|working capital advance|owner|capital contribution|distribution/],
-  ['supplier',/inventory|supplier|purchase order|cost of goods|cogs|po#/],['duties',/dut(y|ies)|tariff|customs/],['freight',/freight|forwarding|ocean|air freight/],
-  ['interest',/interest (charge|expense)|finance charge/],['refunds',/refund|chargeback/],['ads',/advertis|facebk|\bads\b/],['revenue',/sales|settlement|payout|revenue|receipt/]];
-function bucketOf(t){ const s=(t.cat+' '+t.desc).toLowerCase(); if(t.ccy==='CNY'&&t.amount<0) return 'supplier';
+const RULES=[['nonop',/transfer|loan (proceeds|repayment|advance|payment)|working capital advance|owner|capital contribution|distribution|转账|借款|还款/],
+  ['supplier',/inventory|supplier|purchase order|cost of goods|cogs|po#|采购|货款|进货|商品成本/],['duties',/dut(y|ies)|tariff|customs|关税/],['freight',/freight|forwarding|ocean|air freight|物流|运费|快递|头程|尾程|货代/],
+  ['interest',/interest (charge|expense)|finance charge|利息/],['refunds',/refund|chargeback|退款/],['ads',/advertis|facebk|\bads\b|广告|推广/],['revenue',/sales|settlement|payout|revenue|receipt|销售|收入|回款/]];
+// A yuan outflow at a business that isn't yuan-based is a purchase from a Chinese supplier
+function bucketOf(t){ const s=(t.cat+' '+t.desc).toLowerCase(); if(t.ccy==='CNY'&&state.home!=='CNY'&&t.amount<0) return 'supplier';
   for(const [b,re] of RULES){ if(re.test(s)){ if(b==='revenue'&&t.amount<0)continue; if(b==='refunds'&&t.amount>0)continue; return b; } } return t.amount>0?'revenue':'opex'; }
 function monthly(ledger){ const m={}; for(const t of ledger){ const b=bucketOf(t), r=(m[t.month]=m[t.month]||{}); r[b]=(r[b]||0)+t.amount;
     if(b==='supplier'&&t.ccy==='CNY') r.cnyUSD=(r.cnyUSD||0)-t.amount; } return m; }
@@ -377,6 +396,19 @@ function naiveForecast(M){ const ms=Object.keys(M).sort(); if(ms.length<12) thro
   const g=k=>{ if(ms.length<24) return 0; const a=tot(addMonths(last,-11),last,k),b=tot(addMonths(last,-23),addMonths(last,-12),k);return b>0?Math.max(-.5,Math.min(1,a/b-1)):0;};   // same months last year, grown at last year's rate when there is one
   const out=[]; for(let i=1;i<=12;i++){ const m=addMonths(last,i), r={month:m}; for(const k of keys) r[k]=Math.abs(M[addMonths(m,-12)]?.[k]||0)*(1+g(k));
     r.net=r.revenue-COST_KEYS.reduce((s,k)=>s+r[k],0); out.push(r);} return out; }
+// Under 12 months of history: each bucket's cash per calendar day over the last 91 days, carried over the next 12 months. The sales band comes
+// from how much complete months varied (at least 5%, at most 25% a month; 10% with fewer than three complete months).
+function runRateForecast(ledger,M){ const days=[...new Set(ledger.map(t=>t.day))].sort(), first=days[0], last=days[days.length-1], span=dayNum(last)-dayNum(first)+1;
+  if(span<45) throw new Error('Argent needs at least 45 days of transactions, or a forecast file.');
+  const n=Math.min(91,span), from=dayNum(last)-n+1, tot={};
+  for(const t of ledger){ if(dayNum(t.day)<from) continue; const b=bucketOf(t); if(b!=='nonop') tot[b]=(tot[b]||0)+t.amount; }
+  const full=Object.keys(M).sort().filter(m=>`${m}-01`>=first&&`${m}-${String(daysIn(m)).padStart(2,'0')}`<=last).map(m=>M[m].revenue||0);
+  const mean=full.reduce((s,x)=>s+x,0)/Math.max(1,full.length), cv=full.length>=3&&mean>0?Math.sqrt(full.reduce((s,x)=>s+(x-mean)**2,0)/(full.length-1))/mean:0.10;
+  const sig=Math.min(0.25,Math.max(0.05,cv)), out=[];
+  for(let i=1;i<=12;i++){ const m=addMonths(last.slice(0,7),i), d=daysIn(m), r={month:m,runRate:true};
+    r.revenue=Math.max(0,tot.revenue||0)/n*d; for(const k of COST_KEYS) r[k]=Math.max(0,-(tot[k]||0))/n*d;
+    r.revHi=r.revenue*Math.exp(1.28*sig); r.revLo=r.revenue*Math.exp(-1.28*sig); r.net=r.revenue-COST_KEYS.reduce((s,k)=>s+r[k],0); out.push(r); }
+  return out; }
 
 /* ---------- market helpers ---------- */
 function fairYes(m){ const bid=m.yes_bid_dollars||0, ask=(m.yes_ask_dollars&&m.yes_ask_dollars>0)?m.yes_ask_dollars:1;
@@ -512,7 +544,7 @@ const FACTORS={
   natgas:{name:'Natural gas prices',series:'KXNATGASMON'},
   power:{name:'Electricity prices',series:'KXPOWERKWH'},
   rates:{name:'Interest rates',series:'KXFED'},
-  fx:{name:'Exchange rates',why:'Kalshi lists no currency contracts'},
+  fx:{name:'Exchange rates',why:'No open Kalshi contract covers this currency'},
   airfreight:{name:'Air freight rates',why:'No air freight contract on Kalshi'},
   goods:{name:'Supplier prices',why:'Set by your suppliers; tariffs and currency are measured separately'},
   wages:{name:'Wages and services',why:'Reprice slowly, and no contract settles on them'},
@@ -523,7 +555,7 @@ const FACTORS={
 const SOURCE_RULES=[['nonop',t=>bucketOf(t)==='nonop'],['none',/interest income|income tax|sales tax|property tax|^taxes?\b/],
   ['demand',t=>(t.amount>0&&bucketOf(t)==='revenue')||bucketOf(t)==='refunds'],
   ['tariff',/customs|dut(y|ies)|tariff/],['freight',/freight - ocean|ocean|container|\bfcl\b|40hq|flexport|maersk|cosco|evergreen|hapag|\bmsc\b/],
-  ['airfreight',/air freight|freight - air|\bdhl\b|fedex express/],
+  ['airfreight',/air freight|freight - air|\bdhl\b|fedex express|parcel|快递|邮政|专线|小包/],
   ['diesel',/diesel|truck stop|pilot travel|pilot flying j|flying j|love'?s travel|ta petro|petro stopping/],
   ['gasoline',/vehicle fuel|gasoline|gas station|fuel card|fleet card|\bwex\b|fleetcor|comdata|buc-?ee'?s|valero|chevron|\bshell\b|exxon|mobil|\barco\b|circle k|speedway|\bfuel\b/],
   ['diesel',/drayage|trucking|truckload|\bltl\b|freight - (domestic|truck)/,0.3],
@@ -539,17 +571,51 @@ const FX_VOL={CNY:0.04,EUR:0.07,GBP:0.08,CAD:0.06,MXN:0.12,JPY:0.09,AUD:0.09};  
 function scanSources(ledger){ const ms=[...new Set(ledger.map(t=>t.month))].sort(), l12=new Set(ms.slice(-12)), by={}, spend={}, fx={};
   for(const t of ledger){ if(!l12.has(t.month)) continue; const [f,share]=factorOf(t), label=(t.cat&&t.cat.trim())||`Uncategorized (${FACTORS[f].name.toLowerCase()})`;
     const g=by[label]=by[label]||{label,lines:0,amount:0,abs:0,f:{},cc:{}}; g.lines++; g.amount+=t.amount; g.abs+=Math.abs(t.amount); g.f[f]=(g.f[f]||0)+Math.abs(t.amount)*share;
-    if(t.ccy&&t.ccy!=='USD') g.cc[t.ccy]=(g.cc[t.ccy]||0)+Math.abs(t.amount);
+    if(t.ccy&&t.ccy!==state.home) g.cc[t.ccy]=(g.cc[t.ccy]||0)+Math.abs(t.amount);
     if(t.amount<0&&FACTORS[f].series){ const s=spend[f]=spend[f]||{}; s[t.month]=(s[t.month]||0)-t.amount*share; }
-    if(t.ccy&&t.ccy!=='USD'&&f!=='nonop'){ const c=fx[t.ccy]=fx[t.ccy]||{ccy:t.ccy,in:0,out:0,lines:0}; if(t.amount>0) c.in+=t.amount; else c.out-=t.amount; c.lines++; } }
+    if(t.ccy&&t.ccy!==state.home&&f!=='nonop'){ const c=fx[t.ccy]=fx[t.ccy]||{ccy:t.ccy,in:0,out:0,lines:0}; if(t.amount>0) c.in+=t.amount; else c.out-=t.amount; c.lines++; } }
   // ccy: the foreign currency most of a source's cash is billed in, if any
   const sources=Object.values(by).map(g=>{ const [f,w]=Object.entries(g.f).sort((x,y)=>y[1]-x[1])[0], c=Object.entries(g.cc).sort((x,y)=>y[1]-x[1])[0];
       return {label:g.label,lines:g.lines,amount:g.amount,factor:f,linked:w,ccy:c&&c[1]>=0.5*g.abs?c[0]:null}; })
     .sort((x,y)=>Math.abs(y.amount)-Math.abs(x.amount));
   return {sources,spend,fx:Object.values(fx),months:ms.slice(-12),first:ms[0],last:ms[ms.length-1],lines:ledger.length}; }
 
+/* ---------- currencies ---------- */
+// Exposure to each foreign currency: the forecast's cash in that currency by month, split by each bucket's currency mix over the last 12 months of
+// the books. Sales, refunds and ads move with sales volume ('linked'); the rest is taken as committed ('fixed'). Inflows positive, outflows negative,
+// in dollars at spot. sd: the typical 12-month swing if the currency's value in the home currency follows a random walk with its historical volatility.
+const LINKED_BUCKETS=new Set(['revenue','refunds','ads']);
+// A currency enters the years at a much smaller swing than a Kalshi risk: a forward has no premium and only a small extra cost
+const FX_MATERIAL=MATERIAL=>Math.max(2000,0.01*(state.other?state.other.sd:0));
+function fxExposures(F,l12,MATERIAL){ const home=state.home, l12s=new Set(l12), mix={}, ccys=new Set(), out=[];
+  for(const t of state.ledger){ if(!l12s.has(t.month)) continue; const b=bucketOf(t); if(b==='nonop') continue; const m=mix[b]=mix[b]||{}; m[t.ccy]=(m[t.ccy]||0)+Math.abs(t.amount); }
+  for(const b in mix){ const tot=Object.values(mix[b]).reduce((s,x)=>s+x,0); for(const c in mix[b]){ mix[b][c]/=tot; if(c!==home&&mix[b][c]>=0.005) ccys.add(c); } }
+  const vols=(FXS.vol||{})[home]||{};
+  for(const c of ccys){
+    const rows=F.map(r=>{ let fixed=0,linked=0; for(const b of ['revenue',...COST_KEYS]){ const sh=(mix[b]||{})[c]||0; if(!sh) continue; const v=(b==='revenue'?1:-1)*(r[b]||0)*sh; if(LINKED_BUCKETS.has(b)) linked+=v; else fixed+=v; }
+      return {month:r.month,t:Math.max(1/365,((monthStart(r.month)-TODAY)/DAY+15)/365.25),fixed,linked,E:fixed+linked}; });    // converted mid-month
+    const sigma=vols[c]!=null?vols[c]:(FX_VOL[c]||0.08); let v=0; for(const p of rows) for(const q of rows) v+=p.E*q.E*Math.min(p.t,q.t);
+    const sd=sigma*Math.sqrt(Math.max(0,v));
+    out.push({ccy:c,home,rows,sigma,sd,net:rows.reduce((s,p)=>s+p.E,0),in:rows.reduce((s,p)=>s+Math.max(0,p.E),0),out:rows.reduce((s,p)=>s+Math.max(0,-p.E),0),
+      buckets:Object.keys(mix).filter(b=>(mix[b][c]||0)>=0.005),material:sd>=FX_MATERIAL(MATERIAL)}); }
+  return out.sort((x,y)=>y.sd-x.sd); }
+// Kalshi contracts on the currency's rate at a date inside the window, at least two weeks out: 'above K' ladders on the pair quoted either way round.
+// The side that pays when the currency moves against the business: YES on a direct pair when it pays out in that currency, NO when it earns in it.
+function fxKalshiLegs(c,months){ const home=state.home, pairs=((FXS.kalshi||{}).pairs)||{}, out=[];
+  for(const [key,dir] of [[c.ccy+home,1],[home+c.ccy,-1]]){ const p=pairs[key]; if(!p) continue;
+    for(const s of p.openSeries||[]) for(const m of (SNAP.markets||{})[s]||[]){
+      if(!(m.strike_type||'').startsWith('greater')||m.floor_strike==null||fairYes(m)==null) continue;
+      const T=(new Date(m.close_time)-TODAY)/DAY/365.25, sm=settleMonth(m); if(T<14/365||sm<months[0]||sm>months[months.length-1]) continue;
+      const hurtUp=c.net<0;       // an outflow currency hurts when it strengthens
+      out.push({m,series:s,side:(hurtUp===(dir>0))?'yes':'no',K:m.floor_strike,dir,T,nFull:0,unit:0}); } }
+  return out.sort((x,y)=>x.T-y.T||x.K-y.K); }
+function cholesky(A){ const n=A.length, L=A.map(()=>new Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<=i;j++){ let s=A[i][j]; for(let k=0;k<j;k++) s-=L[i][k]*L[j][k];
+    if(i===j){ if(s<=1e-9) return A.map((r,a)=>r.map((x,b)=>a===b?1:0)); L[i][i]=Math.sqrt(s); } else L[i][j]=s/L[j][j]; }
+  return L; }
+
 /* ---------- state ---------- */
-const state={ledger:null,M:null,F:null,fsrc:'',name:'',risks:[],sim:null,res:null,known:null,
+const state={ledger:null,M:null,F:null,fsrc:'',name:'',home:'USD',risks:[],sim:null,res:null,known:null,
   a:{lambda:0.5,markup:0,bookOnly:false,palCap:true,betCap:'view',countLater:false,floor:-100000,shortCost:0,cnyVol:0.04,sdOther:null,dutyRatio:null,sizes:{},shape:{},
      tariff:{view:'',share:null,ref:null,holdAt:null},freight:{view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2},recession:{view:'',loss:0,inShare:0.5}}};
 
@@ -630,13 +696,16 @@ function buildRisks(){ const F=state.F, M=state.M, a=state.a, months=F.map(r=>r.
         risks.push({key:'rates',kind:'ladder',model:'rate',series:'KXFED',title:'Interest rates rise',ref,refLo,refHi:Infinity,curve,bal,frac,annual:intr,sd,zI:zFor('rates:level'),
           markets:ms,settle,close:ms[0].close_time,unit:'%',legsDef:strikesFrom(pts,ms,refLo)}); } } }
   state.scan=scan; state.small=small; state.material=MATERIAL;
+  const o=otherRisk(F); state.other={...o,sd:a.sdOther!=null?a.sdOther:o.sd};
+  // currencies: every foreign currency in the books; material ones enter the years, with Kalshi rate contracts when an open one fits, and forwards
+  state.fx=fxExposures(F,l12,MATERIAL);
+  for(const c of state.fx) if(c.material){ const legs=fxKalshiLegs(c,months);
+    if(legs.length) risks.push({key:'fx_'+c.ccy,kind:'fxladder',ccy:c.ccy,series:legs[0].series,markets:legs.map(l=>l.m),legsDef:legs,settle:legs.map(l=>settleMonth(l.m)).sort().pop(),
+      close:legs[legs.length-1].m.close_time,v0:((FXS.spot||{})[state.home]||1)/((FXS.spot||{})[c.ccy]||1)}); }
   for(const r of risks){ r.si=months.indexOf(r.settle); r.inWindow=r.settle>=months[0]&&r.settle<=end; }
   state.risks=risks; state.known=known;
-  const cnyShare=Math.min(1,hs('cnyUSD')/Math.max(1,-hs('supplier')));
-  state.cny={expo:sumF('supplier')*cnyShare,share:cnyShare}; state.cny.sd=state.cny.expo*a.cnyVol;
-  const o=otherRisk(F); state.other={...o,sd:a.sdOther!=null?a.sdOther:o.sd};
-  // other currencies in the books move dollar cash with the exchange rate; no contract covers them, and only material ones enter the years
-  state.fx=scan.fx.filter(c=>c.ccy!=='CNY').map(c=>{ const vol=FX_VOL[c.ccy]||0.08, expo=Math.abs(c.in-c.out); return {...c,expo,vol,sd:expo*vol,material:expo*vol>=MATERIAL}; });
+  const cnyFx=state.fx.find(c=>c.ccy==='CNY'), cnyShare=Math.min(1,hs('cnyUSD')/Math.max(1,-hs('supplier')));
+  state.cny={expo:cnyFx?cnyFx.out:0,share:cnyShare,sd:cnyFx?cnyFx.sd:0};
   const br=borrowRate(state.ledger); state.fund={rate:a.fundRate!=null?Math.max(0,a.fundRate):(br?br.rate:0),ledger:br?br.rate:null};
   state.forecastNet=F.reduce((s,r)=>s+(r.net!=null?r.net:(r.revenue||0)-COST_KEYS.reduce((t,k)=>t+(r[k]||0),0)),0);
   state.base=state.forecastNet-known.duty-known.freight;
@@ -652,8 +721,8 @@ function probsFor(r){ const v=parseFloat(state.a[r.key].view); return isNaN(v)?r
 function tariffLoss(r,i,v,holdAt,revert){ const k=Math.min(r.days,Math.floor(U(Z.tE[i])*(r.days+1))), last=r.cum.length-1, end=revert?Math.min(last,r.days+revert):last;
   return (v-r.ref)/100*(r.cum[k]-r.cum[v>=holdAt?Math.min(end,k+r.sea):end]); }
 // One simulated set of years per tariff behaviour in r.scen (same draws; only the tariff loss differs). sim.raw, sim.loss.tariff: the first behaviour.
-function simulate(){ const sim={raw:new Float64Array(N).fill(state.base),loss:{},lossS:{},value:{},flag:{},mask:{}};
-  for(const r of state.risks){ const L=new Float64Array(N);
+function simulate(){ const sim={raw:new Float64Array(N).fill(state.base),loss:{},lossS:{},value:{},flag:{},mask:{},fx:{}};
+  for(const r of state.risks){ if(r.kind==='fxladder') continue; const L=new Float64Array(N);
     if(r.key==='tariff'){ const V=new Float64Array(N), c=curveFor(r), LS=r.scen.map(()=>new Float64Array(N));
       for(let i=0;i<N;i++){ let v=invCurve(c,U(Z.tI[i])); if(v>=r.refLo&&v<r.refHi) v=r.ref; V[i]=v; for(let s=0;s<LS.length;s++) LS[s][i]=tariffLoss(r,i,v,r.scen[s],0); L[i]=LS[0][i]; }
       sim.value[r.key]=V; sim.lossS[r.key]=LS; }
@@ -665,13 +734,35 @@ function simulate(){ const sim={raw:new Float64Array(N).fill(state.base),loss:{}
       sim.value[r.key]=V; }
     else { const p=probsFor(r), fl=new Uint8Array(N); for(let i=0;i<N;i++){ fl[i]=U(Z.rI[i])<p?(r.inWindow||U(Z.rE[i])<r.inShare?2:1):0; L[i]=fl[i]?r.hi:r.lo; } sim.flag[r.key]=fl; }
     sim.loss[r.key]=L; for(let i=0;i<N;i++) sim.raw[i]-=L[i]; }
-  const Lc=new Float64Array(N), Lo=new Float64Array(N);
-  for(let i=0;i<N;i++){ Lc[i]=state.cny.sd*Z.cny[i]; Lo[i]=-state.other.sd*Z.oth[i]; sim.raw[i]-=Lc[i]+Lo[i]; }
-  sim.loss.cny=Lc; sim.loss.other=Lo;
-  for(const c of state.fx||[]) if(c.material){ const z=zFor('fx:'+c.ccy), L=new Float64Array(N); for(let i=0;i<N;i++){ L[i]=c.sd*z[i]; sim.raw[i]-=L[i]; } sim.loss['fx_'+c.ccy]=L; }
+  const Lo=new Float64Array(N);
+  for(let i=0;i<N;i++){ Lo[i]=-state.other.sd*Z.oth[i]; sim.raw[i]-=Lo[i]; }
+  sim.loss.other=Lo; state.sim=sim;
+  simulateFx(sim);
   const tr=state.risks.find(r=>r.key==='tariff');     // the same years under each tariff behaviour: swap the first behaviour's tariff loss for the other's
   sim.rawS=tr?tr.scen.map((h,s)=>s?Float64Array.from(sim.raw,(x,i)=>x+sim.loss.tariff[i]-sim.lossS.tariff[s][i]):sim.raw):[sim.raw];
-  state.sim=sim; for(const r of state.risks) if(r.kind==='ladder') bucketize(r); }
+  state.sim=sim; for(const r of state.risks) if(r.kind==='ladder') bucketize(r);
+  // a currency contract's search unit: its minimum-variance size on its own
+  for(const r of state.risks) if(r.kind==='fxladder'){ const L=sim.loss[r.key];
+    for(const d of r.legsDef){ const P=legPays(r,d); let s1=0,n1=0,s0=0,n0=0; for(let i=0;i<N;i++){ if(P[i]){ s1+=L[i]; n1++; } else { s0+=L[i]; n0++; } }
+      d.unit=d.nFull=n1&&n0?Math.max(0,Math.round(s1/n1-s0/n0)):0; } } }
+// Each material currency's value in the home currency follows a random walk at its historical volatility, correlated across currencies and centred on
+// the forward, so that a forward costs only its spread. Month m's cash converts mid-month; sales-linked cash scales with the year's sales surprise
+// (the demand draw), so hedging more than the sales that turn up can add risk. Forwards come in three-month blocks, sized on the forecast amounts.
+function simulateFx(sim){ const fx=state.fx.filter(c=>c.material); if(!fx.length) return;
+  const fl=state.risks.filter(r=>r.kind==='fxladder'), times=[...new Set([...fx.flatMap(c=>c.rows.map(p=>p.t)),...fl.flatMap(r=>r.legsDef.map(d=>d.T))])].sort((a,b)=>a-b), K=times.length, C=fx.length;
+  const corr=((FXS.corr||{})[state.home])||{}, Lc=cholesky(fx.map(a=>fx.map(b=>a===b?1:(((corr[a.ccy]||{})[b.ccy])??0))));
+  const rev=state.F.reduce((s,r)=>s+(r.revenue||0),0), flow=state.other.flow||0.5, gs=rev>0?state.other.sd/(flow*rev):0;
+  const W=fx.map(()=>new Float64Array(N*K)), zs=times.map((t,k)=>fx.map(c=>zFor(`fx:${state.home}:${c.ccy}:${k}`)));
+  for(let k=0;k<K;k++){ const sq=Math.sqrt(times[k]-(k?times[k-1]:0));
+    for(let a=0;a<C;a++){ const Wa=W[a], sa=fx[a].sigma*sq, La=Lc[a];
+      for(let i=0;i<N;i++){ let z=0; for(let b=0;b<=a;b++) z+=La[b]*zs[k][b][i]; Wa[k*N+i]=(k?Wa[(k-1)*N+i]:0)+sa*z; } } }
+  fx.forEach((c,a)=>{ const L=new Float64Array(N), Wa=W[a], s2=c.sigma*c.sigma, idx=c.rows.map(p=>times.indexOf(p.t));
+    const blocks=[]; for(let q=0;q*3<c.rows.length;q++){ const rs=c.rows.slice(q*3,q*3+3).map((p,j)=>({...p,k:idx[q*3+j]}));
+      blocks.push({q,months:rs.map(p=>p.month),notional:rs.reduce((s,p)=>s+Math.abs(p.E),0),net:rs.reduce((s,p)=>s+p.E,0),rs,V:new Float64Array(N)}); }
+    for(let i=0;i<N;i++){ const g=Math.max(-0.9,gs*Z.oth[i]); let li=0;
+      for(const b of blocks){ let v=0; for(const p of b.rs){ const e=Math.exp(Wa[p.k*N+i]-s2*p.t/2)-1; li-=(p.fixed+p.linked*(1+g))*e; v-=p.E*e; } b.V[i]=v; }
+      L[i]=li; sim.raw[i]-=li; }
+    sim.loss['fx_'+c.ccy]=L; sim.fx[c.ccy]={times,W:Wa,sigma:c.sigma,blocks:blocks.map(({rs,...b})=>b)}; }); }
 const meets=(d,v)=>(d.m.strike_type==='greater_or_equal'?v>=d.K:v>d.K);
 // Per settlement bucket: market chance, average value and modelled cost under each tariff behaviour (lossS; meanLoss is the first).
 // A full ladder pays, in each bucket, the extra average cost over the bucket just below its first strike, using the larger cost across behaviours
@@ -697,8 +788,10 @@ const fundOf=(m,up)=>{ const f=state.fund, days=(new Date(m.expected_expiration_
 function legsFor(r,size){ const sh=state.a.shape[r.key]||[];
   return r.legsDef.map((d,j)=>{ const cap=capOf(r,d), p=priceLeg(d.m,d.side,Math.min(cap,Math.round(size*(sh[j]??0)*(d.unit||0))),state.a.markup,state.a.bookOnly,true);
     return {...p,K:d.K,d,cap,series:r.series,fund:fundOf(d.m,p.premium+p.fee)}; }).filter(l=>l.need>0); }
-function legPays(r,d){ const sim=state.sim, key=d.m.ticker; if(sim.mask[key]) return sim.mask[key]; const P=new Uint8Array(N);
+function legPays(r,d){ const sim=state.sim, key=d.m.ticker+(d.side==='no'?':no':''); if(sim.mask[key]) return sim.mask[key]; const P=new Uint8Array(N);
   if(r.kind==='ladder'){ const V=sim.value[r.key]; if(r.inWindow||state.a.countLater) for(let i=0;i<N;i++) P[i]=meets(d,V[i])?1:0; }
+  else if(r.kind==='fxladder'){ const f=sim.fx[r.ccy], k=f.times.indexOf(d.T), s2=f.sigma*f.sigma*d.T/2;       // the pair's rate at the contract's date
+    for(let i=0;i<N;i++){ const v=r.v0*Math.exp(f.W[k*N+i]-s2), pv=d.dir>0?v:1/v, hit=d.m.strike_type==='greater_or_equal'?pv>=d.K:pv>d.K; P[i]=(d.side==='yes')===hit?1:0; } }
   else { const fl=sim.flag[r.key]; for(let i=0;i<N;i++) P[i]=fl[i]===2||(fl[i]&&state.a.countLater)?1:0; }
   return sim.mask[key]=P; }
 function payLookup(r,legs){ if(r.kind==='ladder') return r.buckets.map(b=>legs.reduce((s,l)=>s+(b.lo>=l.K?l.n:0),0)); return legs.reduce((s,l)=>s+l.n,0); }
@@ -706,13 +799,31 @@ const shortfall=x=>x<state.a.floor?x-state.a.shortCost*(state.a.floor-x):x;
 function stats(arr){ const n=arr.length; let s=0,s2=0,neg=0; for(let i=0;i<n;i++){s+=arr[i];s2+=arr[i]*arr[i];if(arr[i]<0)neg++;}
   const mean=s/n, sd=Math.sqrt(Math.max(0,s2/n-mean*mean)), c=Float64Array.from(arr).sort(), k=Math.floor(n*0.05); let t=0; for(let i=0;i<k;i++) t+=c[i];
   return {mean,sd,p5:c[k],cvar5:t/k,p50:c[Math.floor(n*0.5)],p95:c[Math.floor(n*0.95)],pNeg:neg/n,sorted:c}; }
-function evaluate(){ const a=state.a, plan={}, pay=new Float64Array(N); let cost=0,fund=0;
-  for(const r of state.risks){ const legs=legsFor(r,a.sizes[r.key]||0), c=legs.reduce((s,l)=>s+l.premium+l.fee,0), f=legs.reduce((s,l)=>s+l.fund,0); plan[r.key]={legs,cost:c,fund:f,look:payLookup(r,legs)}; cost+=c; fund+=f;
-    for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) pay[i]+=l.n; } }
-  const out=cost+fund, cf0=new Float64Array(N), cf=new Float64Array(N), pnl=new Float64Array(N);   // cost: paid up front; fund: interest on it until settlement
+// Forwards: a share of each three-month block of currency cash, locked at the forward rate. The cash converts anyway, so a forward costs only what a
+// provider charges over converting at spot, paid as the cash converts. FWD_SPREAD is an assumption until a quote replaces it.
+const FWD_SPREAD=0.0015;
+// Full forward cover on one currency, on top of the plan: what it adds in cost, and what it does to the year and to that currency's swing
+function forwardAlternative(ccy){ const res=state.res, f=state.sim&&state.sim.fx[ccy]; if(!res||!f) return null; const cur=(state.a.fwd||{})[ccy]||[], L=state.sim.loss['fx_'+ccy];
+  const add=new Float64Array(N), cf=new Float64Array(N), D=Float64Array.from(L), out=res.cost+(res.fund||0)+(res.fwdCost||0); let cost=0;
+  for(const b of f.blocks){ const extra=1-(cur[b.q]||0); if(extra<=0) continue; cost+=extra*FWD_SPREAD*b.notional; for(let i=0;i<N;i++) add[i]+=extra*b.V[i]; }
+  for(const b of f.blocks) for(let i=0;i<N;i++) D[i]-=b.V[i];
+  for(let i=0;i<N;i++) cf[i]=shortfall(state.sim.raw[i]+res.pay[i]+add[i]-out-cost);
+  const s=stats(cf), notional=f.blocks.reduce((t,b)=>t+b.notional,0), net=f.blocks.reduce((t,b)=>t+b.net,0);
+  return {ccy,cost,notional,net,s,dP5:s.p5-res.s1.p5,dSd:res.s1.sd-s.sd,cut:Math.max(0,1-varOf(D)/varOf(L)),months:f.blocks.flatMap(b=>b.months)}; }
+function forwardPlan(a){ const out={}; for(const c of state.fx||[]){ const f=state.sim&&state.sim.fx[c.ccy]; if(!c.material||!f) continue; const ratios=(a.fwd||{})[c.ccy]||[];
+    out[c.ccy]=f.blocks.map(b=>({ccy:c.ccy,q:b.q,months:b.months,ratio:ratios[b.q]||0,notional:b.notional,net:b.net,amount:(ratios[b.q]||0)*b.net,cost:(ratios[b.q]||0)*FWD_SPREAD*b.notional,V:b.V})).filter(x=>x.ratio>0); }
+  return out; }
+function evaluate(){ const a=state.a, plan={}, pay=new Float64Array(N), payK=new Float64Array(N), payF=new Float64Array(N); let cost=0,fund=0,fwdCost=0;
+  for(const r of state.risks){ const legs=legsFor(r,a.sizes[r.key]||0), c=legs.reduce((s,l)=>s+l.premium+l.fee,0), f=legs.reduce((s,l)=>s+l.fund,0); plan[r.key]={legs,cost:c,fund:f,look:payLookup(r,legs),fwd:[],fwdCost:0}; cost+=c; fund+=f;
+    for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) payK[i]+=l.n; } }
+  const fp=forwardPlan(a);
+  for(const ccy in fp){ const k='fx_'+ccy, p=plan[k]=plan[k]||{legs:[],cost:0,fund:0,look:0,fwd:[],fwdCost:0}; p.fwd=fp[ccy]; p.fwdCost=fp[ccy].reduce((s,x)=>s+x.cost,0); fwdCost+=p.fwdCost;
+    for(const x of fp[ccy]){ const V=x.V; for(let i=0;i<N;i++) payF[i]+=x.ratio*V[i]; } }
+  for(let i=0;i<N;i++) pay[i]=payK[i]+payF[i];
+  const out=cost+fund+fwdCost, cf0=new Float64Array(N), cf=new Float64Array(N), pnl=new Float64Array(N);   // cost: paid up front; fund: interest on it until settlement; fwdCost: forward spreads
   for(let i=0;i<N;i++){ cf0[i]=shortfall(state.sim.raw[i]); cf[i]=shortfall(state.sim.raw[i]+pay[i]-out); pnl[i]=pay[i]-out; }
   const s0=stats(cf0), bad=[], paidV=[]; let sumPaid=0,cover=0,coverBad=0;
-  for(let i=0;i<N;i++){ const back=cost>0&&pay[i]>=out-1e-6; if(pay[i]>0){ paidV.push(pay[i]); sumPaid+=pay[i]; } if(back) cover++; if(cf0[i]<=s0.p5){ bad.push(i); if(back) coverBad++; } }
+  for(let i=0;i<N;i++){ const back=cost>0&&payK[i]>=cost+fund-1e-6; if(payK[i]>0){ paidV.push(payK[i]); sumPaid+=payK[i]; } if(back) cover++; if(cf0[i]<=s0.p5){ bad.push(i); if(back) coverBad++; } }
   paidV.sort((x,y)=>x-y); const paid=paidV.length;
   // right vs wrong for the whole plan: how often nothing pays, pays less than it cost, or pays for itself (overall and in the worst 1-in-20 years);
   // what comes back when something pays (mean and median), and in the worst 1-in-20 years; and what sinks a bad year: each component's extra loss in those years
@@ -722,8 +833,8 @@ function evaluate(){ const a=state.a, plan={}, pay=new Float64Array(N); let cost
   // the same plan on the same years under each tariff behaviour the plan was sized for (scen[0] is the one shown)
   const scen=state.sim.rawS.map((raw,s)=>{ if(!s) return {s0,s1,gain:gain(s0,s1)}; const c0=new Float64Array(N), c1=new Float64Array(N);
     for(let i=0;i<N;i++){ c0[i]=shortfall(raw[i]); c1[i]=shortfall(raw[i]+pay[i]-out); } const x=stats(c0), y=stats(c1); return {s0:x,s1:y,gain:gain(x,y)}; });
-  state.res={plan,cost,fund,pay,cf0,cf,pnl,s0,s1,sp:stats(pnl),scen,pNoPay:1-paid/N,payWhenPaid:paid?sumPaid/paid:0,payMedWhenPaid:paid?paidV[Math.floor(paid/2)]:0,
-    pCover:cost>0?cover/N:0,pShort:cost>0?(paid-cover)/N:0,pCoverBad:cost>0&&bad.length?coverBad/bad.length:0,payBad:avg(pay,bad),tail}; }
+  state.res={plan,cost,fund,fwdCost,pay,payK,payF,cf0,cf,pnl,s0,s1,sp:stats(pnl),scen,pNoPay:1-paid/N,payWhenPaid:paid?sumPaid/paid:0,payMedWhenPaid:paid?paidV[Math.floor(paid/2)]:0,
+    pCover:cost>0?cover/N:0,pShort:cost>0?(paid-cover)/N:0,pCoverBad:cost>0&&bad.length?coverBad/bad.length:0,payBad:avg(payK,bad),tail}; }
 // The same plan and the same simulated years if tariffs behave differently from what the numbers shown assume: holdAt = the rate from which you wait a
 // new rate out (only goods at sea pay it; Infinity = you keep importing whatever the rate), revert = days after the contract's date when every new rate
 // is reversed (0 = it lasts). Stats with and without the plan, and the change in the swing-weighted score.
@@ -731,7 +842,7 @@ function evaluate(){ const a=state.a, plan={}, pay=new Float64Array(N); let cost
 // itself (payout ≥ premium + interest) in that case's worst 1-in-20 years without it.
 function planWhatIf(o){ const tr=state.risks.find(x=>x.key==='tariff'), fr=state.risks.find(x=>x.key==='freight'), res=state.res; if(!res) return null;
   const tt=tr&&state.sim.value.tariff&&o.holdAt!==undefined, ff=fr&&state.sim.value.freight&&o.beta!=null&&o.beta!==state.a.freight.beta;
-  const sdN=ff?freightSdN(fr,o.beta,state.a.freight.basisSd):0, out=res.cost+(res.fund||0), lam=state.a.lambda, cf0=new Float64Array(N), cf=new Float64Array(N);
+  const sdN=ff?freightSdN(fr,o.beta,state.a.freight.basisSd):0, out=res.cost+(res.fund||0)+(res.fwdCost||0), lam=state.a.lambda, cf0=new Float64Array(N), cf=new Float64Array(N);
   for(let i=0;i<N;i++){ let raw=state.sim.raw[i]; if(tt) raw+=state.sim.loss.tariff[i]-tariffLoss(tr,i,state.sim.value.tariff[i],o.holdAt,o.revert||0);
     if(ff) raw+=state.sim.loss.freight[i]-freightLoss(fr,i,state.sim.value.freight[i],o.beta,sdN); cf0[i]=shortfall(raw); cf[i]=shortfall(raw+res.pay[i]-out); }
   const s0=stats(cf0), s1=stats(cf); let bad=0,cov=0; for(let i=0;i<N;i++) if(cf0[i]<=s0.p5){ bad++; if(out>0&&res.pay[i]>=out-1e-6) cov++; }
@@ -755,7 +866,7 @@ function tariffWhatIfs(){ const r=state.risks.find(x=>x.key==='tariff'); if(!r||
 function partialFill(frac){ const pay=new Float64Array(N), cf=new Float64Array(N); let cost=0,fund=0,n=0;
   for(const r of state.risks) for(const l of state.res.plan[r.key].legs){ const k=Math.floor(Math.min(l.onBook,l.n)+frac*Math.max(0,l.n-l.onBook)); if(k<1) continue;
     const p=priceLeg(l.m,l.side,k,state.a.markup,false,true), P=legPays(r,l.d); cost+=p.premium+p.fee; fund+=fundOf(l.m,p.premium+p.fee); n+=k; for(let i=0;i<N;i++) if(P[i]) pay[i]+=k; }
-  for(let i=0;i<N;i++) cf[i]=shortfall(state.sim.raw[i]+pay[i]-cost-fund); return {cost,fund,n,s:stats(cf)}; }
+  const res=state.res; for(let i=0;i<N;i++) cf[i]=shortfall(state.sim.raw[i]+pay[i]+(res.payF?res.payF[i]:0)-cost-fund-(res.fwdCost||0)); return {cost,fund,n,s:stats(cf)}; }
 // Per-leg sizes: multiples 0-3 of each leg's search unit (steps of 0.05), within position caps, maximising the swing-weighted score (expected cash
 // − λ × typical swing). When the books allow more than one tariff behaviour (r.scen), the plan maximises the smallest score gain across them, so it
 // has to help whichever way you would act. Coordinate ascent, then moves of two legs at once where two behaviours tie (the worst case has kinks there).
@@ -766,29 +877,35 @@ const viewOn=r=>!isNaN(parseFloat((state.a[r.key]||{}).view));
 function optimize(){ const a=state.a, G=61, step=0.05, X=state.sim.rawS.map(r=>Float64Array.from(r)), S=X.length, legs=[];
   for(const r of state.risks) r.legsDef.forEach((d,j)=>{ if(d.unit>0) legs.push({r,d,j,P:legPays(r,d),cap:capOf(r,d),g:0}); });
   for(const L of legs){ L.n=[]; L.c=[]; for(let g=0;g<G;g++){ const n=Math.min(L.cap,Math.round(g*step*L.d.unit)), p=n>0?priceLeg(L.d.m,L.d.side,n,a.markup,a.bookOnly,true):null; L.n.push(p?p.n:0); L.c.push(p?p.premium+p.fee+fundOf(L.d.m,p.premium+p.fee):0); } }
-  const room=L=>{ const r=L.r; if(r.kind!=='ladder'||!r.buckets||!(a.betCap==='always'||(a.betCap!=='never'&&viewOn(r)))) return Infinity;
+  for(const c of state.fx||[]){ const f=state.sim.fx[c.ccy]; if(!c.material||!f) continue;
+    for(const b of f.blocks) if(b.notional>0){ const L={fwd:true,ccy:c.ccy,q:b.q,V:b.V,cap:Infinity,g:0,n:[],c:[]}; for(let g=0;g<=20;g++){ L.n.push(g/20); L.c.push(g/20*FWD_SPREAD*b.notional); } legs.push(L); } }
+  const room=L=>{ const r=L.r; if(L.fwd||r.kind!=='ladder'||!r.buckets||!(a.betCap==='always'||(a.betCap!=='never'&&viewOn(r)))) return Infinity;
     const d0=r.legsDef[0], below=r.buckets.filter(b=>b.hi<=d0.K).pop(), base=below?Math.max(...below.lossS):0; let m=Infinity, run=-Infinity;
     for(const b of r.buckets){ if(b.lo<d0.K) continue; run=Math.max(run,...b.lossS); if(b.lo<L.d.K) continue; let other=0; for(const M of legs) if(M!==L&&M.r===r&&M.d.K<=b.lo) other+=M.n[M.g];
       m=Math.min(m,Math.max(0,run-base)-other); } return m; };
-  let cost=0; const scoreOf=(x,P,dn,c)=>{ let s=0,s2=0; for(let i=0;i<N;i++){ const v=shortfall(x[i]+(P&&P[i]?dn:0)-c); s+=v; s2+=v*v; } const m=s/N; return m-a.lambda*Math.sqrt(Math.max(0,s2/N-m*m)); };
-  const base=X.map(x=>scoreOf(x,null,0,0)), obj=(P,dn,dc)=>{ let m=Infinity; for(let s=0;s<S;s++){ const g=scoreOf(X[s],P,dn,cost+dc)-base[s]; if(g<m) m=g; } return m; };
-  const move=(L,g)=>{ const dn=L.n[g]-L.n[L.g]; if(dn) for(const x of X) for(let i=0;i<N;i++) if(L.P[i]) x[i]+=dn; cost+=L.c[g]-L.c[L.g]; L.g=g; };
+  let cost=0; const scoreOf=(x,L,dn,c)=>{ let s=0,s2=0;
+    if(L&&L.V){ const V=L.V; for(let i=0;i<N;i++){ const v=shortfall(x[i]+dn*V[i]-c); s+=v; s2+=v*v; } }
+    else { const P=L&&L.P; for(let i=0;i<N;i++){ const v=shortfall(x[i]+(P&&P[i]?dn:0)-c); s+=v; s2+=v*v; } }
+    const m=s/N; return m-a.lambda*Math.sqrt(Math.max(0,s2/N-m*m)); };
+  const base=X.map(x=>scoreOf(x,null,0,0)), obj=(L,dn,dc)=>{ let m=Infinity; for(let s=0;s<S;s++){ const g=scoreOf(X[s],L,dn,cost+dc)-base[s]; if(g<m) m=g; } return m; };
+  const move=(L,g)=>{ const dn=L.n[g]-L.n[L.g]; if(dn) for(const x of X){ if(L.V){ const V=L.V; for(let i=0;i<N;i++) x[i]+=dn*V[i]; } else for(let i=0;i<N;i++) if(L.P[i]) x[i]+=dn; } cost+=L.c[g]-L.c[L.g]; L.g=g; };
   for(let outer=0;outer<4;outer++){
     for(let pass=0;pass<8;pass++){ let moved=false;
-      for(const L of legs){ const rm=room(L); let best=L.g, bs=-Infinity; for(let g=0;g<G;g++){ if(g>0&&L.n[g]>rm+0.5) continue; const v=obj(L.P,L.n[g]-L.n[L.g],L.c[g]-L.c[L.g]); if(v>bs+1e-6){ bs=v; best=g; } }
+      for(const L of legs){ const rm=room(L); let best=L.g, bs=-Infinity; for(let g=0;g<L.n.length;g++){ if(g>0&&L.n[g]>rm+0.5) continue; const v=obj(L,L.n[g]-L.n[L.g],L.c[g]-L.c[L.g]); if(v>bs+1e-6){ bs=v; best=g; } }
         if(best!==L.g){ move(L,best); moved=true; } }
       if(!moved) break; }
     if(S<2) break;
     let cur=obj(null,0,0), moved=false;
     for(let p=0;p<legs.length;p++) for(let q=p+1;q<legs.length;q++) for(const [da,db] of [[1,-1],[-1,1],[1,1],[-1,-1]]){ const A=legs[p], B=legs[q], ga=A.g+da, gb=B.g+db;
-      if(ga<0||gb<0||ga>=G||gb>=G||(ga>0&&A.n[ga]>room(A)+0.5)||(gb>0&&B.n[gb]>room(B)+0.5)) continue; const ka=A.g, kb=B.g; move(A,ga); move(B,gb); const v=obj(null,0,0);
+      if(ga<0||gb<0||ga>=A.n.length||gb>=B.n.length||(ga>0&&A.n[ga]>room(A)+0.5)||(gb>0&&B.n[gb]>room(B)+0.5)) continue; const ka=A.g, kb=B.g; move(A,ga); move(B,gb); const v=obj(null,0,0);
       if(v>cur+1e-6){ cur=v; moved=true; } else { move(B,kb); move(A,ka); } }
     if(!moved) break; }
-  for(const r of state.risks){ a.sizes[r.key]=0; a.shape[r.key]=r.legsDef.map(()=>0); }
-  for(const L of legs){ if(L.g) a.sizes[L.r.key]=1; a.shape[L.r.key][L.j]=L.g*step; } }
+  for(const r of state.risks){ a.sizes[r.key]=0; a.shape[r.key]=r.legsDef.map(()=>0); } a.fwd={};
+  for(const L of legs){ if(L.fwd){ (a.fwd[L.ccy]=a.fwd[L.ccy]||[])[L.q]=L.n[L.g]; continue; } if(L.g) a.sizes[L.r.key]=1; a.shape[L.r.key][L.j]=L.g*step; } }
 
 /* ---------- the risk report ---------- */
-const CCY_NAME={CNY:'the yuan',EUR:'the euro',GBP:'the pound',CAD:'the Canadian dollar',MXN:'the peso',JPY:'the yen',AUD:'the Australian dollar'};
+const CCY_NAME={USD:'the US dollar',CNY:'the yuan',EUR:'the euro',GBP:'the pound',CAD:'the Canadian dollar',MXN:'the peso',JPY:'the yen',AUD:'the Australian dollar',BRL:'the real',
+  KRW:'the won',INR:'the rupee',HKD:'the Hong Kong dollar',CHF:'the Swiss franc',SGD:'the Singapore dollar',TWD:'the Taiwan dollar'};
 const meanOf=A=>{ let s=0; for(let i=0;i<A.length;i++) s+=A[i]; return s/A.length; };
 const varOf=A=>{ const m=meanOf(A); let s=0; for(let i=0;i<A.length;i++) s+=(A[i]-m)**2; return s/A.length; };
 // Share of L's variance that a least-squares combination of 0/1 payoff columns (and a constant) can offset: what the listed strikes could hedge at best,
@@ -808,17 +925,28 @@ function riskReport(){ const sim=state.sim, res=state.res; if(!sim||!res) return
   for(const k of keys){ const L=sim.loss[k]; for(let i=0;i<N;i++) tot[i]+=L[i]; }
   const vT=varOf(tot), mT=meanOf(tot), rows=[];
   for(const k of keys){ const L=sim.loss[k], mL=meanOf(L), vL=varOf(L), r=state.risks.find(x=>x.key===k); let cv=0; for(let i=0;i<N;i++) cv+=(L[i]-mL)*(tot[i]-mT);
-    const factor=k==='other'||k==='recession'?'demand':k==='cny'||k.startsWith('fx_')?'fx':k, ccy=k==='cny'?'CNY':k.startsWith('fx_')?k.slice(3):null;
+    const factor=k==='other'||k==='recession'?'demand':k.startsWith('fx_')?'fx':k, ccy=k.startsWith('fx_')?k.slice(3):null;
     const name=ccy?(CCY_NAME[ccy]||ccy).replace(/^./,ch=>ch.toUpperCase()):FACTORS[factor].name;
-    let hedgeable=0, cut=0, strikes=0, mk=[];
-    if(r&&r.kind==='ladder'&&r.inWindow&&r.markets){ mk=r.markets.filter(m=>{ const q=fairYes(m); return q!=null&&q>0.01&&q<0.99; }); const cols=mk.map(m=>legPays(r,{m,K:m.floor_strike}));
-      strikes=cols.length; hedgeable=explained(L,cols); }
-    const legs=res.plan[k]?res.plan[k].legs:[];
-    if(r&&legs.length){ const D=Float64Array.from(L); for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) D[i]-=l.n; } cut=Math.max(0,1-varOf(D)/vL); }
-    rows.push({key:k,factor,name,ccy,sd:Math.sqrt(vL),share:vT>0?cv/N/vT:0,hedgeable,cut,strikes,markets:mk,series:r&&r.kind==='ladder'?r.series:null,settle:r?r.settle:null,inWindow:r?r.inWindow:true,
-      why:r&&!r.inWindow?'The contract pays after your 12 months':FACTORS[factor].why||(r?'':'No listed contract'),legs}); }
+    let hedgeable=0, hedgeableAll=0, cut=0, strikes=0, mk=[], cols=[];
+    if(r&&r.kind==='ladder'&&r.inWindow&&r.markets){ mk=r.markets.filter(m=>{ const q=fairYes(m); return q!=null&&q>0.01&&q<0.99; }); cols=mk.map(m=>legPays(r,{m,K:m.floor_strike})); }
+    if(r&&r.kind==='fxladder'){ mk=r.markets; cols=r.legsDef.map(d=>legPays(r,d)); }
+    if(cols.length){ strikes=cols.length; hedgeable=explained(L,cols); }
+    const f=ccy&&sim.fx[ccy], fcols=f?f.blocks.map(b=>b.V):[];
+    hedgeableAll=fcols.length?Math.max(hedgeable,explained(L,[...cols,...fcols])):hedgeable;
+    const p=res.plan[k]||{legs:[],fwd:[]}, legs=p.legs||[], fwd=p.fwd||[];
+    if(legs.length||fwd.length){ const D=Float64Array.from(L); for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) D[i]-=l.n; }
+      for(const x of fwd){ for(let i=0;i<N;i++) D[i]-=x.ratio*x.V[i]; } cut=Math.max(0,1-varOf(D)/vL); }
+    rows.push({key:k,factor,name,ccy,sd:Math.sqrt(vL),share:vT>0?cv/N/vT:0,hedgeable,hedgeableAll,cut,strikes,markets:mk,series:r&&(r.kind==='ladder'||r.kind==='fxladder')?r.series:null,
+      settle:r?r.settle:null,inWindow:r?r.inWindow:true,forwards:fcols.length>0,why:r&&!r.inWindow?'The contract pays after your 12 months':ccy?fxWhy(ccy):FACTORS[factor].why||(r?'':'No listed contract'),legs,fwd}); }
   rows.sort((x,y)=>y.share-x.share);
-  return {sd:Math.sqrt(vT),rows,hedgeable:Math.max(0,Math.min(1,rows.reduce((s,x)=>s+Math.max(0,x.share)*x.hedgeable,0))),small:state.small,fx:state.fx,scan:state.scan,known:state.known}; }
+  const w=key=>Math.max(0,Math.min(1,rows.reduce((s,x)=>s+Math.max(0,x.share)*x[key],0)));
+  return {sd:Math.sqrt(vT),rows,hedgeable:w('hedgeable'),hedgeableAll:w('hedgeableAll'),small:state.small,fx:state.fx,scan:state.scan,known:state.known}; }
+// Why Kalshi can't take a currency: what is listed on the pair, and whether any of it is open for long enough
+function fxWhy(ccy){ const home=state.home, pairs=((FXS.kalshi||{}).pairs)||{}, p=pairs[ccy+home]||pairs[home+ccy], name=CCY_NAME[ccy]||ccy, pair=p?`${p.base}/${p.quote}`:`${ccy}/${home}`;
+  if(!p) return `Kalshi lists no ${pair} contract`;
+  if(!p.openMarkets) return `Kalshi lists ${pair} contracts, but none is open`;
+  const next=p.lastClose?new Date(p.lastClose):null, days=next?Math.round((next-TODAY)/DAY):0;
+  return days<14?`Kalshi's open ${pair} contracts settle within ${days<=1?'a day':days+' days'}, too soon to hedge a year`:p.strikeTypes&&!p.strikeTypes.some(t=>t.startsWith('greater'))?`Kalshi's open ${pair} contracts don't pay on the rate at a date`:`No open Kalshi ${pair} contract fits your 12 months`; }
 
 /* ================= Kalshi series Argent reads ================= */
 const SERIES_INFO={
@@ -873,6 +1001,13 @@ function hist(host,tipEl,series){ host.innerHTML=''; const W=760,H=270,ml=50,mr=
       const hr=host.parentElement.getBoundingClientRect(); let left=e.clientX-hr.left+12; if(left+tipEl.offsetWidth>hr.width-6) left=e.clientX-hr.left-tipEl.offsetWidth-12; tipEl.style.left=left+'px'; tipEl.style.top=(e.clientY-hr.top-10)+'px'; });
     r.addEventListener('mouseleave',()=>tipEl.style.display='none'); } }
 
+
+/* ================= currencies in words ================= */
+const ccyName=c=>CCY_NAME[c]||c, inCcy=(v,c)=>fmtK(Math.abs(v)*((FXS.spot||{})[c]||1),CCY_SYM[c]||c+' ');     // a dollar amount shown in currency c
+const fxAsOf=()=>FXS.asOf?dmy(FXS.asOf+'T12:00:00Z'):'';
+// how much of a currency's cash moves with sales (sales, refunds, ads) rather than being committed
+const linkedShare=ccy=>{ const c=(state.fx||[]).find(x=>x.ccy===ccy); if(!c) return 0; const l=Math.abs(c.rows.reduce((t,p)=>t+p.linked,0)), f=Math.abs(c.rows.reduce((t,p)=>t+p.fixed,0)); return l+f>0?l/(l+f):0; };
+
 /* ================= 1 · sources ================= */
 // What one ordinary move in each risk does to 12-month cash (a rise in a cost is negative), for the whole business
 function factorSens(){ const s={}, k=state.known, tr=state.risks.find(r=>r.key==='tariff'), rr=state.risks.find(r=>r.key==='rates');
@@ -884,35 +1019,40 @@ function factorSens(){ const s={}, k=state.known, tr=state.risks.find(r=>r.key==
   return s; }
 const MARKET_FACTORS=new Set(['demand','tariff','freight','diesel','gasoline','natgas','power','rates','fx']);
 // Each source of cash in the last 12 months with the risk it carries: a source billed mostly in a foreign currency with no market price of its own
-// carries that currency; one ordinary move in the risk, split across sources by their share of it; and whether Kalshi can take it
-function sourceRows(){ const sc=state.scan, sens=factorSens(), rows=state.report.rows, small=new Set(state.small.map(x=>x.factor)), tot={}, flow=state.other.flow||0.5, hasTariff=state.risks.some(r=>r.key==='tariff');
-  const out=sc.sources.map(s=>{ const fx=s.ccy&&['goods','wages','rent','ads','none','airfreight'].includes(s.factor), f=fx?'fx':s.factor, F0=FACTORS[f];
-    const rowKey=f==='fx'?(s.ccy==='CNY'?'cny':'fx_'+s.ccy):f==='demand'?'other':f, row=rows.find(x=>x.key===rowKey), ccyName=CCY_NAME[s.ccy]||s.ccy;
-    const risk=f==='fx'?cap(ccyName):F0.name;
-    const note=f==='fx'?`Billed in ${s.ccy}${s.factor==='goods'&&hasTariff?'; also the customs value your duty is charged on':''}`
-      :s.ccy?`Billed in ${s.ccy}, so it also moves with ${ccyName}`:s.factor==='goods'&&hasTariff?'Also the customs value your duty is charged on':s.factor==='diesel'&&s.linked<0.9*Math.abs(s.amount)?'Through the fuel surcharge':'';
-    let k=null;
-    if(F0.series) k=row&&row.strikes?{cls:'acc',txt:F0.series,href:kalshiUrl(F0.series)}:small.has(f)?{cls:'off',txt:'Too small to hedge'}:row&&!row.inWindow?{cls:'off',txt:'Pays after the 12 months'}:{cls:'off',txt:'No usable contract'};
-    else if(f==='nonop') k={cls:'off',txt:'Not operating cash'}; else if(f!=='none') k={cls:'off',txt:f==='fx'?'No currency contracts':'No contract'};
-    return {...s,f,risk,note,k,market:MARKET_FACTORS.has(f),row}; });
+// carries that currency; one ordinary move in the risk, split across sources by their share of it; and what can hedge it, on Kalshi or with a forward
+function sourceRows(){ const sc=state.scan, sens=factorSens(), rows=state.report.rows, small=new Set(state.small.map(x=>x.factor)), tot={}, flow=state.other.flow||0.5, hasTariff=state.risks.some(r=>r.key==='tariff'), home=state.home;
+  const out=sc.sources.map(s=>{ const foreign=s.ccy&&s.ccy!==home?s.ccy:null, fx=foreign&&['goods','wages','rent','ads','none','airfreight'].includes(s.factor), f=fx?'fx':s.factor, F0=FACTORS[f];
+    const rowKey=f==='fx'?'fx_'+foreign:f==='demand'?'other':f, row=rows.find(x=>x.key===rowKey), frow=foreign&&rows.find(x=>x.key==='fx_'+foreign);
+    const risk=f==='fx'?cap(ccyName(foreign)):F0.name;
+    const note=f==='fx'?`Billed in ${foreign}${s.factor==='goods'&&hasTariff?'; also the customs value your duty is charged on':''}`
+      :foreign?`Billed in ${foreign}, so it also moves with ${ccyName(foreign)}`:s.factor==='goods'&&hasTariff?'Also the customs value your duty is charged on':s.factor==='diesel'&&s.linked<0.9*Math.abs(s.amount)?'Through the fuel surcharge':'';
+    const k=[];
+    if(F0.series) k.push(row&&row.strikes?{cls:'acc',txt:F0.series,href:kalshiUrl(F0.series)}:small.has(f)?{cls:'off',txt:'Too small to hedge'}:row&&!row.inWindow?{cls:'off',txt:'Pays after the 12 months'}:{cls:'off',txt:'No usable contract'});
+    else if(f==='nonop') k.push({cls:'off',txt:'Not operating cash'});
+    else if(f!=='none'&&f!=='fx') k.push({cls:'off',txt:'No contract'});
+    if(foreign){ if(frow&&frow.strikes) k.push({cls:'acc',txt:frow.series,href:kalshiUrl(frow.series)}); if(frow&&frow.forwards) k.push({cls:'good',txt:`${foreign} forward`}); else if(f==='fx') k.push({cls:'off',txt:'Too small to hedge'}); }
+    return {...s,f,foreign,risk,note,k,market:MARKET_FACTORS.has(f),row}; });
   for(const s of out) tot[s.f]=(tot[s.f]||0)+s.linked;
-  for(const s of out) s.move=s.f==='fx'?`5% move in ${CCY_NAME[s.ccy]||s.ccy}: ${pm(Math.abs(s.amount)*0.05)}`:s.f==='demand'?(s.amount>0?`10% drop in sales: ${skm(-s.amount*flow*0.1)}`:'Moves with sales')
+  for(const s of out) s.move=s.f==='fx'?`5% move in ${ccyName(s.foreign)}: ${pm(Math.abs(s.amount)*0.05)}`:s.f==='demand'?(s.amount>0?`10% drop in sales: ${skm(-s.amount*flow*0.1)}`:'Moves with sales')
     :sens[s.f]&&tot[s.f]>0?`${cap(sens[s.f].move)}: ${skm(sens[s.f].v*s.linked/tot[s.f])}`:'';
   return out; }
 function knownBlock(){ const k=state.known, kn=k.duty+k.freight; if(Math.abs(kn)<500) return '';
-  const parts=[]; if(Math.abs(k.freight)>=500) parts.push(`Container quotes are ${money(state.a.freight.rateNow)} today (${QUOTES.rateNow.src}) against ${money(k.rateOld)} on the last 12 months' invoices: ${skm(-k.freight)} over the year.`);
+  const parts=[]; if(Math.abs(k.freight)>=500) parts.push(`Container quotes are ${usd(state.a.freight.rateNow)} today (${QUOTES.rateNow.src}) against ${usd(k.rateOld)} on the last 12 months' invoices: ${skm(-k.freight)} over the year.`);
   if(Math.abs(k.duty)>=500) parts.push(`Duty per customs entry in ${mname(k.dutyMonth)} ran ${pct(Math.abs(k.dutyRatio-1))} ${k.dutyRatio>=1?'above':'below'} the 12-month average: ${skm(-k.duty)}.`);
   return `<div class="card known"><p class="eyebrow">Already in force</p><h4>${kn>0?`${km(kn)} of higher costs have already happened.`:`Costs already in force run ${km(-kn)} below the forecast.`} No contract can hedge them.</h4>
     <p>${esc(parts.join(' '))} Argent moves both into the forecast before measuring what could still change.</p></div>`; }
 
-/* ================= 3 · contracts ================= */
+/* ================= 3 · contracts and forwards ================= */
 const COST_NOUN={tariff:'Duty',freight:'Freight',diesel:'Diesel',gasoline:'Fuel',natgas:'Gas',power:'Electricity',rates:'Interest'};
 const afterWhen=m=>whenOf(m).replace(/^on /,'').replace(/^in its /,"the index's ").replace(/^for /,'').replace(/^after /,'');
-function contractLine(row){ const info=SERIES_INFO[row.series]; if(!info||!row.markets.length) return '';
+function contractLine(row){ if(!row.markets.length) return ''; const info=SERIES_INFO[row.series], link=`<a class="pill acc" href="${kalshiUrl(row.series)}" target="_blank" rel="noopener">${esc(row.series)}</a>`;
+  if(!info) return `${link} <span>${esc(row.markets[0].title||'')} · ${row.markets.length} strike${row.markets.length>1?'s':''}</span>`;
   const ks=row.markets.map(m=>m.floor_strike).sort((a,b)=>a-b);
-  return `<a class="pill acc" href="${kalshiUrl(row.series)}" target="_blank" rel="noopener">${row.series}</a> <span>${esc(info.label)} ${esc(whenOf(row.markets[0]))} · ${ks.length} strike${ks.length>1?'s':''} from ${esc(info.fmt(ks[0]))} to ${esc(info.fmt(ks[ks.length-1]))}</span>`; }
-// What the listed strikes leave uncovered, in plain words
-function restOf(row){ const r=state.risks.find(x=>x.key===row.key); if(!r||!r.markets) return '';
+  return `${link} <span>${esc(info.label)} ${esc(whenOf(row.markets[0]))} · ${ks.length} strike${ks.length>1?'s':''} from ${esc(info.fmt(ks[0]))} to ${esc(info.fmt(ks[ks.length-1]))}</span>`; }
+const forwardLine=row=>`<span class="pill good">${esc(row.ccy)} forward</span> <span>Outside Kalshi: a forward from a bank or payment provider locks the rate on each quarter's ${esc(ccyName(row.ccy).replace(/^the /,''))} cash.</span>`;
+// What the hedges leave uncovered, in plain words
+function restOf(row){ if(row.ccy) return `Not covered: sales above or below the forecast, which change how much ${ccyName(row.ccy).replace(/^the /,'')} there is to convert.`;
+  const r=state.risks.find(x=>x.key===row.key); if(!r||!r.markets) return '';
   if(r.key==='tariff') return `Not covered: when a new rate starts, and any change after ${afterWhen(r.markets[0])}.`;
   if(r.key==='freight') return `Not covered: freight moves after ${afterWhen(r.markets[0])}, and your container rate drifting from the index.`;
   if(r.model==='index') return `Not covered: price moves after ${afterWhen(r.markets[0])}.`;
@@ -923,6 +1063,8 @@ function restOf(row){ const r=state.risks.find(x=>x.key===row.key); if(!r||!r.ma
 function bucketText(r,b,j){ const info=SERIES_INFO[r.series], f=info.fmt;
   if(r.key==='tariff'&&b.lo<=r.ref&&(b.top||r.ref<b.hi)) return `${info.subject} stays at today's ${f(r.ref)} through ${afterWhen(r.markets[0])}`;
   return `${info.subject} is ${j===0?`below ${f(b.hi)}`:b.top?`${f(b.lo)} or more`:`between ${f(b.lo)} and ${f(b.hi)}`} ${whenOf(r.markets[0])}`; }
+const scenCard=(right,chance,title,without,withPlan,text,eyebrow)=>`<div class="card scen-card${right?' right':''}"><p class="eyebrow">${eyebrow||(right?'The bet comes true':'The bet does not')} · ${chance}</p><h4>${esc(title)}</h4>
+  <div class="vs"><div><span>No hedge</span><b>${skm(without)}</b></div><div class="w"><span>With the hedge</span><b>${skm(withPlan)}</b></div></div><p>${esc(text)}</p></div>`;
 // One outcome where the hedge pays (the bucket holding a 1-in-7 bad outcome, or the first that pays) and a near miss where it does not
 // (the bucket just below the first strike, or the likeliest unpaid bucket when that one is a long shot)
 function scenCards(r){ const pl=state.res.plan[r.key], legs=pl.legs; if(r.kind!=='ladder'||!legs.length||!r.buckets) return [];
@@ -933,121 +1075,169 @@ function scenCards(r){ const pl=state.res.plan[r.key], legs=pl.legs; if(r.kind!=
   const card=(right,j)=>{ const b=bs[j], hit=-b.meanLoss, pay=pl.look[j]||0, net=hit+pay-cost;
     const move=hit<-500?`${noun} costs about ${km(-hit)} more than the forecast`:hit>500?`${noun} costs about ${km(hit)} less than the forecast`:`${noun} costs about what the forecast says`;
     const text=right?`${move}. The contract${many?'s pay':' pays'} ${km(pay)} for ${km(cost)} up front.`:`${move}. The contract${many?'s expire':' expires'}, and ${WHO.subj} ${WHO.is} out the ${km(cost)} ${many?'they':'it'} cost.`;
-    return `<div class="card scen-card${right?' right':''}"><p class="eyebrow">${right?'The bet comes true':'The bet does not'} · ${pct(b.pMkt,b.pMkt<0.1?1:0)} chance</p><h4>${esc(bucketText(r,b,j))}</h4>
-      <div class="vs"><div><span>No hedge</span><b>${skm(hit)}</b></div><div class="w"><span>With the hedge</span><b>${skm(net)}</b></div></div><p>${esc(text)}</p></div>`; };
+    return scenCard(right,`${pct(b.pMkt,b.pMkt<0.1?1:0)} chance`,bucketText(r,b,j),hit,net,text); };
   const out=[]; if(jr>=0) out.push(card(true,jr)); if(jw>=0) out.push(card(false,jw)); return out; }
+// A currency's hedges when the rate moves against the business (the worst 15% of its moves by the window's end) and when it moves its way (the best 15%)
+function fxCards(ccy){ const f=state.sim.fx[ccy], L=state.sim.loss['fx_'+ccy], p=state.res.plan['fx_'+ccy], c=(state.fx||[]).find(x=>x.ccy===ccy); if(!f||!p||!c) return [];
+  const legs=p.legs||[], fwd=p.fwd||[]; if(!legs.length&&!fwd.length) return [];
+  const k=f.times.length-1, s2=f.sigma*f.sigma*f.times[k]/2, mv=new Float64Array(N), hp=new Float64Array(N), r=state.risks.find(q=>q.key==='fx_'+ccy);
+  for(let i=0;i<N;i++) mv[i]=Math.exp(f.W[k*N+i]-s2)-1;
+  for(const x of fwd) for(let i=0;i<N;i++) hp[i]+=x.ratio*x.V[i];
+  for(const l of legs){ const P=legPays(r,l.d); for(let i=0;i<N;i++) if(P[i]) hp[i]+=l.n; }
+  const cost=(p.fwdCost||0)+(p.cost||0)+(p.fund||0), idx=Array.from({length:N},(_,i)=>i).sort((a,b)=>mv[a]-mv[b]), q=Math.floor(N*0.15), lo=idx.slice(0,q), hi=idx.slice(N-q);
+  const hurtUp=c.net<0, bad=hurtUp?hi:lo, good=hurtUp?lo:hi, avg=(A,ix)=>ix.reduce((s,i)=>s+A[i],0)/ix.length, name=cap(ccyName(ccy)), homeName=ccyName(state.home).replace(/^the /,''), end=mabbr(state.F[state.F.length-1].month);
+  const whose=WHO.poss==='your'?'Your':cap(WHO.poss), flowWord=c.net>0?`${ccy} income`:`${ccy} bills`;
+  const card=(right,ix)=>{ const m=avg(mv,ix), without=-avg(L,ix), withPlan=without+avg(hp,ix)-cost, verb=c.net>0?(without<0?'converts to':'converts to'):'costs';
+    const size=c.net>0?`about ${km(Math.abs(without))} ${without<0?'less':'more'} than the forecast`:`about ${km(Math.abs(without))} ${without<0?'more':'less'} than the forecast`;
+    const text=right?`${whose} ${flowWord} ${verb} ${size}; the hedge makes up ${km(avg(hp,ix))}.`:`${whose} ${flowWord} ${verb} ${size}, and the hedge gives most of that up: the price of a known rate.`;
+    return scenCard(right,'a 15% chance of a move this size or larger',`${name} ${m>0?'rises':'falls'} about ${pct(Math.abs(m),1)} against the ${homeName} by ${end}`,without,withPlan,text,right?'The rate moves against you':'The rate moves your way'); };
+  return [card(true,bad),card(false,good)]; }
 const rng=()=>{ const res=state.res; if(!res) return null; if(res._rng===undefined) res._rng=whatIfRange(); return res._rng; };
 
 /* ================= the report ================= */
-function renderReport(meta){ const rep=state.report, res=state.res, T=planTotals(), F=state.F, s0=res.s0, s1=res.s1, sc=state.scan, h=rep.hedgeable, has=T.legs.length>0;
-  const rows=rep.rows.filter(x=>x.share>0.0005), stat=(label,value,note,cls)=>`<div class="stat${cls?' '+cls:''}"><span>${esc(label)}</span><b>${esc(value)}</b><small>${esc(note)}</small></div>`;
-  const title=h>=0.005?`${pct(h)} of the variation in ${WHO.poss} next 12 months can be hedged on Kalshi.`:`Almost none of the variation in ${WHO.poss} next 12 months can be hedged on Kalshi today.`;
-  const win=`${mabbr(F[0].month)} to ${mabbr(F[F.length-1].month)}`;
+function renderReport(meta){ const rep=state.report, res=state.res, T=planTotals(), F=state.F, s0=res.s0, s1=res.s1, sc=state.scan, home=state.home;
+  const hK=rep.hedgeable, hA=rep.hedgeableAll, FW=Object.values(res.plan).flatMap(p=>p.fwd||[]), has=T.legs.length>0||FW.length>0, fxOn=(state.fx||[]).some(c=>c.material);
+  const rows=rep.rows.filter(x=>x.share>0.0005), fwdAny=rows.some(x=>x.forwards), stat=(label,value,note,cls)=>`<div class="stat${cls?' '+cls:''}"><span>${esc(label)}</span><b>${esc(value)}</b><small>${esc(note)}</small></div>`;
+  const sameK=pct(hA)===pct(hK);
+  const title=hA<0.005?`Almost none of the variation in ${WHO.poss} next 12 months can be hedged today.`
+    :sameK||!fwdAny?`${pct(hK)} of the variation in ${WHO.poss} next 12 months can be hedged on Kalshi.`
+    :hK>=0.005?`${pct(hA)} of the variation in ${WHO.poss} next 12 months can be hedged: ${pct(hK)} on Kalshi, the rest with currency forwards.`
+    :`${pct(hA)} of the variation in ${WHO.poss} next 12 months can be hedged, all of it with currency forwards outside Kalshi.`;
+  const win=`${mabbr(F[0].month)} to ${mabbr(F[F.length-1].month)}`, totalCost=T.expCost+(res.fwdCost||0);
   const log=(meta.log||[]).map(s=>`<li data-s="done"><span class="ic" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span><b>${esc(s.label)}</b><span class="t">${s.ms<1000?Math.max(1,Math.round(s.ms))+' ms':(s.ms/1000).toFixed(1)+' s'}</span><small>${esc(s.detail)}</small></li>`).join('');
 
   // 1 · sources
   const src=sourceRows(), gross=src.filter(s=>s.f!=='nonop').reduce((t,s)=>t+Math.abs(s.amount),0);
-  const main=src.filter(s=>s.market||(s.f!=='none'&&s.f!=='nonop'&&Math.abs(s.amount)>=0.01*gross)).slice(0,16), rest=src.filter(s=>!main.includes(s));
-  const risky=src.filter(s=>s.market).length, onK=[...new Set(src.filter(s=>s.k&&s.k.href).map(s=>s.risk))];
-  const srow=s=>`<tr><td><b>${esc(s.label)}</b><small>${fmtN(s.lines)} transaction${s.lines===1?'':'s'}</small></td><td class="n">${skm(s.amount)}</td>
-    <td>${esc(s.risk)}${s.note?`<small>${esc(s.note)}</small>`:''}</td><td>${s.move?esc(s.move):'<span class="muted">—</span>'}</td>
-    <td>${s.k?(s.k.href?`<a class="pill acc" href="${s.k.href}" target="_blank" rel="noopener">${esc(s.k.txt)}</a>`:`<span class="pill off">${esc(s.k.txt)}</span>`):''}</td></tr>`;
-  const thead='<thead><tr><th>Source</th><th class="n">Last 12 months</th><th>Risk it carries</th><th>One move, 12-month cash</th><th>Kalshi</th></tr></thead>';
+  const main=src.filter(s=>s.market||s.foreign||(s.f!=='none'&&s.f!=='nonop'&&Math.abs(s.amount)>=0.01*gross)).slice(0,16), rest=src.filter(s=>!main.includes(s));
+  const risky=src.filter(s=>s.market||s.foreign).length, onK=[...new Set(src.filter(s=>s.k.some(p=>p.href)).map(s=>s.risk))], onF=[...new Set(src.filter(s=>s.k.some(p=>p.cls==='good')).map(s=>s.foreign))];
+  const pill=p=>p.href?`<a class="pill acc" href="${p.href}" target="_blank" rel="noopener">${esc(p.txt)}</a>`:`<span class="pill ${p.cls}">${esc(p.txt)}</span>`;
+  const srow=s=>`<tr><td><b>${esc(s.label)}</b><small>${fmtN(s.lines)} ${s.lines===1?'entry':'entries'}</small></td><td class="n">${skm(s.amount)}</td>
+    <td>${esc(s.risk)}${s.note?`<small>${esc(s.note)}</small>`:''}</td><td>${s.move?esc(s.move):'<span class="muted">—</span>'}</td><td class="pills">${s.k.map(pill).join(' ')}</td></tr>`;
+  const thead='<thead><tr><th>Source</th><th class="n">Last 12 months</th><th>Risk it carries</th><th>One move, 12-month cash</th><th>Hedge with</th></tr></thead>';
+  const leadHedge=[onK.length?`${cap(andList(onK.map(lc)))} can be hedged on Kalshi.`:'',onF.length?`${cap(andList(onF.map(c=>ccyName(c))))} can be hedged with a forward outside Kalshi.`:''].filter(Boolean).join(' ');
   const sec1=`<div class="block" id="rep-sources"><p class="eyebrow">1 · Where the risk comes from</p><h3>${risky} of ${src.length} sources of cash carry a market risk.</h3>
-    <p class="lead">Argent tied every transaction from ${mabbr(sc.months[0])} to ${mabbr(sc.last)} to the price, rate or demand that moves it.${onK.length?` ${esc(cap(andList(onK.map(lc))))} can be hedged on Kalshi.`:' None of those risks can be hedged on Kalshi at a size worth measuring.'}</p>
+    <p class="lead">Argent tied every transaction from ${mabbr(sc.months[0])} to ${mabbr(sc.last)} to the price, rate, currency or demand that moves it.${leadHedge?' '+esc(leadHedge):' None of those risks can be hedged at a size worth measuring.'}</p>
     <div class="scroll"><table class="src">${thead}<tbody>${main.map(srow).join('')}</tbody></table></div>
     ${rest.length?`<details class="more"><summary>${rest.length} more source${rest.length>1?'s':''} with no market link or too small to list</summary><div class="scroll"><table class="src">${thead}<tbody>${rest.map(srow).join('')}</tbody></table></div></details>`:''}
     ${knownBlock()}</div>`;
 
   // 2 · variation
-  const smallTxt=[...state.small.map(x=>`${lc(FACTORS[x.factor].name)} (${pm(x.sd)})`),...(state.fx||[]).filter(c=>!c.material).map(c=>`${CCY_NAME[c.ccy]||c.ccy} (${pm(c.sd)})`)];
+  const smallTxt=[...state.small.map(x=>`${lc(FACTORS[x.factor].name)} (${pm(x.sd)})`),...(state.fx||[]).filter(c=>!c.material).map(c=>`${ccyName(c.ccy)} (${pm(c.sd)})`)];
   const sec2=`<div class="block" id="rep-variation"><p class="eyebrow">2 · What moves ${WHO.poss} net cash</p><h3>A typical year lands within ${pm(s0.sd)} of expected. ${rows.length?`${pct(rows[0].share)} of that variation comes from ${lc(rows[0].name)}.`:''}</h3>
     <div class="tiles three">${stat('Bad year (1 in 20)',km(s0.p5),`net cash, ${win}`)}${stat('Typical year',km(s0.p50),'half of years land above, half below')}${stat('Good year (1 in 20)',km(s0.p95),'before any hedge')}</div>
     <div class="vlist" role="list">${rows.map(x=>`<div class="vrow" role="listitem"><div class="nm"><b>${esc(x.name)}</b><small>${pm(x.sd)} on its own</small></div><div class="track" aria-hidden="true"><i style="width:${(Math.max(0,x.share)*100).toFixed(1)}%"></i></div><div class="v">${pctS(Math.max(0,x.share))}</div></div>`).join('')}
       <div class="vrow total" role="listitem"><div class="nm"><b>All risks together</b><small>${pm(s0.sd)} typical swing</small></div><div></div><div class="v">100%</div></div></div>
-    <p class="note">Each share is the part of the year's variation that comes from that risk, and the shares add up to 100%. A risk's swing on its own is larger than its share suggests because separate risks partly offset each other.${smallTxt.length?` Also in the books, but too small to move the year: ${esc(andList(smallTxt))}.`:''}</p></div>`;
+    <p class="note">Each share is the part of the year's variation that comes from that risk, and the shares add up to 100%. A risk's swing on its own is larger than its share suggests because separate risks partly offset each other.${fxOn?` Currency swings use each currency's volatility over the last two years (Federal Reserve H.10 rates), starting from rates on ${fxAsOf()}.`:''}${smallTxt.length?` Also in the books, but too small to move the year: ${esc(andList(smallTxt))}.`:''}</p></div>`;
 
   // 3 · hedgeable
-  const bestSd=Math.sqrt(Math.max(0,1-h))*s0.sd, covered=has?Math.max(0,1-(s1.sd/s0.sd)**2):0, smallK=state.small.filter(x=>FACTORS[x.factor].series).map(x=>lc(FACTORS[x.factor].name));
-  const sec3=`<div class="block" id="rep-hedgeable"><p class="eyebrow">3 · What Kalshi can hedge</p><h3>${h>=0.005?`Listed Kalshi contracts can hedge ${pct(h)} of that variation.`:'Listed Kalshi contracts can hedge almost none of that variation.'}</h3>
-    <div class="tiles three">${stat('Hedgeable at best',pctS(h),'of the variation, before prices and fees')}${stat('Swing with a perfect hedge',pm(bestSd),`down from ${pm(s0.sd)}`)}${stat('Covered by the plan below',has?pct(covered):'0%',has?`for about ${km(T.expCost)} of average cost`:'no hedge is worth its cost today','pay')}</div>
-    <p class="legend"><span><i class="k-plan"></i>covered by the plan</span><span><i class="k-best"></i>hedgeable at best</span></p>
-    <div class="vlist" role="list">${rows.map(x=>`<div class="vrow hrow" role="listitem"><div class="nm"><b>${esc(x.name)}</b><small>${pctS(Math.max(0,x.share))} of the variation</small></div>
-      <div class="track" aria-hidden="true"><i class="best" style="width:${(x.hedgeable*100).toFixed(1)}%"></i><i style="width:${(x.cut*100).toFixed(1)}%"></i></div>
-      <div class="v">${pctS(x.hedgeable)}<small>${x.cut>=0.005?`plan: ${pct(x.cut)}`:'hedgeable'}</small></div>
-      <p class="what">${x.strikes?`${contractLine(x)}<br><span class="muted">${esc(restOf(x))}</span>`:`<span class="muted">${esc(x.why||'No listed contract')}.</span>`}</p></div>`).join('')}</div>
+  const bestSd=Math.sqrt(Math.max(0,1-(fwdAny?hA:hK)))*s0.sd, covered=has?Math.max(0,1-(s1.sd/s0.sd)**2):0, smallK=state.small.filter(x=>FACTORS[x.factor].series).map(x=>lc(FACTORS[x.factor].name));
+  const h3=hA<0.005?'Almost none of that variation can be hedged with Kalshi contracts or currency forwards.':!fwdAny||sameK?`Listed Kalshi contracts can hedge ${pct(hK)} of that variation.`
+    :hK>=0.005?`${pct(hA)} of that variation can be hedged: ${pct(hK)} with Kalshi contracts, the rest with currency forwards.`:`${pct(hA)} of that variation can be hedged, with currency forwards; Kalshi contracts cover none of it.`;
+  const hrow=x=>{ const best=Math.max(x.hedgeable,x.hedgeableAll), what=[x.strikes?`${contractLine(x)}`:'',x.forwards?forwardLine(x):''].filter(Boolean).join('<br>');
+    const note=x.strikes||x.forwards?restOf(x):'', why=x.strikes?'':x.why||'No listed contract';
+    return `<div class="vrow hrow" role="listitem"><div class="nm"><b>${esc(x.name)}</b><small>${pctS(Math.max(0,x.share))} of the variation</small></div>
+      <div class="track" aria-hidden="true">${x.forwards?`<i class="all" style="width:${(x.hedgeableAll*100).toFixed(1)}%"></i>`:''}<i class="best" style="width:${(x.hedgeable*100).toFixed(1)}%"></i><i style="width:${(x.cut*100).toFixed(1)}%"></i></div>
+      <div class="v">${pctS(best)}<small>${x.cut>=0.005?`plan: ${pct(x.cut)}`:x.forwards&&!x.strikes?'with forwards':'hedgeable'}</small></div>
+      <p class="what">${what?what+'<br>':''}<span class="muted">${esc([why&&(x.forwards||!x.strikes)?why+'.':'',note].filter(Boolean).join(' '))}</span></p></div>`; };
+  const sec3=`<div class="block" id="rep-hedgeable"><p class="eyebrow">3 · What can be hedged</p><h3>${esc(h3)}</h3>
+    <div class="tiles three">${stat('Hedgeable on Kalshi',pctS(hK),'of the variation, before prices and fees')}${fwdAny?stat('With currency forwards too',pctS(hA),'forwards come from a bank or payment provider'):stat('Swing with a perfect hedge',pm(bestSd),`down from ${pm(s0.sd)}`)}
+      ${stat('Covered by the plan below',has?pct(covered):'0%',has?`for about ${km(totalCost)} of average cost`:'no hedge is worth its cost today','pay')}</div>
+    <p class="legend"><span><i class="k-plan"></i>covered by the plan</span><span><i class="k-best"></i>hedgeable on Kalshi</span>${fwdAny?'<span><i class="k-all"></i>hedgeable with forwards</span>':''}</p>
+    <div class="vlist" role="list">${rows.map(hrow).join('')}</div>
     ${smallK.length?`<p class="note">Kalshi also lists contracts on ${esc(andList(smallK))}, but in these books ${smallK.length>1?'they move':'it moves'} too little cash to be worth hedging.</p>`:''}</div>`;
 
   // 4 · the hedge and what it does
-  let sec4;
   const histCard=`<div class="card chart"><p class="legend"><span><i class="k-no"></i>without the hedge</span>${has?'<span><i class="k-yes"></i>with the hedge</span>':''}</p><div class="scroll" id="rep-hist"></div><div class="tip" id="rep-tip"></div>
-      <p class="note">${cap(WHO.poss)} net cash over the next 12 months across the years Kalshi's prices make possible.</p></div>`;
+      <p class="note">${cap(WHO.poss)} net cash over the next 12 months across the years that Kalshi's prices${fxOn?' and exchange-rate history':''} make possible.</p></div>`;
   const yearTable=`<div class="scroll"><table class="score"><thead><tr><th>12 months of net cash</th><th class="n">Without</th>${has?'<th class="n">With the hedge</th>':''}</tr></thead><tbody>
       ${[['Bad year (1 in 20)','p5'],['Typical year','p50'],['Good year (1 in 20)','p95'],['Typical swing','sd']].map(([l,k])=>`<tr><td>${l}</td><td class="n">${k==='sd'?pm(s0[k]):km(s0[k])}</td>${has?`<td class="n">${k==='sd'?pm(s1[k]):km(s1[k])}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
+  // full forward cover on a currency the plan hedges only partly: what it would add, and why the plan stops short
+  const alts=rows.filter(x=>x.forwards&&x.cut<0.8&&(x.share>=0.01||x.sd>=10000)).map(x=>({x,a:forwardAlternative(x.ccy)})).filter(o=>o.a&&o.a.cost>0);
+  const altHTML=alts.map(({x,a})=>`<div class="card alt"><p class="eyebrow">Also possible · full forward cover on ${esc(ccyName(x.ccy))}</p>
+    <h4>Lock the rate on all ${inCcy(a.net,x.ccy)} of ${esc(ccyName(x.ccy).replace(/^the /,''))} cash ${a.net>0?'coming in':'going out'} over the 12 months.</h4>
+    <p>That would cost about ${km(a.cost)} more and remove ${pct(a.cut)} of ${esc(ccyName(x.ccy))}'s swing. ${a.dP5>=0?`The bad year would improve by only ${km(a.dP5)}`:linkedShare(x.ccy)>=0.5?`The bad year would get about ${km(-a.dP5)} worse, because in the worst years sales fall short and a full forward covers more currency than comes in`:`The bad year would not improve (about ${km(-a.dP5)} worse after the cost)`}: ${esc(ccyName(x.ccy))} is ${pctS(Math.max(0,x.share))} of the variation, so ${x.cut>=0.005?`the plan covers ${pct(x.cut)} of it`:'the plan leaves it alone'}. Full cover still makes sense when a known rate matters for prices or budgets.</p></div>`).join('');
+  let sec4;
   if(has){ const months=[...new Set(T.legs.map(l=>l.settle))].sort().map(mname), rg=rng();
-    const legRow=l=>{ const r=state.risks.find(x=>x.series===l.series), info=SERIES_INFO[l.series];
-      return `<tr><td><b>${esc(FACTORS[r.key].name)}</b></td><td>${l.side.toUpperCase()} · ${esc(info.subject)} ${esc((l.m.yes_sub_title||'').toLowerCase())} ${esc(whenOf(l.m))}<br><a class="mono tick" href="${kalshiUrl(l.series)}" target="_blank" rel="noopener">${esc(l.m.ticker)}</a></td>
-        <td class="n">${fmtN(l.n)}</td><td class="n">${Math.round(l.limit*100)}¢</td><td class="n">${money(l.premium+l.fee)}</td><td class="n">${money(l.n)}</td><td>${esc(mlong(l.settle))}</td></tr>`; };
+    const legRow=l=>{ const r=state.risks.find(x=>x.series===l.series)||state.risks.find(x=>x.legsDef.some(d=>d.m.ticker===l.m.ticker)), info=SERIES_INFO[l.series];
+      const risk=r&&r.kind==='fxladder'?cap(ccyName(r.ccy)):FACTORS[r.key].name, desc=info?`${info.subject} ${(l.m.yes_sub_title||'').toLowerCase()} ${whenOf(l.m)}`:(l.m.title||l.m.ticker);
+      return `<tr><td><b>${esc(risk)}</b></td><td>${l.side.toUpperCase()} · ${esc(desc)}<br><a class="mono tick" href="${kalshiUrl(l.series)}" target="_blank" rel="noopener">${esc(l.m.ticker)}</a></td>
+        <td class="n">${fmtN(l.n)}</td><td class="n">${Math.round(l.limit*100)}¢</td><td class="n">${usd(l.premium+l.fee)}</td><td class="n">${usd(l.n)}</td><td>${esc(mlong(l.settle))}</td></tr>`; };
+    const fwdRow=x=>`<tr><td><b>${esc(cap(ccyName(x.ccy)))}</b></td><td>${x.net>0?'Sell':'Buy'} ${inCcy(x.amount,x.ccy)} ${x.net>0?'for':'with'} ${esc(ccyName(home).replace(/^the /,''))} at the forward rate</td>
+      <td>${esc(mabbr(x.months[0]))} to ${esc(mabbr(x.months[x.months.length-1]))}</td><td class="n">${km(Math.abs(x.amount))}</td><td class="n">${pct(x.ratio)}</td><td class="n">${km(x.cost)}</td></tr>`;
     const assume=[state.risks.some(r=>r.key==='tariff')?'what you would do if tariffs jump, whether a new rate lasts':'',state.risks.some(r=>r.key==='freight')?'how closely your container rate follows the index':''].filter(Boolean);
-    const scen=state.risks.flatMap(r=>scenCards(r)), capped=T.legs.filter(l=>l.cap<Infinity&&l.need>=l.cap&&TERMS[l.series]&&TERMS[l.series].palUSD);
-    const unh=rows.filter(x=>x.hedgeable<0.01&&x.share>=0.01), part=rows.filter(x=>x.cut>=0.005);
-    const stays=[unh.length?`<li><b>${esc(cap(andList(unh.map(x=>`${lc(x.name)} (${pct(x.share)} of the variation)`))))}.</b> No listed contract covers ${unh.length>1?'them':'it'}, so the hedge leaves ${unh.length>1?'them':'it'} alone.</li>`:'',
+    const scen=[...state.risks.flatMap(r=>scenCards(r)),...(state.fx||[]).filter(c=>c.material).flatMap(c=>fxCards(c.ccy))], capped=T.legs.filter(l=>l.cap<Infinity&&l.need>=l.cap&&TERMS[l.series]&&TERMS[l.series].palUSD);
+    const unh=rows.filter(x=>Math.max(x.hedgeable,x.hedgeableAll)<0.01&&x.share>=0.01), part=rows.filter(x=>x.cut>=0.005);
+    const stays=[unh.length?`<li><b>${esc(cap(andList(unh.map(x=>`${lc(x.name)} (${pct(x.share)} of the variation)`))))}.</b> Nothing listed covers ${unh.length>1?'them':'it'}, so the hedge leaves ${unh.length>1?'them':'it'} alone.</li>`:'',
       ...part.map(x=>`<li><b>The rest of ${esc(lc(x.name))}.</b> The hedge covers ${pct(x.cut)} of this risk's variation. ${esc(restOf(x))}</li>`),
-      T.onBook<T.n-0.5?`<li><b>Fills.</b> Only ${fmtN(T.onBook)} of the ${fmtN(T.n)} contracts are on Kalshi's order book today; the rest wait as limit orders at these prices and may not fill.</li>`:'',
-      ...capped.map(l=>`<li><b>Position size.</b> The ${esc(l.m.ticker)} position stops at Kalshi's ${money(TERMS[l.series].palUSD)} position accountability level.</li>`),
-      `<li><b>Timing.</b> The contracts pay in ${esc(andList(months))}; until then the ${money(T.cost)} premium is out of ${WHO.poss} cash.</li>`].filter(Boolean).join('');
-    sec4=`<div class="block" id="rep-hedge"><p class="eyebrow">4 · The hedge and what it does</p><h3>${NUM[T.legs.length]||T.legs.length} Kalshi contract${T.legs.length>1?'s':''}, ${money(T.cost)} up front.${T.dP5>0?` The bad year improves by about ${km(T.dP5)}.`:''}</h3>
-      <div class="scroll"><table class="score plan"><thead><tr><th>Protects against</th><th>Contract</th><th class="n">Contracts</th><th class="n">Limit</th><th class="n">Up front</th><th class="n">Pays up to</th><th>Pays out</th></tr></thead><tbody>
-        ${T.legs.map(legRow).join('')}<tr class="big"><td>Total</td><td></td><td class="n">${fmtN(T.n)}</td><td></td><td class="n">${money(T.cost)}</td><td></td><td></td></tr></tbody></table></div>
-      <div class="tiles four">${stat('Paid up front',money(T.cost),`about ${km(T.back)} comes back on average in ${andList(months)}`)}${stat('Costs on average',km(T.expCost),'spreads, fees and interest on the premium')}
+      T.onBook<T.n-0.5?`<li><b>Fills.</b> Only ${fmtN(T.onBook)} of the ${fmtN(T.n)} Kalshi contracts are on the order book today; the rest wait as limit orders at these prices and may not fill.</li>`:'',
+      ...capped.map(l=>`<li><b>Position size.</b> The ${esc(l.m.ticker)} position stops at Kalshi's ${usd(TERMS[l.series].palUSD)} position accountability level.</li>`),
+      T.legs.length?`<li><b>Timing.</b> The Kalshi contracts pay in ${esc(andList(months))}; until then the ${money(T.cost)} premium is out of ${WHO.poss} cash.</li>`:'',
+      FW.length?`<li><b>Forwards.</b> They lock the rate on the amounts in the forecast: if sales come in lower, a forward covers more currency than there is, and loses when the rate moves the other way. They need a line with a bank or payment provider, which may ask for collateral, and the ${(FWD_SPREAD*100).toFixed(2)}% extra cost over spot is an assumption until a quote replaces it.</li>`:''].filter(Boolean).join('');
+    const heads=[T.legs.length?`${NUM[T.legs.length]||T.legs.length} Kalshi contract${T.legs.length>1?'s':''} (${money(T.cost)} up front)`:'',FW.length?`forwards on ${andList([...new Set(FW.map(x=>ccyName(x.ccy)))])} (about ${km(res.fwdCost)} over spot)`:''].filter(Boolean);
+    sec4=`<div class="block" id="rep-hedge"><p class="eyebrow">4 · The hedge and what it does</p><h3>${esc(cap(andList(heads)))}.${T.dP5>0?` The bad year improves by about ${km(T.dP5)}.`:''}</h3>
+      ${T.legs.length?`<div class="scroll"><table class="score plan"><thead><tr><th>Protects against</th><th>Kalshi contract</th><th class="n">Contracts</th><th class="n">Limit</th><th class="n">Up front</th><th class="n">Pays up to</th><th>Pays out</th></tr></thead><tbody>
+        ${T.legs.map(legRow).join('')}<tr class="big"><td>Total</td><td></td><td class="n">${fmtN(T.n)}</td><td></td><td class="n">${usd(T.cost)}</td><td></td><td></td></tr></tbody></table></div>`:''}
+      ${FW.length?`<p class="eyebrow sub-eyebrow">Outside Kalshi · currency forwards</p><div class="scroll"><table class="score plan fwd"><thead><tr><th>Protects against</th><th>Forward</th><th>Converts</th><th class="n">Amount</th><th class="n">Share of forecast</th><th class="n">Extra cost</th></tr></thead><tbody>
+        ${FW.map(fwdRow).join('')}<tr class="big"><td>Total</td><td></td><td></td><td class="n">${km(FW.reduce((s,x)=>s+Math.abs(x.amount),0))}</td><td></td><td class="n">${km(res.fwdCost)}</td></tr></tbody></table></div>`:''}
+      <div class="tiles four">${T.legs.length?stat('Paid up front',money(T.cost),`on Kalshi${home!=='USD'?` (${usd(T.cost)})`:''}; about ${km(T.back)} comes back on average in ${andList(months)}`):stat('Paid up front','Nothing','forwards settle as the cash converts')}
+        ${stat('Costs on average',km(totalCost),[T.legs.length?'Kalshi spreads, fees and interest':'',FW.length?`forwards at ${(FWD_SPREAD*100).toFixed(2)}% over spot`:''].filter(Boolean).join('; '))}
         ${stat('Bad year (1 in 20)',skm(T.dP5),`from ${km(s0.p5)} to ${km(s1.p5)}`,'pay')}${stat('Typical swing',pm(s1.sd),`down from ${pm(s0.sd)}`)}</div>
-      ${rg&&rg.n>1&&assume.length?`<p class="lead">That is the central case. Across what the books can't settle (${esc(andList(assume))}), the same contracts change the bad year by ${skm(rg.lo)} to ${skm(rg.hi)}.</p>`:''}
-      ${scen.length?`<h4 class="sub">When each bet comes true, and when it does not</h4><div class="scen">${scen.join('')}</div><p class="note">Each card shows one risk and its contracts on their own. Chances come from Kalshi's prices.</p>`:''}
+      ${T.legs.length&&rg&&rg.n>1&&assume.length?`<p class="lead">That is the central case. Across what the books can't settle (${esc(andList(assume))}), the same contracts change the bad year by ${skm(rg.lo)} to ${skm(rg.hi)}.</p>`:''}
+      ${altHTML}
+      ${scen.length?`<h4 class="sub">When each hedge pays off, and when it doesn't</h4><div class="scen">${scen.join('')}</div><p class="note">Each card shows one risk and its hedges on their own. Chances come from Kalshi's prices${fxOn?' and exchange-rate history':''}.</p>`:''}
       <h4 class="sub">The whole year, with and without the hedge</h4>
-      <div class="two">${histCard}<div>${yearTable}<p class="note" style="margin-top:12px">Hedging gives up part of the good years to protect the bad ones. At market prices it costs a little on average, here about ${km(T.expCost)}.</p></div></div>
-      <h4 class="sub">What stays with ${WHO.subj==='you'?'you':WHO.subj}</h4><ul class="stays">${stays}</ul></div>`; }
+      <div class="two">${histCard}<div>${yearTable}<p class="note" style="margin-top:12px">Hedging gives up part of the good years to protect the bad ones. At market prices it costs a little on average, here about ${km(totalCost)}.</p></div></div>
+      <h4 class="sub">What stays with ${WHO.subj}</h4><ul class="stays">${stays}</ul></div>`; }
   else { const k=rows.filter(x=>x.strikes), top=rows[0];
-    const why=!k.length?`None of the risks large enough to matter has a Kalshi contract${top?`: the largest, ${lc(top.name)}, is ${pct(top.share)} of the variation`:''}.`
-      :h<0.02?`The risks Kalshi covers are a small part of the year (${esc(andList(k.map(x=>`${lc(x.name)}, ${pctS(Math.max(0,x.share))} of the variation`)))}). At that size, spreads and fees cost more than a steadier year is worth.`
+    const why=fwdAny&&hA-hK>=0.005?`Currency forwards could remove ${pct(hA)} of the variation, but at an assumed ${(FWD_SPREAD*100).toFixed(2)}% over spot a steadier year is worth less than they cost.`
+      :!k.length?`None of the risks large enough to matter has a Kalshi contract or a forward${top?`: the largest, ${lc(top.name)}, is ${pct(top.share)} of the variation`:''}.`
+      :hK<0.02?`The risks Kalshi covers are a small part of the year (${esc(andList(k.map(x=>`${lc(x.name)}, ${pctS(Math.max(0,x.share))} of the variation`)))}). At that size, spreads and fees cost more than a steadier year is worth.`
       :'At Kalshi\'s current prices, spreads and fees cost more than a steadier year is worth.';
-    sec4=`<div class="block" id="rep-hedge"><p class="eyebrow">4 · The hedge and what it does</p><h3>No hedge is worth its cost at today's prices.</h3><p class="lead">${why}</p>
+    sec4=`<div class="block" id="rep-hedge"><p class="eyebrow">4 · The hedge and what it does</p><h3>No hedge is worth its cost at today's prices.</h3><p class="lead">${why}</p>${altHTML}
       <div class="two">${histCard}<div>${yearTable}</div></div></div>`; }
 
   const banner=meta.sample?`<div class="banner"><span class="pill acc">Sample report</span><p>Nimbus Home Goods is a fictional importer of kitchenware and lamps; its books are synthetic. Add your own data above to get your report.</p><a class="btn" href="#top">Analyze your cash flow <span aria-hidden="true">↑</span></a></div>`
     :`<div class="banner"><span class="pill ${meta.kind==='bank'?'acc':'good'}">${meta.kind==='bank'?'Demo bank feed':'Your report'}</span><p>${esc(meta.source)} Everything ran in this browser; nothing was uploaded.</p><button class="btn" id="rep-again">Analyze other data <span aria-hidden="true">↑</span></button></div>`;
   byId('rep-body').innerHTML=`${banner}
-    <div class="rhead"><div><p class="eyebrow">Risk report · ${esc(meta.sample?'Nimbus Home Goods (sample)':meta.kind==='bank'?'Linked bank feed (sample)':'Your data')}</p><h2 id="rep-title">${esc(title)}</h2></div>
-      <p>Built from ${fmtN(sc.lines)} transactions (${mabbr(sc.first)} to ${mabbr(sc.last)}) and ${esc(state.fsrc)}. Kalshi prices as of ${snapTime()}.</p></div>
+    <div class="rhead"><div><p class="eyebrow">Risk report · ${esc(meta.sample?'Nimbus Home Goods (sample)':meta.kind==='bank'?'Linked bank feed (sample)':'Your data')}${home!=='USD'?` · in ${esc(ccyName(home).replace(/^the /,''))}`:''}</p><h2 id="rep-title">${esc(title)}</h2></div>
+      <p>Built from ${fmtN(sc.lines)} ${meta.log&&meta.log[0]&&/daily entries/.test(meta.log[0].detail)?'daily entries':'transactions'} (${mabbr(sc.first)} to ${mabbr(sc.last)}) and ${esc(state.fsrc)}. Kalshi prices as of ${snapTime()}${fxOn?`; exchange rates as of ${fxAsOf()}`:''}.</p></div>
     <div class="tiles four top">${stat('Expected net cash',km(s0.mean),`operating cash, ${win}`)}${stat('Typical swing',pm(s0.sd),'how far a typical year lands from expected')}
-      ${stat('Hedgeable on Kalshi',pctS(h),'of the variation, with listed contracts')}${has?stat('With the hedge',skm(T.dP5),`on the bad year (1 in 20), for ${km(T.expCost)} on average`,'pay'):stat('With the hedge','No hedge','none is worth its cost at today\'s prices')}</div>
+      ${stat('Hedgeable',pctS(fwdAny?hA:hK),fwdAny&&!sameK?`of the variation: ${pctS(hK)} on Kalshi, the rest with forwards`:'of the variation, with listed Kalshi contracts')}${has?stat('With the hedge',skm(T.dP5),`on the bad year (1 in 20), for ${km(totalCost)} on average`,'pay'):stat('With the hedge','No hedge','none is worth its cost at today\'s prices')}</div>
     ${log?`<details class="log"><summary>How Argent read ${meta.sample?'these books':meta.kind==='bank'?'the bank feed':'your data'} · ${meta.log.length} steps</summary><ol class="runlist">${log}</ol></details>`:''}
     ${sec1}${sec2}${sec3}${sec4}
-    <p class="note fine">${meta.sample||meta.kind==='bank'?'Nimbus Home Goods is fictional: its books are synthetic, built from public tariff, freight and currency history. ':''}Prices, order-book depth and contract terms come from Kalshi's public API, ${snapTime()}, and change continuously. An illustration, not investment advice.</p>`;
+    <p class="note fine">${meta.sample||meta.kind==='bank'?'Nimbus Home Goods is fictional: its books are synthetic, built from public tariff, freight and currency history. ':''}Prices, order-book depth and contract terms come from Kalshi's public API, ${snapTime()}, and change continuously${fxOn?`; exchange rates from the ${esc(FXS.spotSource||'ECB')}`:''}. An illustration, not investment advice.</p>`;
   hist(byId('rep-hist'),byId('rep-tip'),has?[{name:'without the hedge',st:s0,area:'a-no',line:'l-no',mark:'m-no'},{name:'with the hedge',st:s1,area:'a-yes',line:'l-yes',mark:'m-yes'}]:[{name:'without the hedge',st:s0,area:'a-no',line:'l-no',mark:'m-no'}]);
   const again=byId('rep-again'); if(again) again.addEventListener('click',()=>byId('top').scrollIntoView({behavior:'smooth',block:'start'})); }
 
 /* ================= the engine run ================= */
-function resetA(){ const a=state.a; a.sizes={}; a.shape={}; a.sdOther=null; a.dutyRatio=null; a.fundRate=null; a.lambda=0.5; a.palCap=true; a.bookOnly=false; a.betCap='view'; a.tariff={view:'',share:null,ref:null,holdAt:null}; a.freight={view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2}; a.recession={view:'',loss:0,inShare:0.5}; }
-function runBooks(ledgerText,F,name,fsrc){ state.ledger=loadLedger(ledgerText); state.M=monthly(state.ledger); state.F=F||naiveForecast(state.M); state.name=name; state.fsrc=fsrc; resetA(); buildRisks(); simulate(); optimize(); evaluate(); }
+function resetA(){ const a=state.a; a.sizes={}; a.shape={}; a.fwd={}; a.sdOther=null; a.dutyRatio=null; a.fundRate=null; a.lambda=0.5; a.palCap=true; a.bookOnly=false; a.betCap='view'; a.tariff={view:'',share:null,ref:null,holdAt:null}; a.freight={view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2}; a.recession={view:'',loss:0,inShare:0.5}; }
+function runBooks(ledgerText,F,name,fsrc,home='USD'){ state.home=home; state.ledger=loadLedger(ledgerText,home); state.M=monthly(state.ledger); state.F=F||(Object.keys(state.M).length>=12?naiveForecast(state.M):runRateForecast(state.ledger,state.M)); state.name=name; state.fsrc=fsrc; resetA(); buildRisks(); simulate(); optimize(); evaluate(); }
+function setDisplay(home){ DISPLAY.ccy=home; DISPLAY.sym=CCY_SYM[home]||home+' '; DISPLAY.rate=(FXS.spot||{})[home]||1; }
+const ccyLabel=c=>(CCY_NAME[c]||c).replace(/^the /,'');
 // The same run as runBooks, one step at a time, each returning what it found
-function analysisSteps(src){ let rep0=null;
+function analysisSteps(src){ let rep0=null; const home=src.home||'USD';
   return [
-    {label:'Reading transactions',run(){ state.ledger=loadLedger(src.text); state.M=monthly(state.ledger); const ms=Object.keys(state.M).sort(), cc=new Set(state.ledger.map(t=>t.ccy));
-      return `${fmtN(state.ledger.length)} transactions from ${mabbr(ms[0])} to ${mabbr(ms[ms.length-1])}${cc.size>1?`, in ${cc.size} currencies`:''}.`; }},
-    {label:'Setting up the next 12 months',run(){ const F=src.F||(src.forecastText!=null?forecastFromCSV(src.forecastText):null);
-      state.F=F||naiveForecast(state.M); state.name=src.name; state.fsrc=src.F?src.fsrc:F?`the forecast in ${src.forecastName}`:'a forecast projected from the last 12 months'; resetA();
+    {label:'Reading transactions',run(){ setDisplay(home); state.home=home; state.ledger=loadLedger(src.text,home); state.M=monthly(state.ledger);
+      const ms=Object.keys(state.M).sort(), cc=[...new Set(state.ledger.map(t=>t.ccy))];
+      return `${fmtN(state.ledger.length)} ${src.daily?'daily entries':'transactions'} from ${mabbr(ms[0])} to ${mabbr(ms[ms.length-1])}${cc.length>1?`, in ${andList(cc)}`:''}.`; }},
+    {label:'Setting up the next 12 months',run(){ const F=src.F||(src.forecastText!=null?forecastFromCSV(src.forecastText):null), long=Object.keys(state.M).length>=12;
+      state.F=F||(long?naiveForecast(state.M):runRateForecast(state.ledger,state.M)); state.name=src.name; resetA();
+      state.fsrc=src.F?src.fsrc:F?`the forecast in ${src.forecastName}`:long?'a forecast projected from the last 12 months':"a forecast that carries the last 91 days' pace forward";
       const span=`${mabbr(state.F[0].month)} to ${mabbr(state.F[state.F.length-1].month)}`;
-      return src.F?`${src.fsrc}: ${span}.`:F?`Forecast read from ${src.forecastName}: ${span}.`:`No forecast added, so Argent projected ${span} from the same months last year${Object.keys(state.M).length>=24?', grown at last year\'s rate':''}.`; }},
-    {label:'Tracing each source of cash to the risk behind it',run(){ buildRisks(); const s=state.scan.sources;
-      const kinds=new Set(s.map(t=>t.ccy&&['goods','wages','rent','ads','none','airfreight'].includes(t.factor)?'fx:'+t.ccy:t.factor).filter(f=>f!=='none'&&f!=='nonop'));
-      return `${s.length} sources of cash in the last 12 months, tied to ${kinds.size} kinds of risk.`; }},
+      return src.F?`${src.fsrc}: ${span}.`:F?`Forecast read from ${src.forecastName}: ${span}.`:long?`No forecast added, so Argent projected ${span} from the same months last year${Object.keys(state.M).length>=24?', grown at last year\'s rate':''}.`
+        :`Under 12 months of history and no forecast, so Argent carried the last 91 days' pace forward, without seasonality: ${span}.`; }},
+    {label:'Tracing each source of cash to the risk behind it',run(){ buildRisks(); const s=state.scan.sources, fx=state.fx.filter(c=>c.material);
+      const kinds=new Set(s.map(t=>t.ccy&&t.ccy!==home&&['goods','wages','rent','ads','none','airfreight'].includes(t.factor)?'fx:'+t.ccy:t.factor).filter(f=>f!=='none'&&f!=='nonop'));
+      return `${s.length} sources of cash in the last 12 months, tied to ${kinds.size} kinds of risk${fx.length?`, with ${andList(fx.map(c=>`${km(Math.abs(c.net))} a year in ${c.ccy}`))}`:''}.`; }},
     {label:'Measuring how much each risk moves net cash',run(){ simulate(); evaluate();
-      return `${fmtN(N)} possible years, with the odds taken from Kalshi's prices: a typical swing of ${pm(state.res.s0.sd)}.`; }},
-    {label:'Matching risks to Kalshi contracts',run(){ rep0=riskReport(); const k=rep0.rows.filter(r=>r.strikes);
-      return k.length?`${k.reduce((t,r)=>t+r.strikes,0)} strikes on ${andList(k.map(r=>SERIES_INFO[r.series].short))}: ${pct(rep0.hedgeable)} of the variation is hedgeable.`:'No listed contract matches a risk large enough to matter.'; }},
-    {label:'Sizing the hedge and projecting results',run(){ optimize(); evaluate(); state.report=riskReport(); const T=planTotals();
-      return T.legs.length?`${fmtN(T.n)} contracts on ${T.legs.length} strike${T.legs.length>1?'s':''} for ${money(T.cost)} up front; ${T.dP5>0?`the bad year improves by ${km(T.dP5)}`:`the typical swing narrows by ${km(T.dSd)}`}.`:'No hedge is worth its cost at today\'s prices.'; }}]; }
-const SAMPLE=()=>({text:window.NIMBUS_LEDGER_CSV,F:forecastFromModule(window.NIMBUS_FORECAST),fsrc:"Nimbus's 12-month forecast",name:'Nimbus Home Goods LLC (synthetic example)',kind:'sample',sample:true});
+      return `${fmtN(N)} possible years, with the odds taken from Kalshi's prices and exchange-rate history: a typical swing of ${pm(state.res.s0.sd)}.`; }},
+    {label:'Matching risks to Kalshi contracts and forwards',run(){ rep0=riskReport(); const k=rep0.rows.filter(r=>r.strikes&&SERIES_INFO[r.series]), kf=rep0.rows.filter(r=>r.strikes&&!SERIES_INFO[r.series]), f=rep0.rows.filter(r=>r.forwards);
+      const parts=[k.length?`${k.reduce((t,r)=>t+r.strikes,0)} strikes on ${andList(k.map(r=>SERIES_INFO[r.series].short))}`:'',kf.length?`Kalshi rate contracts on ${andList(kf.map(r=>ccyLabel(r.ccy)))}`:'',f.length?`forwards on ${andList(f.map(r=>ccyName(r.ccy)))}`:''].filter(Boolean);
+      return parts.length?`${cap(andList(parts))}: ${pct(rep0.hedgeable)} of the variation is hedgeable on Kalshi${f.length?`, ${pct(rep0.hedgeableAll)} with forwards too`:''}.`:'No listed contract or forward matches a risk large enough to matter.'; }},
+    {label:'Sizing the hedge and projecting results',run(){ optimize(); evaluate(); state.report=riskReport(); const T=planTotals(), fw=Object.values(state.res.plan).flatMap(p=>p.fwd||[]);
+      const parts=[T.legs.length?`${fmtN(T.n)} Kalshi contracts on ${T.legs.length} strike${T.legs.length>1?'s':''} for ${usd(T.cost)} up front`:'',fw.length?`forwards on ${km(fw.reduce((s,x)=>s+Math.abs(x.amount),0))} of ${andList([...new Set(fw.map(x=>ccyLabel(x.ccy)))])} cash`:''].filter(Boolean);
+      return parts.length?`${cap(andList(parts))}; ${T.dP5>0?`the bad year improves by ${km(T.dP5)}`:`the typical swing narrows by ${km(T.dSd)}`}.`:'No hedge is worth its cost at today\'s prices.'; }}]; }
+const SAMPLE=()=>({text:window.NIMBUS_LEDGER_CSV,F:forecastFromModule(window.NIMBUS_FORECAST),fsrc:"Nimbus's 12-month forecast",name:'Nimbus Home Goods LLC (synthetic example)',kind:'sample',sample:true,home:'USD'});
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 const fmtMs=ms=>ms<1000?`${Math.max(1,Math.round(ms))} ms`:`${(ms/1000).toFixed(1)} s`;
 const MIN_STEP=420;     // a step that finishes faster stays on screen this long, so the list can be read as it runs
@@ -1077,21 +1267,69 @@ async function runAnalysis(src,animate){ if(running) return; running=true; setBu
     byId('run-sample').addEventListener('click',async()=>{ await runAnalysis(SAMPLE(),false); byId('report').scrollIntoView({behavior:'smooth',block:'start'}); }); }
   finally{ running=false; setBusy(false); } }
 
-/* ================= connect: files, bank link, sample ================= */
+/* ================= reading files: CSV or Excel; a transaction ledger or a daily summary ================= */
+const XLSX_URL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+let xlsxLoading=null;
+function loadXLSX(){ if(window.XLSX) return Promise.resolve(window.XLSX);
+  return xlsxLoading=xlsxLoading||new Promise((ok,fail)=>{ const s=document.createElement('script'); s.src=XLSX_URL; s.onload=()=>window.XLSX?ok(window.XLSX):fail(new Error('The Excel reader did not load.'));
+    s.onerror=()=>{ xlsxLoading=null; fail(new Error('The Excel reader could not load. Check the connection, or save the sheet as CSV.')); }; document.head.appendChild(s); }); }
+const isExcel=f=>/\.(xlsx|xlsm|xls)$/i.test(f.name||'');
+// rows: the sheet as arrays (Excel dates as serial numbers), csv: the same sheet as CSV text with dates as displayed
+async function readTable(file){ if(!isExcel(file)){ const text=await file.text(); return {rows:parseCSV(text),csv:text}; }
+  const X=await loadXLSX(), wb=X.read(await file.arrayBuffer(),{type:'array'});
+  const ws=wb.SheetNames.map(n=>wb.Sheets[n]).find(w=>X.utils.sheet_to_json(w,{header:1,blankrows:false}).length>=2)||wb.Sheets[wb.SheetNames[0]];
+  return {rows:X.utils.sheet_to_json(ws,{header:1,raw:true,defval:'',blankrows:false}),csv:X.utils.sheet_to_csv(ws,{dateNF:'yyyy-mm-dd'})}; }
+const DATE_HEAD=/日期|时间|date|day/i;
+const METRICS=[['count',/销量|订单|单量|件数|数量|访客|转化|orders?\b|units?\b|qty|quantity|visitors|sessions|conversion/i],['refunds',/退款|退货|refund|returns?\b|chargeback/i],
+  ['ads',/广告|推广|投放|advertis|marketing|\bads?\b|ppc|cpc/i],['freight',/物流|运费|快递|头程|尾程|货代|邮费|shipping|freight|logistics|postage|delivery/i],
+  ['supplier',/采购|货款|进货|商品成本|成本|cogs|purchase|inventory|product cost/i],['fees',/佣金|平台费|手续费|服务费|commission|platform|fees?\b/i],
+  ['wages',/工资|薪资|人工|salar|payroll|wage/i],['rent',/房租|租金|\brent\b/i],['tax',/税|\btax/i],['revenue',/销售额|销售|营业额|收入|回款|成交额|sales|revenue|gmv|turnover|income/i]];
+const DAILY_CAT={revenue:'Sales',refunds:'Refunds',ads:'Advertising',freight:'Freight - Parcels',supplier:'Inventory - Product purchases',fees:'Platform fees',wages:'Payroll',rent:'Rent',tax:'Taxes'};
+const colCcy=h=>{ const t=String(h), m=t.match(/[（(]\s*([A-Za-z]{3}|美元|人民币|RMB|元)\s*[)）]/); if(m) return ccyCode(m[1]); if(/\$|美元|\busd\b/i.test(t)) return 'USD'; if(/¥|￥|人民币|\brmb\b|\bcny\b/i.test(t)) return 'CNY'; return null; };
+// A daily summary: a date column and money columns such as sales, refunds, ad spend and logistics, each tagged with its currency, e.g. 销售额（USD）
+function tableShape(rows){ const hi=rows.slice(0,10).findIndex(r=>r.some(c=>DATE_HEAD.test(String(c)))); if(hi<0) return {kind:'unknown'};
+  const head=rows[hi].map(c=>String(c).trim()), nh=head.map(norm), has=k=>ALIASES[k].some(a=>nh.includes(a));
+  if(has('date')&&(has('amount')||has('debit')||has('credit'))) return {kind:'ledger',hi,head};
+  const cols=head.map((h,i)=>{ if(DATE_HEAD.test(h)&&!METRICS.some(([k,re])=>k!=='count'&&re.test(h))) return {i,kind:'date'}; const m=METRICS.find(([,re])=>re.test(h)); return {i,h,kind:m?m[0]:'other',ccy:colCcy(h)}; });
+  const money=cols.filter(c=>c.kind!=='date'&&c.kind!=='count'&&c.kind!=='other'), date=cols.find(c=>c.kind==='date');
+  return date&&money.length?{kind:'daily',hi,head,date:date.i,money,cny:money.some(c=>c.ccy==='CNY')||head.some(h=>/[一-鿿]/.test(h))}:{kind:'unknown'}; }
+const excelDate=(v,X)=>{ if(typeof v==='number'&&X&&X.SSF){ const d=X.SSF.parse_date_code(v); return d?`${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`:null; }
+  const d=parseDate(v); return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`:null; };
+const csvCell=v=>/[",\n]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:String(v);
+function dailyToCSV(rows,shape,home){ const spot=FXS.spot||{}, out=['Date,Description,Amount,Currency,Original Amount,Category'];
+  for(const r of rows.slice(shape.hi+1)){ const day=excelDate(r[shape.date],window.XLSX); if(!day) continue;
+    for(const c of shape.money){ const raw=r[c.i], v=typeof raw==='number'?raw:parseAmount(raw); if(!v||isNaN(v)) continue;
+      const ccy=c.ccy||home, sign=c.kind==='revenue'?1:-1, orig=sign*Math.abs(v), amt=orig/(spot[ccy]||1)*(spot[home]||1);
+      out.push([day,csvCell(c.h),amt.toFixed(2),ccy,orig.toFixed(2),csvCell(DAILY_CAT[c.kind]||'Other costs')].join(',')); } }
+  if(out.length<2) throw new Error('The daily sheet has no rows with a readable date and amount.');
+  return out.join('\n'); }
+async function ledgerFrom(file,home){ const t=await readTable(file), shape=tableShape(t.rows);
+  if(shape.kind==='daily') return {text:dailyToCSV(t.rows,shape,home),daily:true};
+  if(shape.kind==='ledger'||!isExcel(file)) return {text:isExcel(file)?t.rows.slice(shape.hi).map(r=>r.map((c,i)=>i===shape.head.findIndex(h=>ALIASES.date.includes(norm(h)))?excelDate(c,window.XLSX)||c:c).map(csvCell).join(',')).join('\n'):t.csv,daily:false};
+  throw new Error('Argent could not find a date column and amounts in this sheet.'); }
+
+/* ================= connect: files, home currency, bank link, sample ================= */
 const conn={ledger:null,forecast:null,bank:false};
 const fileLabel=f=>`${f.name} · ${f.size<1e6?`${Math.max(1,Math.round(f.size/1024))} KB`:`${(f.size/1e6).toFixed(1)} MB`}`;
 function renderConnect(){ const dl=byId('drop-ledger'), df=byId('drop-forecast');
-  dl.dataset.state=conn.ledger||conn.bank?'ready':'empty'; byId('ledger-name').textContent=conn.bank?'Using the linked bank feed':conn.ledger?fileLabel(conn.ledger):'Choose a CSV or drop it here';
-  df.dataset.state=conn.forecast?'ready':'empty'; byId('forecast-name').textContent=conn.forecast?fileLabel(conn.forecast):'Choose a CSV or drop it here';
+  dl.dataset.state=conn.ledger||conn.bank?'ready':'empty'; byId('ledger-name').textContent=conn.bank?'Using the linked bank feed':conn.ledger?fileLabel(conn.ledger):'Choose a CSV or Excel file, or drop it here';
+  df.dataset.state=conn.forecast?'ready':'empty'; byId('forecast-name').textContent=conn.forecast?fileLabel(conn.forecast):'Choose a CSV or Excel file, or drop it here';
   byId('clear-ledger').hidden=!(conn.ledger||conn.bank); byId('clear-forecast').hidden=!conn.forecast;
   byId('bank-status').hidden=!conn.bank; byId('btn-plaid').textContent=conn.bank?'Linked · load again':'Link with Plaid'; }
-function wireDrop(zoneId,inputId,key){ const z=byId(zoneId), inp=byId(inputId), take=f=>{ if(!f) return; conn[key]=f; if(key==='ledger') conn.bank=false; byId('connect-status').textContent=''; renderConnect(); };
+// A daily sheet with yuan columns or Chinese headings most likely comes from a yuan-based business: suggest it, visibly, before the run
+async function inspectLedger(file){ const st=byId('connect-status'), sel=byId('home-ccy');
+  try{ const t=await readTable(file), shape=tableShape(t.rows);
+    if(shape.kind==='daily'&&shape.cny&&sel.value!=='CNY'){ sel.value='CNY'; st.textContent='This looks like a daily summary kept in yuan, so the home currency is set to CNY. Change it if your books are in dollars.'; }
+    else if(shape.kind==='daily') st.textContent=`Daily summary found: ${shape.money.map(c=>c.h).join(', ')}.`;
+    else if(shape.kind==='unknown') st.innerHTML='<span class="err">No date column found in this file. Name it Date, or 日期 in a daily summary.</span>'; }
+  catch(err){ st.innerHTML=`<span class="err">${esc(err.message||String(err))}</span>`; } }
+function wireDrop(zoneId,inputId,key){ const z=byId(zoneId), inp=byId(inputId), take=f=>{ if(!f) return; conn[key]=f; if(key==='ledger'){ conn.bank=false; inspectLedger(f); } else byId('connect-status').textContent=''; renderConnect(); };
   inp.addEventListener('change',()=>take(inp.files[0]));
   for(const ev of ['dragenter','dragover']) z.addEventListener(ev,e=>{ e.preventDefault(); z.classList.add('over'); });
   for(const ev of ['dragleave','drop']) z.addEventListener(ev,()=>z.classList.remove('over'));
   z.addEventListener('drop',e=>{ e.preventDefault(); take(e.dataTransfer&&e.dataTransfer.files[0]); }); }
 function wireConnect(){ wireDrop('drop-ledger','f-ledger','ledger'); wireDrop('drop-forecast','f-forecast','forecast');
-  byId('clear-ledger').addEventListener('click',()=>{ conn.ledger=null; conn.bank=false; byId('f-ledger').value=''; renderConnect(); });
+  byId('clear-ledger').addEventListener('click',()=>{ conn.ledger=null; conn.bank=false; byId('f-ledger').value=''; byId('connect-status').textContent=''; renderConnect(); });
   byId('clear-forecast').addEventListener('click',()=>{ conn.forecast=null; byId('f-forecast').value=''; renderConnect(); });
   const dlg=byId('dlg-bank');
   byId('btn-plaid').addEventListener('click',()=>{ if(typeof dlg.showModal==='function') dlg.showModal(); else linkSampleBank(); });
@@ -1099,18 +1337,18 @@ function wireConnect(){ wireDrop('drop-ledger','f-ledger','ledger'); wireDrop('d
   byId('btn-sample').addEventListener('click',()=>runAnalysis(SAMPLE(),true));
   byId('btn-analyze').addEventListener('click',async()=>{ const st=byId('connect-status');
     if(!conn.ledger&&!conn.bank){ st.innerHTML='<span class="err">Add your transaction history or link your bank first. Or use the sample data.</span>'; return; }
-    st.textContent='';
-    try{ const text=conn.bank?window.NIMBUS_LEDGER_CSV:await conn.ledger.text(), ft=conn.forecast?await conn.forecast.text():null;
+    st.textContent=''; const home=conn.bank?'USD':byId('home-ccy').value;
+    try{ const led=conn.bank?{text:window.NIMBUS_LEDGER_CSV,daily:false}:await ledgerFrom(conn.ledger,home), ft=conn.forecast?(await readTable(conn.forecast)).csv:null;
       const from=conn.bank?'the sample bank feed':conn.ledger.name, fc=conn.forecast?` and ${conn.forecast.name}`:'';
-      runAnalysis({text,forecastText:ft,forecastName:conn.forecast?conn.forecast.name:null,name:conn.bank?'Nimbus Home Goods LLC (sample bank feed)':'Your business',kind:conn.bank?'bank':'file',
-        sourceText:`From ${from}${fc}${conn.bank&&!conn.forecast?', with no forecast, so Argent projected one':''}.`},true); }
+      runAnalysis({text:led.text,daily:led.daily,home,forecastText:ft,forecastName:conn.forecast?conn.forecast.name:null,name:conn.bank?'Nimbus Home Goods LLC (sample bank feed)':'Your business',kind:conn.bank?'bank':'file',
+        sourceText:`From ${from}${fc}${conn.bank&&!conn.forecast?', with no forecast, so Argent projected one':''}${home!=='USD'?`, in ${ccyLabel(home)}`:''}.`},true); }
     catch(err){ st.innerHTML=`<span class="err">${esc(err.message||String(err))}</span>`; } }); }
-function linkSampleBank(){ conn.bank=true; conn.ledger=null; byId('f-ledger').value=''; renderConnect();
-  byId('connect-status').textContent='Sample bank feed linked. Add a forecast if you have one, then analyze.'; }
+function linkSampleBank(){ conn.bank=true; conn.ledger=null; byId('f-ledger').value=''; byId('home-ccy').value='USD'; renderConnect();
+  byId('connect-status').textContent='Sample bank feed linked (a dollar-based business). Add a forecast if you have one, then analyze.'; }
 
 /* ================= start ================= */
 function init(){ byId('snapchip').textContent=`Kalshi snapshot · ${snapTime()}`;
-  byId('foot-snap').textContent=`Prices, order-book depth and rules come from Kalshi's public API, captured ${snapTime()}. They change continuously: check the live price, size, fees and eligibility on Kalshi before any order.`;
+  byId('foot-snap').textContent=`Prices, order-book depth and rules come from Kalshi's public API, captured ${snapTime()}; exchange rates from the ${FXS.spotSource||'ECB'} and volatility from ${FXS.volSource||'Federal Reserve H.10 rates'}. Prices change continuously: check the live price, size, fees and eligibility on Kalshi, and a forward quote with your provider, before any order.`;
   wireConnect(); renderConnect();
   runAnalysis(SAMPLE(),false); }      // the sample report is the page at rest
 init();
