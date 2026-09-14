@@ -113,7 +113,7 @@ button,select,input{font-family:var(--body)} button{cursor:pointer;color:var(--i
 
 /* overview: hedge, month and outcome cards */
 .prog{font:700 19px/1.3 var(--display)}
-.mini3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mini3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px} .mini3.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .mini3>div{background:var(--panel);border-radius:8px;padding:10px 12px;display:grid;gap:1px;min-width:0}
 .mini3 span{font:700 11px/1.3 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .mini3 b{font:700 19px/1.2 var(--display);font-variant-numeric:tabular-nums} .mini3 small{font-size:12px;color:var(--muted)}
@@ -1891,7 +1891,6 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const s0=R?R.s0:res.s0, E=s0.mean, rows=state.report.rows.filter(x=>x.share>=0.005), win=`${mabbr(F[0].month)} to ${mabbr(F[F.length-1].month)}`, chosen=pg&&pg.key!=='none';
   const D=R?null:directOrders(), hasDirect=D&&(D.legs.length||D.FW.length), nameOf=p=>p.key===pick?'the recommended hedge':'your chosen hedge';
   const withHedge=chosen?pg.s:hasDirect?res.s1:null, before=a=>shortfallOf(s0,E,a), after=a=>withHedge?shortfallOf(withHedge,E,a):null;
-  const b5=before(0.05), a5=after(0.05);
   const kpis=kpiCard('Expected net cash',km(E),`operating cash, ${win}`)+kpiCard('Typical swing',pm(s0.sd),'how far a typical year lands from expected')+kpiCard('Bad year (1 in 20)',km(s0.p5),'net cash, with no hedge')
     +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,skm(withHedge.p5-s0.p5),`on the bad year, now ${km(withHedge.p5)}; typical swing ${pm(withHedge.sd)} instead of ${pm(s0.sd)}`,'pay')
       :kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
@@ -1924,11 +1923,11 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const hedgeCard=()=>{ if(R&&chosen){ const g=groupOrders(R,openOrders(R,pg.key));
       return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2>${pg.key===pick?'<span class="pill acc">Recommended</span>':pg.compare?'<span class="pill off">Comparison</span>':'<span class="pill off">Your choice</span>'}</div>
         <p class="prog">${esc(pg.name)}</p>
-        <div class="mini3"><div><span>Up front</span><b>${pg.upfront>=50?km(pg.upfront):'None'}</b><small>${pg.upfront>=50?'Kalshi premium':'nothing paid now'}</small></div><div><span>Max payoff</span><b>${km(maxPayoff(R,pg.key))}</b><small>${usd(maxPayoff(R,pg.key))} if every contract pays</small></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b><small>average loss</small></div></div>
+        <div class="mini3 two"><div><span>Up front</span><b>${pg.upfront>=50?km(pg.upfront):'None'}</b><small>${pg.upfront>=50?'Kalshi premium':'nothing paid now'}</small></div><div><span>Max payoff</span><b>${km(maxPayoff(R,pg.key))}</b><small>${usd(maxPayoff(R,pg.key))} if every contract pays</small></div></div>
         <ul class="holds">${g.map(x=>`<li><b>${esc(x.name)}</b><b>${esc(x.count)}</b><span>${esc(x.detail)}</span></li>`).join('')}</ul>
         <button type="button" class="btn" data-go="plan">Compare programs</button></div>`; }
     if(hasDirect) return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div>
-        <div class="mini3"><div><span>Up front</span><b>${D.T.cost>=1?usd(D.T.cost):'None'}</b></div><div><span>Max payoff</span><b>${usd(D.T.n)}</b></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b></div></div>
+        <div class="mini3 two"><div><span>Up front</span><b>${D.T.cost>=1?usd(D.T.cost):'None'}</b></div><div><span>Max payoff</span><b>${usd(D.T.n)}</b></div></div>
         <button type="button" class="btn" data-go="plan">See what to buy</button></div>`;
     return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div><p class="muted">${R?'No program is selected. The recommended one is marked on the Hedge plan tab.':'No hedge is worth its cost at today\'s prices.'}</p>${R?'<button type="button" class="btn" data-go="plan">Choose a program</button>':''}</div>`; };
   const monthCard=()=>{ const L=window.MONITOR_LATEST, auto=APP.src&&APP.src.sample&&L&&pg&&L.program===pg.name;
