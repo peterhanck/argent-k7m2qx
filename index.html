@@ -1891,13 +1891,13 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const D=R?null:directOrders(), hasDirect=D&&(D.legs.length||D.FW.length), nameOf=p=>p.key===pick?'the recommended hedge':'your chosen hedge';
   const withHedge=chosen?pg.s:hasDirect?res.s1:null, before=a=>shortfallOf(s0,E,a), after=a=>withHedge?shortfallOf(withHedge,E,a):null;
   const b5=before(0.05), a5=after(0.05), cost=chosen?pg.avgCost:hasDirect?D.T.expCost+(res.fwdCost||0):0, upfront=chosen?pg.upfront:hasDirect?D.T.cost:0;
-  const kpis=kpiCard('Expected net cash',km(E),`operating cash, ${win}`)+kpiCard('Worst 5% of years',lossTxt(b5),'average loss against expected, with no hedge')
-    +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,lossTxt(a5),`in the worst 5% of years: ${km(b5-a5)} less`,'pay')+kpiCard('Cost of the hedge',km(cost),`a year on average${upfront>=50?`; ${km(upfront)} paid up front`:''}`)
-      :kpiCard('Worst 1% of years',lossTxt(before(0.01)),'average loss against expected, with no hedge')+kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
-  const tailCard=`<div class="card span-7"><div class="card-h"><h2>Losses in bad years</h2>${withHedge?`<span class="small muted">${esc(chosen?pg.name:'The hedge')}</span>`:''}</div>
-      <p class="card-sub">How far 12-month net cash falls below the expected ${km(E)}, on average, in the worst of ${fmtN(N)} simulated years. With the hedge, the loss includes what the hedge costs.</p>
-      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n">No hedge</th>${withHedge?'<th class="n col-with">With the hedge</th><th class="n">Hedged</th>':''}</tr></thead><tbody>
-      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=after(a); return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n col-with">${lossTxt(h)}</td><td class="n"><b>${km(b-h)}</b><small>${pct((b-h)/b,1)} of the loss</small></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
+  const kpis=kpiCard('Expected net cash',km(E),`operating cash, ${win}`)+kpiCard('Typical swing',pm(s0.sd),'how far a typical year lands from expected')+kpiCard('Bad year (1 in 20)',km(s0.p5),'net cash, with no hedge')
+    +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,skm(withHedge.p5-s0.p5),`on the bad year, now ${km(withHedge.p5)}; typical swing ${pm(withHedge.sd)} instead of ${pm(s0.sd)}`,'pay')
+      :kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
+  const tailCard=`<div class="card span-12"><div class="card-h"><h2>Expected loss in bad years</h2>${withHedge?`<span class="small muted">With ${esc(chosen?inSentence(pg.name):'the hedge')}</span>`:''}</div>
+      <p class="card-sub">The average amount 12-month net cash falls below the expected ${km(E)} in the worst years of ${fmtN(N)} simulated. With the hedge, the loss includes what the hedge costs.</p>
+      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n">Expected loss, no hedge</th>${withHedge?'<th class="n col-with">Expected loss, with the hedge</th><th class="n">Improvement</th>':''}</tr></thead><tbody>
+      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=after(a); return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n col-with">${lossTxt(h)}</td><td class="n"><b>${km(b-h)} less</b><small>${pct((b-h)/b,1)} lower</small></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
   // what drives the worst 5% of years, and how much of each risk's part the hedge takes off (the parts add up to the totals in the table)
   const T=R?tailDrivers(R,chosen?pg.key:'none',0.05):null, viaOf={other:'Recession contract'};
   if(R&&R.fed) viaOf['fx_'+R.fed.ccy]='Fed-rate ladder'; if(state.priceRisk) viaOf[state.priceRisk.key]='Oil price contract';
@@ -1914,33 +1914,34 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
     return `<li class="risk"><div class="risk-top"><b>${esc(riskLabel(x))}</b><span class="share">${pctS(sh)}<small>of the swing</small></span></div>
       <div class="rbar" role="img" aria-label="${esc(`${riskLabel(x)}: ${pctS(sh)} of the swing, ${cv>=0.0005?pctS(cv):'none'} of it covered`)}"><i class="unc" style="width:${(sh*100).toFixed(1)}%"><i class="cov" style="width:${(cv*100).toFixed(1)}%${cv>=0.0005?';min-width:3px':''}"></i></i></div>
       <div class="risk-foot">${cv>=0.0005?`<span class="cov-v">${pctS(cv)} covered</span><span class="pill acc">${esc(c.via)}</span>`:'<span class="cov-v none">Not covered</span>'}${c.hint?`<span class="muted">${esc(c.hint)}</span>`:''}</div></li>`; };
-  const riskCard=T?`<div class="card span-8"><div class="card-h"><h2>What drives the worst 5% of years</h2><span class="keys"><span><i class="k-cov"></i>hedged</span><span><i class="k-unc"></i>left with you</span></span></div>
+  const riskCard=T?`<div class="card span-12"><div class="card-h"><h2>What drives the worst 5% of years</h2><span class="keys"><span><i class="k-cov"></i>hedged</span><span><i class="k-unc"></i>left with you</span></span></div>
       <p class="card-sub">Each bar is one risk's part of the ${km(T.before)} average loss in the worst 5% of years; the filled part is what the hedge takes off it.</p>
       <ul class="risks">${rows.map(driverLi).join('')}</ul>
       <p class="small muted">No Kalshi contract settles on these risks, so each hedge is a proxy that follows its risk only partly.</p></div>`
-    :`<div class="card span-8"><div class="card-h"><h2>What moves your cash</h2><span class="keys"><span><i class="k-cov"></i>covered by the hedge</span><span><i class="k-unc"></i>not covered</span></span></div>
+    :`<div class="card span-12"><div class="card-h"><h2>What moves your cash</h2><span class="keys"><span><i class="k-cov"></i>covered by the hedge</span><span><i class="k-unc"></i>not covered</span></span></div>
       <p class="card-sub">Each bar is one risk's share of the swing in net cash.</p><ul class="risks">${rows.map(riskLi).join('')}</ul></div>`;
   const hedgeCard=()=>{ if(R&&chosen){ const g=groupOrders(R,openOrders(R,pg.key));
-      return `<div class="card span-5"><div class="card-h"><h2>Your hedge</h2>${pg.key===pick?'<span class="pill acc">Recommended</span>':pg.compare?'<span class="pill off">Comparison</span>':'<span class="pill off">Your choice</span>'}</div>
+      return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2>${pg.key===pick?'<span class="pill acc">Recommended</span>':pg.compare?'<span class="pill off">Comparison</span>':'<span class="pill off">Your choice</span>'}</div>
         <p class="prog">${esc(pg.name)}</p>
         <div class="mini3"><div><span>Up front</span><b>${pg.upfront>=50?km(pg.upfront):'None'}</b><small>${pg.upfront>=50?'Kalshi premium':'nothing paid now'}</small></div><div><span>Average cost</span><b>${km(pg.avgCost)}</b><small>a year</small></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b><small>average loss</small></div></div>
         <ul class="holds">${g.map(x=>`<li><b>${esc(x.name)}</b><b>${esc(x.count)}</b><span>${esc(x.detail)}</span></li>`).join('')}</ul>
         <button type="button" class="btn" data-go="plan">Compare programs</button></div>`; }
-    if(hasDirect) return `<div class="card span-5"><div class="card-h"><h2>Your hedge</h2></div>
+    if(hasDirect) return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div>
         <div class="mini3"><div><span>Up front</span><b>${D.T.cost>=1?usd(D.T.cost):'None'}</b></div><div><span>Average cost</span><b>${km(D.T.expCost+(res.fwdCost||0))}</b></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b></div></div>
         <button type="button" class="btn" data-go="plan">See what to buy</button></div>`;
-    return `<div class="card span-5"><div class="card-h"><h2>Your hedge</h2></div><p class="muted">${R?'No program is selected. The recommended one is marked on the Hedge plan tab.':'No hedge is worth its cost at today\'s prices.'}</p>${R?'<button type="button" class="btn" data-go="plan">Choose a program</button>':''}</div>`; };
+    return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div><p class="muted">${R?'No program is selected. The recommended one is marked on the Hedge plan tab.':'No hedge is worth its cost at today\'s prices.'}</p>${R?'<button type="button" class="btn" data-go="plan">Choose a program</button>':''}</div>`; };
   const monthCard=()=>{ const L=window.MONITOR_LATEST, auto=APP.src&&APP.src.sample&&L&&pg&&L.program===pg.name;
     const orders=R&&chosen?groupOrders(R,openOrders(R,pg.key)):[];
-    if(!orders.length&&!hasDirect) return `<div class="card span-4"><div class="card-h"><h2>This month</h2></div><div class="todo"><span class="pill off">Nothing to do</span></div><p class="small muted">No positions are open, so there is nothing to check.</p></div>`;
+    if(!orders.length&&!hasDirect) return `<div class="card span-5"><div class="card-h"><h2>This month</h2></div><div class="todo"><span class="pill off">Nothing to do</span></div><p class="small muted">No positions are open, so there is nothing to check.</p></div>`;
     const list=orders.length?orders:[...(D.legs.length?[{name:'Kalshi contracts',count:`${fmtN(D.T.n)} contracts`,detail:`about ${usd(D.T.cost)} at today's prices`}]:[]),...(D.FW.length?[{name:'Forwards',count:km(D.FW.reduce((t,x)=>t+Math.abs(x.amount),0)),detail:'booked with a bank or payment provider'}]:[])];
-    return `<div class="card span-4"><div class="card-h"><h2>This month</h2>${auto?`<span class="small muted">Checked ${esc(dmy(L.checked_at))}</span>`:''}</div>
+    const total=orders.length?openOrders(R,pg.key).filter(x=>x.pos!=='fwd').reduce((t,x)=>t+x.cost,0):D.T.cost;
+    return `<div class="card span-5"><div class="card-h"><h2>This month</h2>${auto?`<span class="small muted">Checked ${esc(dmy(L.checked_at))}</span>`:''}</div>
       <div class="todo"><span class="pill acc">Open</span><b>Place the hedge orders</b></div>
-      <ul class="orders">${list.map(x=>`<li><span>${esc(x.name)}</span><b>${esc(x.count)}</b><small>${esc(x.detail)}</small></li>`).join('')}</ul>
+      <p>${list.length} position${list.length>1?'s':''}, about ${usd(total)} (${km(total)}) at today's prices, as listed under Your hedge. The Hedge plan tab has each contract and its limit price.</p>
       <p class="small muted">Use limit orders spread over the coming weeks. Then check the positions once a month.</p>
-      ${R?'<button type="button" class="btn" data-go="check">Run the monthly check</button>':''}</div>`; };
+      <div class="actions"><button type="button" class="btn" data-go="plan">See what to buy</button>${R?'<button type="button" class="btn" data-go="check">Run the monthly check</button>':''}</div></div>`; };
   byId('view-overview').innerHTML=`<div class="page-h"><p class="label">Overview</p><h1>The next 12 months</h1><p class="sub">${esc(win)} · built from ${fmtN(sc.lines)} ${APP.src&&APP.src.daily?'daily entries':'transactions'}, ${esc(mabbr(sc.first))} to ${esc(mabbr(sc.last))}</p></div>
-    <div class="grid">${kpis}${tailCard}${hedgeCard()}${riskCard}${monthCard()}</div>`; }
+    <div class="grid">${kpis}${tailCard}${hedgeCard()}${monthCard()}${riskCard}</div>`; }
 
 /* ---------- hedge plan ---------- */
 // the hedge plan tab shows US dollars, the currency Kalshi settles in; the programs table in thousands with two decimals
