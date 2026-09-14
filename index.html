@@ -266,6 +266,7 @@ details.rules[open] summary{margin-bottom:12px}
   </section>
 </main>
 <footer class="foot"><p id="foot"></p><p>Argent Research, all-weather risk management. This MVP doesn't hold money, place trades or give investment advice; any order happens on Kalshi. Not affiliated with Kalshi.</p></footer>
+<script>window.ARGENT_VARIANT='tail';</script>
 <script src="data/kalshi_snapshot.js"></script>
 <script src="data/fx_snapshot.js"></script>
 <script src="data/seller_daily.js"></script>
@@ -643,7 +644,7 @@ function cholesky(A){ const n=A.length, L=A.map(()=>new Array(n).fill(0));
 /* ---------- state ---------- */
 // assume: inputs the books can't supply, kept across runs (cogs: product cost as a share of sales, used only when the books carry none; recDrop: how
 // much a US recession would cut 12-month sales; oilBeta: how much of an oil move the per-kg price follows, null = fitted on the carrier's bills)
-const state={ledger:null,M:null,F:null,fsrc:'',name:'',home:'USD',priceHistory:null,priceRisk:null,newYear:null,assume:{cogs:0.25,recDrop:0.10,oilBeta:null,ownSales:true},programs:null,fedCache:null,risks:[],sim:null,res:null,known:null,
+const state={ledger:null,M:null,F:null,fsrc:'',name:'',home:'USD',priceHistory:null,priceRisk:null,newYear:null,assume:{cogs:0.25,recDrop:0.10,oilBeta:null,ownSales:true,tailHedge:false},programs:null,fedCache:null,risks:[],sim:null,res:null,known:null,
   a:{lambda:0.5,markup:0,bookOnly:false,palCap:true,betCap:'view',countLater:false,floor:-100000,shortCost:0,cnyVol:0.04,sdOther:null,dutyRatio:null,sizes:{},shape:{},
      tariff:{view:'',share:null,ref:null,holdAt:null},freight:{view:'',rateNow:QUOTES.rateNow.v,scfiNow:QUOTES.scfiNow.v,beta:0.8,basisSd:0.2},recession:{view:'',loss:0,inShare:0.5}}};
 
@@ -1034,7 +1035,9 @@ function fedProxy(){ const q=PX&&PX.fed, study=PX&&PX.fx_study, sim=state.sim, f
   const build=k=>{ const pay=new Float64Array(N); let cost=0,max=0; for(const g of legs){ const n=g[k]; if(!n) continue; cost+=n*g.noAsk+feeOf(n,g.noAsk); max+=n; for(let i=0;i<N;i++) if(ff[i]<=g.strike+1e-9) pay[i]+=n; }
     const D=Float64Array.from(L,(x,i)=>x-pay[i]); let r1=0,c1=0,r0=0,c0=0; for(let i=0;i<N;i++){ if(flag[i]){ r1+=pay[i]; c1++; } else { r0+=pay[i]; c0++; } }
     return {pay,cost,max,cut:Math.max(0,1-varOf(D)/varOf(L)),recGap:c1&&c0?r1/c1-r0/c0:0,mean:meanOf(pay),sdLeft:Math.sqrt(varOf(D))}; };
-  const r={key:'fed',q,series:q.series,close:q.close,pts,now,median:invCurve(curve,0.5),legs,nRisk,B,align,link:cal.linkOutsideRecession,a:best.a,gap:best.gap,target,
+  // deep: strikes under the ladder (under a 10% chance) with a two-sided quote, cheap because they pay only when the rate falls far; ff: each year's rate
+  const lowest=Math.min(...set.map(x=>x.strike)), deep=lad.filter(x=>x.strike<lowest-1e-9&&x.bid>0&&x.ask<1).map(x=>({strike:x.strike,ticker:x.ticker,below:1-above(x.strike),noAsk:Math.min(0.99,1-x.bid),oi:x.openInterest||0}));
+  const r={key:'fed',ff,deep,q,series:q.series,close:q.close,pts,now,median:invCurve(curve,0.5),legs,nRisk,B,align,link:cal.linkOutsideRecession,a:best.a,gap:best.gap,target,
     coverLoss:Float64Array.from(L).sort()[Math.floor(N*0.85)],fxSd:sL,risk:build('nRisk'),market:build('nMkt'),oi:legs.reduce((t,g)=>t+g.oi,0),ccy:fx.ccy};
   state.fedCache={sim,recDrop:state.assume.recDrop,r}; return r; }
 // The chance the rate at the end of next year ends at or below K if the market's expected rate moves by shift points (the ladder slides with it)
@@ -1045,7 +1048,10 @@ function fedBelow(F,K,shift){ const x=K-shift, pts=F.pts; if(x<pts[0][0]) return
 const PROGRAMS=[{key:'none',name:'No hedge'},{key:'fedm',name:'Fed ladder at today\'s market size',fed:'market'},{key:'fedr',name:'Fed ladder sized for the risk',fed:'risk'},
   {key:'core',name:'Fed ladder and recession cover',fed:'risk',recession:true},{key:'fullm',name:'Every risk hedged',fed:'market',recession:true,oil:true},
   {key:'full',name:'Every risk hedged, full-size ladder',fed:'risk',recession:true,oil:true},
+  {key:'tail',name:'Every risk hedged, weighted to the worst years',fed:'market',recession:true,oil:true,tail:true},
   {key:'fwd',name:'Bank forwards instead',fwd:[0.8,0.6,0.4,0.2],compare:true}].filter(pg=>!(KALSHI_ONLY&&pg.fwd));
+// The worst-years program (only with assume.tailHedge): this share of the recession contracts, the rest of the money moved to a deep Fed strike
+const TAIL_REC=0.5;
 // A program's name inside a sentence: 'the Fed ladder ...' keeps its capital, others go lower case
 const inSentence=n=>/^Fed\b/.test(n)?`the ${n}`:n.charAt(0).toLowerCase()+n.slice(1);
 // What a hedge pays out, on average, in the years that are worst with no hedge: the worst share a of years (TAILS), and the years around the 1-in-20
@@ -1069,17 +1075,27 @@ function programResults(){ const sim=state.sim; if(!sim) return null;
   // Expected shortfall: how far net cash falls below the expected no-hedge mean, on average, in the worst 10%, 5% and 1% of simulated years
   const esOf=sorted=>Object.fromEntries(TAILS.map(a=>{ const k=Math.max(1,Math.round(a*N)); let t=0; for(let i=0;i<k;i++) t+=sorted[i]; return [a,s0.mean-t/k]; }));
   s0.es=esOf(s0.sorted);
-  const programs=PROGRAMS.filter(pg=>!pg.fed||fed).map(pg=>{ const pay=new Float64Array(N), legs=[], fw=pg.fwd||[0,0,0,0]; let fwdCost=0, fwdAmt=0, upfront=0, recN=0, fedLeg=null;
+  const programs=PROGRAMS.filter(pg=>(!pg.fed||fed)&&(!pg.tail||state.assume.tailHedge)).map(pg=>{ const pay=new Float64Array(N), legs=[], fw=pg.fwd||[0,0,0,0]; let fwdCost=0, fwdAmt=0, upfront=0, recN=0, fedLeg=null, deep=null;
     if(f) for(const b of f.blocks){ const r=fw[b.q]||0; if(!r) continue; fwdCost+=fwdCostOf(b,r); fwdAmt+=r*Math.abs(b.net); for(let i=0;i<N;i++) pay[i]+=r*b.V[i]; }
     if(pg.fed&&fed){ fedLeg=fed[pg.fed]; upfront+=fedLeg.cost; for(let i=0;i<N;i++) pay[i]+=fedLeg.pay[i]; }
-    if(pg.recession&&rec&&rec.n>0){ recN=Math.min(rec.n,Math.max(0,Math.round(rec.loss-(fedLeg?fedLeg.recGap:0)))); upfront+=recN*rec.entry+feeOf(recN,rec.entry); legs.push(rec); for(let i=0;i<N;i++) if(fR[i]) pay[i]+=recN; }
+    if(pg.recession&&rec&&rec.n>0){ recN=Math.min(rec.n,Math.max(0,Math.round(rec.loss-(fedLeg?fedLeg.recGap:0)))); if(pg.tail) recN=Math.round(recN*TAIL_REC);
+      upfront+=recN*rec.entry+feeOf(recN,rec.entry); legs.push(rec); for(let i=0;i<N;i++) if(fR[i]) pay[i]+=recN; }
     if(pg.oil&&oil&&oil.n>0){ legs.push(oil); upfront+=oil.cost; for(let i=0;i<N;i++) if(fO[i]) pay[i]+=oil.n; }
+    // The worst-years program adds NO contracts on the deep strike that pays most often in the worst 1 in 100 years per dollar, as many (in 10,000s)
+    // as keep that year's payout at or under its loss; they join the Fed ladder, so its payout, cost and positions carry them
+    if(pg.tail&&fed&&fedLeg&&fed.deep.length){ const k=Math.max(1,Math.round(0.01*N)), W=order0.subarray(0,k), hit=K=>{ let c=0; for(const i of W) if(fed.ff[i]<=K+1e-9) c++; return c/k; };
+      const d=fed.deep.map(x=>({...x,hit:hit(x.strike)})).filter(x=>x.hit>0).sort((a,b)=>b.hit/b.noAsk-a.hit/a.noAsk)[0];
+      let paid1=0; for(const i of W) paid1+=pay[i]; paid1/=k;
+      const n=d?Math.max(0,Math.floor((s0.es[0.01]-paid1)/d.hit/10000)*10000):0;
+      if(n>0){ deep={...d,n,cost:n*d.noAsk+feeOf(n,d.noAsk)}; upfront+=deep.cost; const P=Float64Array.from(fedLeg.pay);
+        for(let i=0;i<N;i++) if(fed.ff[i]<=d.strike+1e-9){ pay[i]+=n; P[i]+=n; } fedLeg={...fedLeg,pay:P,cost:fedLeg.cost+deep.cost,max:fedLeg.max+n}; } }
     const cf=new Float64Array(N); let under=0; for(let i=0;i<N;i++){ cf[i]=shortfall(raw[i]+pay[i]-fwdCost-upfront); if(cf[i]<thr) under++; }
-    const s=stats(cf); return {...pg,legs,fwdAmt,fwdCost,upfront,recN,fedLeg,pay,s,es:esOf(s.sorted),paid:sameYears(c0,pay,order0),avgCost:s0.mean-s.mean,dP5:s.p5-s0.p5,pUnder:under/N,slide:ly&&f?fxPath(fx.ccy,ly.g,fw).total:null}; });
+    const s=stats(cf); return {...pg,legs,fwdAmt,fwdCost,upfront,recN,fedLeg,deep,pay,s,es:esOf(s.sorted),paid:sameYears(c0,pay,order0),avgCost:s0.mean-s.mean,dP5:s.p5-s0.p5,pUnder:under/N,slide:ly&&f?fxPath(fx.ccy,ly.g,fw).total:null}; });
   // The recommended program puts a Kalshi contract on every risk that has one, directly or by proxy; among those, the one that pays out the most in the
   // worst 5% of years with no hedge, per yuan of average cost
   const cut5=x=>x.paid.tail[0.05], eligible=programs.filter(x=>x.key!=='none'&&!x.compare&&x.avgCost>0&&cut5(x)>0), all=x=>(!fed||x.fed)&&(!(rec&&rec.n>0)||x.recession)&&(!(oil&&oil.n>0)||x.oil);
-  const pick=(eligible.some(all)?eligible.filter(all):eligible).sort((a,b)=>cut5(b)/b.avgCost-cut5(a)/a.avgCost)[0];
+  // In the worst-years version the recommended program is the worst-years one, once it holds its deep contracts
+  const pick=programs.find(x=>x.tail&&x.deep)||(eligible.some(all)?eligible.filter(all):eligible).sort((a,b)=>cut5(b)/b.avgCost-cut5(a)/a.avgCost)[0];
   const share=(p,L)=>varOf(raw)>0?p*(1-p)*L*L/varOf(raw):0;
   return {rec,oil,fx,fed,s0,thr,programs,tail:{raw,comp,fR,fO},pick:pick?pick.key:null,recShare:rec?share(rec.p,rec.loss):0,oilShare:oil?share(oil.p,oil.loss):0}; }
 const TAILS=[0.10,0.05,0.01];
@@ -1101,7 +1117,8 @@ function tailDrivers(R,key,a){ const T=R&&R.tail; if(!T) return null; const k=Ma
 // What a program holds on day one: the Fed ladder's contracts per strike, forwards per quarter, contracts at today's ask
 function programPositions(R,key){ const pg=R.programs.find(x=>x.key===key); if(!pg) return null; const f=R.fx&&state.sim.fx[R.fx.ccy], fw=pg.fwd||[0,0,0,0], F=R.fed;
   return {key,fwd:f?f.blocks.map(b=>({q:b.q,months:b.months,ratio:fw[b.q]||0,amount:(fw[b.q]||0)*b.net,plan:b.net})).filter(x=>x.ratio>0):[],schedule:fw,
-    fed:pg.fed&&F?{legs:F.legs.map(g=>({strike:g.strike,ticker:g.ticker,n:pg.fed==='risk'?g.nRisk:g.nMkt,entry:g.noAsk})).filter(g=>g.n>0),cost:F[pg.fed].cost,share:1,coverLoss:F.coverLoss,profitTaken:false,reviewed:false}:null,
+    fed:pg.fed&&F?{legs:[...F.legs.map(g=>({strike:g.strike,ticker:g.ticker,n:pg.fed==='risk'?g.nRisk:g.nMkt,entry:g.noAsk})).filter(g=>g.n>0),...(pg.deep?[{strike:pg.deep.strike,ticker:pg.deep.ticker,n:pg.deep.n,entry:pg.deep.noAsk}]:[])],
+      cost:pg.fedLeg?pg.fedLeg.cost:F[pg.fed].cost,share:1,coverLoss:F.coverLoss,profitTaken:false,reviewed:false}:null,
     rec:pg.recession&&R.rec&&pg.recN>0?{n:pg.recN,held:pg.recN,entry:R.rec.entry,loss:R.rec.loss,profitTaken:false}:null,
     oil:pg.oil&&R.oil&&R.oil.n>0?{n:R.oil.n,held:R.oil.n,entry:R.oil.entry,loss:R.oil.loss}:null}; }
 // What the Fed ladder of a position is worth if the market's expected rate has moved by shift points, at bids a cent under the chance
@@ -1980,7 +1997,9 @@ function driversCard(R,pg,on,s){
 // the hedge plan tab shows US dollars, the currency Kalshi settles in; the programs table in thousands with two decimals
 const $k=v=>`${v<0?'−':''}$${(Math.abs(v)/1000).toFixed(2)}k`, $s=v=>(v>0?'+':'')+$k(v), $pm=v=>'±'+$k(Math.abs(v));
 function renderPlan(){ const host=byId('view-plan'), R=state.programs;
-  const head=`<div class="page-h"><p class="label">Hedge plan</p><h1>Choose how much protection to buy</h1><p class="sub">Every program is scored on the same simulated years, and every position is a Kalshi contract. The recommended one puts a Kalshi contract on every risk and, among the programs that do, pays back the most in a bad year (1 in 20) for what it costs. Each contract pays $1 if it settles your way, so the max payoff is the number of contracts. Amounts on this page are in US dollars.</p></div>`;
+  const pickPg=R&&R.programs.find(p=>p.key===R.pick), rule=pickPg&&pickPg.deep?`The recommended one puts a Kalshi contract on every risk and leans toward the worst years: it holds ${pct(TAIL_REC)} of the usual recession contracts and puts the money into contracts that pay only if the Fed rate ends at or below ${pickPg.deep.strike.toFixed(2)}%, which happens far more often in the worst years.`
+    :'The recommended one puts a Kalshi contract on every risk and, among the programs that do, pays back the most in a bad year (1 in 20) for what it costs.';
+  const head=`<div class="page-h"><p class="label">Hedge plan</p><h1>Choose how much protection to buy</h1><p class="sub">Every program is scored on the same simulated years, and every position is a Kalshi contract. ${rule} Each contract pays $1 if it settles your way, so the max payoff is the number of contracts. Amounts on this page are in US dollars.</p></div>`;
   if(!R){ const D=directOrders();
     host.innerHTML=head+`<div class="grid"><div class="card span-12"><div class="card-h"><h2>What to buy</h2></div>${D.legs.length||D.FW.length?buyTables(D.legs,[],null):'<p class="muted">No hedge is worth its cost at today\'s prices.</p>'}</div></div>`; return; }
   const row=p=>`<tr data-key="${esc(p.key)}" class="${[p.key===APP.prog?'sel':'',p.compare?'compare':''].filter(Boolean).join(' ')}"><td><label class="radio"><input type="radio" name="prog" value="${esc(p.key)}"${p.key===APP.prog?' checked':''}><b>${esc(p.name)}</b></label>${p.key===R.pick?' <span class="pill acc">Recommended</span>':p.compare?' <span class="pill off">For comparison</span>':''}</td>
@@ -2008,6 +2027,8 @@ function renderBuy(R){ const host=byId('plan-buy'), pg=selProgram(), o=pg?openOr
 function beforeList(R){ const pg=selProgram()||{}, pos=pg.key?sizedPositions(R,pg.key):null, out=[];
   if(pg.fed||pg.recession||pg.oil) out.push(`Open a Kalshi account in the company's name. Premiums are paid up front, and contracts can be sold at the bid any day before they settle.`);
   if(pg.fed&&R.fed) out.push(`Buy the Fed ladder with limit orders over several weeks. It is thin: ${fmtN(R.fed.oi)} contracts are open across its ${R.fed.legs.length} strikes.`);
+  const deepLeg=pg.deep&&pos&&pos.fed&&pos.fed.legs.find(g=>g.strike===pg.deep.strike);
+  if(deepLeg) out.push(`The ${pg.deep.strike.toFixed(2)}% contracts are far thinner: ${fmtN(pg.deep.oi)} are open against ${fmtN(deepLeg.n)} to buy, so a real order this size would push the price well above ${cents(pg.deep.noAsk)}. Treat the size as an illustration.`);
   if(pg.recession&&R.rec&&pos&&pos.rec) out.push(`Buy the recession contracts with limit orders too: ${fmtN(bookDepth(R.rec.q,'ask'))} were offered within 2¢ of the ask at the snapshot, against ${fmtN(pos.rec.n)} to buy.`,`The recession cover assumes a US recession would cut sales by ${pct(state.assume.recDrop)}. Change it on the Your data tab.`);
   if(pg.fwd) out.push('Forwards need a line with a bank or payment provider, which may ask for collateral. The 0.15% margin is an assumption until you get a quote.');
   if(!out.length) out.push('Nothing to order. Pick a program to see what it holds.');
@@ -2146,9 +2167,10 @@ function renderAll(){ const src=APP.src;
   renderOverview(); renderPlan(); renderCheck(); renderDataSide();
   byId('foot').textContent=`Kalshi prices from its public API, ${snapTime()}, change continuously${FXS.asOf?`; exchange rates from the ${FXS.spotSource||`ECB, ${fxAsOf()}`}`:''}. An illustration, not investment advice.`; }
 // The illustration assumes a US recession would cut sales by 20%; the Your data tab can change it. It counts only the market risks a Kalshi contract
-// can follow (a US recession, currencies, freight rates), leaving out the business's own sales ups and downs.
+// can follow (a US recession, currencies, freight rates), leaving out the business's own sales ups and downs. A page built as the worst-years version
+// (window.ARGENT_VARIANT 'tail') recommends the program that leans toward the worst years (assume.tailHedge).
 const ILLUSTRATIVE_REC_DROP=0.20;
-function bootClient(){ state.assume.recDrop=ILLUSTRATIVE_REC_DROP; state.assume.ownSales=false; wireTabs(); wireUpload(); renderDrops(); const h=(location.hash||'').slice(1); showTab(VIEWS.includes(h)?h:'overview',{scroll:false}); analyze(SAMPLE(),{animate:false}); }
+function bootClient(){ state.assume.recDrop=ILLUSTRATIVE_REC_DROP; state.assume.ownSales=false; state.assume.tailHedge=window.ARGENT_VARIANT==='tail'; wireTabs(); wireUpload(); renderDrops(); const h=(location.hash||'').slice(1); showTab(VIEWS.includes(h)?h:'overview',{scroll:false}); analyze(SAMPLE(),{animate:false}); }
 bootClient();
 
 })();
