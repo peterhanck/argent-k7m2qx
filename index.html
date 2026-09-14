@@ -142,7 +142,7 @@ svg text{font-family:var(--body);fill:var(--ink)} .tk{font-size:11.5px;fill:var(
 .tbl td small{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
 .tbl tr.big td{font-weight:700;border-bottom:0}
 .tbl .tick{font-size:12.5px}
-table.progs{min-width:900px} table.buy{min-width:640px} table.rules{min-width:760px}
+table.progs{min-width:900px} table.buy{min-width:720px} table.rules{min-width:760px}
 table.progs tbody tr{cursor:pointer} table.progs tbody tr:hover td{background:var(--panel)}
 table.progs tr.sel td{background:var(--accent-tint)}
 table.progs tr.compare td{color:var(--muted)}
@@ -1871,9 +1871,10 @@ function openOrders(R,key){ const pos=programPositions(R,key); if(!pos) return [
   if(pos.oil) out.push({pos:'oil',side:'YES',label:`WTI reaches $${R.oil.strike} by 31 Dec 2026`,ticker:R.oil.ticker,series:R.oil.q.ticker.split('-')[0],n:pos.oil.n,px:pos.oil.entry,cost:cost(pos.oil.n,pos.oil.entry)});
   for(const f of pos.fwd) out.push({pos:'fwd',label:`${mabbr(f.months[0])} to ${mabbr(f.months[f.months.length-1])}`,amount:f.amount,ratio:f.ratio});
   return out; }
+const maxPayoff=(R,key)=>{ const pos=R&&programPositions(R,key); return pos?(pos.fed?pos.fed.legs.reduce((t,g)=>t+g.n,0):0)+(pos.rec?pos.rec.n:0)+(pos.oil?pos.oil.n:0):0; };
 function groupOrders(R,o){ const nm=POS_NAME(R), out=[];
   for(const k of ['fed','rec','oil']){ const g=o.filter(x=>x.pos===k); if(!g.length) continue; const n=g.reduce((t,x)=>t+x.n,0), c=g.reduce((t,x)=>t+x.cost,0);
-    out.push({name:nm[k],count:`${fmtN(n)} contracts`,detail:`${g.length>1?`${g.length} strikes, `:''}about ${usd(c)} (${km(c)}) at today's prices`}); }
+    out.push({name:nm[k],count:`${fmtN(n)} contracts`,detail:`${g.length>1?`${g.length} strikes; `:''}costs about ${usd(c)} (${km(c)}), pays up to ${usd(n)} (${km(n)})`}); }
   const f=o.filter(x=>x.pos==='fwd'); if(f.length&&R.fx) out.push({name:nm.fwd,count:inCcy(f.reduce((t,x)=>t+Math.abs(x.amount),0),R.fx.ccy),detail:`sold forward over ${f.length} quarters with a bank or payment provider`});
   return out; }
 // Books without proxy programs: the plan's own Kalshi legs and forwards
@@ -1890,7 +1891,7 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const s0=R?R.s0:res.s0, E=s0.mean, rows=state.report.rows.filter(x=>x.share>=0.005), win=`${mabbr(F[0].month)} to ${mabbr(F[F.length-1].month)}`, chosen=pg&&pg.key!=='none';
   const D=R?null:directOrders(), hasDirect=D&&(D.legs.length||D.FW.length), nameOf=p=>p.key===pick?'the recommended hedge':'your chosen hedge';
   const withHedge=chosen?pg.s:hasDirect?res.s1:null, before=a=>shortfallOf(s0,E,a), after=a=>withHedge?shortfallOf(withHedge,E,a):null;
-  const b5=before(0.05), a5=after(0.05), cost=chosen?pg.avgCost:hasDirect?D.T.expCost+(res.fwdCost||0):0, upfront=chosen?pg.upfront:hasDirect?D.T.cost:0;
+  const b5=before(0.05), a5=after(0.05);
   const kpis=kpiCard('Expected net cash',km(E),`operating cash, ${win}`)+kpiCard('Typical swing',pm(s0.sd),'how far a typical year lands from expected')+kpiCard('Bad year (1 in 20)',km(s0.p5),'net cash, with no hedge')
     +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,skm(withHedge.p5-s0.p5),`on the bad year, now ${km(withHedge.p5)}; typical swing ${pm(withHedge.sd)} instead of ${pm(s0.sd)}`,'pay')
       :kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
@@ -1923,17 +1924,17 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const hedgeCard=()=>{ if(R&&chosen){ const g=groupOrders(R,openOrders(R,pg.key));
       return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2>${pg.key===pick?'<span class="pill acc">Recommended</span>':pg.compare?'<span class="pill off">Comparison</span>':'<span class="pill off">Your choice</span>'}</div>
         <p class="prog">${esc(pg.name)}</p>
-        <div class="mini3"><div><span>Up front</span><b>${pg.upfront>=50?km(pg.upfront):'None'}</b><small>${pg.upfront>=50?'Kalshi premium':'nothing paid now'}</small></div><div><span>Average cost</span><b>${km(pg.avgCost)}</b><small>a year</small></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b><small>average loss</small></div></div>
+        <div class="mini3"><div><span>Up front</span><b>${pg.upfront>=50?km(pg.upfront):'None'}</b><small>${pg.upfront>=50?'Kalshi premium':'nothing paid now'}</small></div><div><span>Max payoff</span><b>${km(maxPayoff(R,pg.key))}</b><small>${usd(maxPayoff(R,pg.key))} if every contract pays</small></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b><small>average loss</small></div></div>
         <ul class="holds">${g.map(x=>`<li><b>${esc(x.name)}</b><b>${esc(x.count)}</b><span>${esc(x.detail)}</span></li>`).join('')}</ul>
         <button type="button" class="btn" data-go="plan">Compare programs</button></div>`; }
     if(hasDirect) return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div>
-        <div class="mini3"><div><span>Up front</span><b>${D.T.cost>=1?usd(D.T.cost):'None'}</b></div><div><span>Average cost</span><b>${km(D.T.expCost+(res.fwdCost||0))}</b></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b></div></div>
+        <div class="mini3"><div><span>Up front</span><b>${D.T.cost>=1?usd(D.T.cost):'None'}</b></div><div><span>Max payoff</span><b>${usd(D.T.n)}</b></div><div><span>Worst 5%</span><b>${km(b5-a5)} less</b></div></div>
         <button type="button" class="btn" data-go="plan">See what to buy</button></div>`;
     return `<div class="card span-7"><div class="card-h"><h2>Your hedge</h2></div><p class="muted">${R?'No program is selected. The recommended one is marked on the Hedge plan tab.':'No hedge is worth its cost at today\'s prices.'}</p>${R?'<button type="button" class="btn" data-go="plan">Choose a program</button>':''}</div>`; };
   const monthCard=()=>{ const L=window.MONITOR_LATEST, auto=APP.src&&APP.src.sample&&L&&pg&&L.program===pg.name;
     const orders=R&&chosen?groupOrders(R,openOrders(R,pg.key)):[];
     if(!orders.length&&!hasDirect) return `<div class="card span-5"><div class="card-h"><h2>This month</h2></div><div class="todo"><span class="pill off">Nothing to do</span></div><p class="small muted">No positions are open, so there is nothing to check.</p></div>`;
-    const list=orders.length?orders:[...(D.legs.length?[{name:'Kalshi contracts',count:`${fmtN(D.T.n)} contracts`,detail:`about ${usd(D.T.cost)} at today's prices`}]:[]),...(D.FW.length?[{name:'Forwards',count:km(D.FW.reduce((t,x)=>t+Math.abs(x.amount),0)),detail:'booked with a bank or payment provider'}]:[])];
+    const list=orders.length?orders:[...(D.legs.length?[{name:'Kalshi contracts',count:`${fmtN(D.T.n)} contracts`,detail:`costs about ${usd(D.T.cost)}, pays up to ${usd(D.T.n)}`}]:[]),...(D.FW.length?[{name:'Forwards',count:km(D.FW.reduce((t,x)=>t+Math.abs(x.amount),0)),detail:'booked with a bank or payment provider'}]:[])];
     const total=orders.length?openOrders(R,pg.key).filter(x=>x.pos!=='fwd').reduce((t,x)=>t+x.cost,0):D.T.cost;
     return `<div class="card span-5"><div class="card-h"><h2>This month</h2>${auto?`<span class="small muted">Checked ${esc(dmy(L.checked_at))}</span>`:''}</div>
       <div class="todo"><span class="pill acc">Open</span><b>Place the hedge orders</b></div>
@@ -1947,14 +1948,14 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
 // the hedge plan tab shows US dollars, the currency Kalshi settles in; the programs table in thousands with two decimals
 const $k=v=>`${v<0?'−':''}$${(Math.abs(v)/1000).toFixed(2)}k`, $s=v=>(v>0?'+':'')+$k(v), $pm=v=>'±'+$k(Math.abs(v));
 function renderPlan(){ const host=byId('view-plan'), R=state.programs;
-  const head=`<div class="page-h"><p class="label">Hedge plan</p><h1>Choose how much protection to buy</h1><p class="sub">Every program is scored on the same simulated years, and every position is a Kalshi contract. The recommended one puts a Kalshi contract on every risk and, among the programs that do, cuts the average loss in the worst 5% of years the most for each dollar it costs. Amounts on this page are in US dollars.</p></div>`;
+  const head=`<div class="page-h"><p class="label">Hedge plan</p><h1>Choose how much protection to buy</h1><p class="sub">Every program is scored on the same simulated years, and every position is a Kalshi contract. The recommended one puts a Kalshi contract on every risk and, among the programs that do, gives the most protection in the worst 5% of years for what it costs. Each contract pays $1 if it settles your way, so the max payoff is the number of contracts. Amounts on this page are in US dollars.</p></div>`;
   if(!R){ const D=directOrders();
     host.innerHTML=head+`<div class="grid"><div class="card span-12"><div class="card-h"><h2>What to buy</h2></div>${D.legs.length||D.FW.length?buyTables(D.legs,[],null):'<p class="muted">No hedge is worth its cost at today\'s prices.</p>'}</div></div>`; return; }
   const row=p=>`<tr data-key="${esc(p.key)}" class="${[p.key===APP.prog?'sel':'',p.compare?'compare':''].filter(Boolean).join(' ')}"><td><label class="radio"><input type="radio" name="prog" value="${esc(p.key)}"${p.key===APP.prog?' checked':''}><b>${esc(p.name)}</b></label>${p.key===R.pick?' <span class="pill acc">Recommended</span>':p.compare?' <span class="pill off">For comparison</span>':''}</td>
-    <td class="n">${p.key!=='none'?$k(p.upfront):'—'}</td><td class="n">${p.key!=='none'?$k(p.avgCost):'—'}</td>${TAIL_ROWS.map(([a])=>{ const b=R.s0.es[a], h=p.es[a]; return `<td class="n">${$k(-h)}${p.key!=='none'?`<small>${$k(b-h)} hedged</small>`:''}</td>`; }).join('')}</tr>`;
+    <td class="n">${p.key!=='none'?$k(p.upfront):'—'}</td><td class="n">${p.key!=='none'?$k(maxPayoff(R,p.key)):'—'}</td>${TAIL_ROWS.map(([a])=>{ const b=R.s0.es[a], h=p.es[a]; return `<td class="n">${$k(-h)}${p.key!=='none'?`<small>${$k(b-h)} hedged</small>`:''}</td>`; }).join('')}</tr>`;
   host.innerHTML=head+`<div class="grid">
     <div class="card span-12"><div class="card-h"><h2>Programs</h2><span class="small muted">Select one to see what it holds. The overview follows your choice.</span></div>
-      <div class="scroll"><table class="tbl progs"><thead><tr><th>Program</th><th class="n">Up front</th><th class="n">Average cost a year</th><th class="n">Worst 10% of years</th><th class="n">Worst 5% of years</th><th class="n">Worst 1% of years</th></tr></thead><tbody>${R.programs.map(row).join('')}</tbody></table></div>
+      <div class="scroll"><table class="tbl progs"><thead><tr><th>Program</th><th class="n">Up front</th><th class="n">Max payoff</th><th class="n">Worst 10% of years</th><th class="n">Worst 5% of years</th><th class="n">Worst 1% of years</th></tr></thead><tbody>${R.programs.map(row).join('')}</tbody></table></div>
       <p class="small muted">Each loss is how far 12-month net cash falls below expected, on average, in those years, including what the program costs.</p></div>
     <div class="card span-8" id="plan-buy"></div>
     <div class="card span-4"><div class="card-h"><h2>Before you order</h2></div><ul class="checklist">${beforeList(R).map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></div>`;
@@ -1963,9 +1964,9 @@ function renderPlan(){ const host=byId('view-plan'), R=state.programs;
   host.querySelectorAll('input[name="prog"]').forEach(inp=>inp.addEventListener('change',()=>pickRow(inp.value)));
   renderBuy(R); }
 function buyTables(legs,fwd,R){ const nm=R?POS_NAME(R):{};
-  return `${legs.length?`<div class="scroll"><table class="tbl buy"><thead><tr><th>Position</th><th>Kalshi contract</th><th class="n">Contracts</th><th class="n">Limit</th><th class="n">Cost</th></tr></thead><tbody>
-      ${legs.map(x=>`<tr><td><b>${esc(nm[x.pos]||x.side)}</b><small>${esc(x.side)} · ${esc(x.label)}</small></td><td><a class="mono tick" href="${kalshiUrl(x.series)}" target="_blank" rel="noopener">${esc(x.ticker)}</a></td><td class="n">${fmtN(x.n)}</td><td class="n">${cents(x.px)}</td><td class="n">${usd(x.cost)}</td></tr>`).join('')}
-      ${legs.length>1?`<tr class="big"><td>Total</td><td></td><td class="n">${fmtN(legs.reduce((t,x)=>t+x.n,0))}</td><td></td><td class="n">${usd(legs.reduce((t,x)=>t+x.cost,0))}</td></tr>`:''}</tbody></table></div>`:''}
+  return `${legs.length?`<div class="scroll"><table class="tbl buy"><thead><tr><th>Position</th><th>Kalshi contract</th><th class="n">Contracts</th><th class="n">Limit</th><th class="n">Cost</th><th class="n">Pays up to</th></tr></thead><tbody>
+      ${legs.map(x=>`<tr><td><b>${esc(nm[x.pos]||x.side)}</b><small>${esc(x.side)} · ${esc(x.label)}</small></td><td><a class="mono tick" href="${kalshiUrl(x.series)}" target="_blank" rel="noopener">${esc(x.ticker)}</a></td><td class="n">${fmtN(x.n)}</td><td class="n">${cents(x.px)}</td><td class="n">${usd(x.cost)}</td><td class="n">${usd(x.n)}</td></tr>`).join('')}
+      ${legs.length>1?`<tr class="big"><td>Total</td><td></td><td class="n">${fmtN(legs.reduce((t,x)=>t+x.n,0))}</td><td></td><td class="n">${usd(legs.reduce((t,x)=>t+x.cost,0))}</td><td class="n">${usd(legs.reduce((t,x)=>t+x.n,0))}</td></tr>`:''}</tbody></table></div>`:''}
     ${fwd.length&&R&&R.fx?`<div class="scroll"><table class="tbl buy"><thead><tr><th>Forward with your bank</th><th class="n">${esc(R.fx.ccy)} sold</th><th class="n">Share of expected ${esc(R.fx.ccy)}</th></tr></thead><tbody>
       ${fwd.map(x=>`<tr><td><b>${esc(x.label)}</b></td><td class="n">${inCcy(Math.abs(x.amount),R.fx.ccy)}</td><td class="n">${pct(x.ratio)}</td></tr>`).join('')}</tbody></table></div>`:''}`; }
 function renderBuy(R){ const host=byId('plan-buy'), pg=selProgram(), o=pg?openOrders(R,pg.key):[];
