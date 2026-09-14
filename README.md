@@ -1,6 +1,6 @@
 # Argent Research: all-weather risk management
 
-Live site: https://peterhanck.github.io/argent-research/
+Live site: https://peterhanck.github.io/argent-k7m2qx/
 
 A working MVP of the client dashboard. Upload a file of your sales and costs (CSV or Excel) and the page projects the next
 12 months, shows what moves your net cash and how much of each risk Kalshi contracts cover, directly or by proxy where no
