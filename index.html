@@ -208,7 +208,7 @@ details.rules[open] summary{margin-bottom:12px}
 @media (max-width:560px){ .bar{padding-inline:16px;min-height:56px} .tabs .in,.app,.foot{padding-inline:16px} .span-3{grid-column:span 12}
   .card{padding:16px} .brand img{height:20px} .mini3{grid-template-columns:1fr} .pair{grid-template-columns:1fr}
   .decision{grid-template-columns:minmax(0,1fr)} .decision .n{text-align:left} .top .btn.primary .lbl-long{display:none}
-  .tbl.tails th,.tbl.tails td{padding:9px 6px;font-size:13.5px} .tbl.tails .col-with,.tbl.tails .lg{display:none} .tbl.tails .sm{display:inline} .tbl.tails th.n{white-space:normal} .tbl.tails td.n small{white-space:normal} }
+  .tbl.tails th,.tbl.tails td{padding:9px 6px;font-size:13.5px} .tbl.tails .lg{display:none} .tbl.tails .sm{display:inline} .tbl.tails th.n{white-space:normal} .tbl.tails td.n small{white-space:normal} }
 </style>
 <style>img{max-width:100%}</style>
 </head>
@@ -1043,9 +1043,14 @@ const PROGRAMS=[{key:'none',name:'No hedge'},{key:'fedm',name:'Fed ladder at tod
   {key:'fwd',name:'Bank forwards instead',fwd:[0.8,0.6,0.4,0.2],compare:true}].filter(pg=>!(KALSHI_ONLY&&pg.fwd));
 // A program's name inside a sentence: 'the Fed ladder ...' keeps its capital, others go lower case
 const inSentence=n=>/^Fed\b/.test(n)?`the ${n}`:n.charAt(0).toLowerCase()+n.slice(1);
+// What a hedge adds to net cash, on average, in the years that are worst with no hedge: the worst share a of years (TAILS), and the years around the
+// 1-in-20 bad year (the 4th to 6th percentile). c0, c1: each simulated year's net cash without and with the hedge, its cost already taken off.
+function sameYears(c0,c1,order){ const n=c0.length; order=order||Uint32Array.from({length:n},(_,i)=>i).sort((x,y)=>c0[x]-c0[y]);
+  const added=(lo,hi)=>{ let t=0; for(let j=lo;j<hi;j++){ const i=order[j]; t+=c1[i]-c0[i]; } return t/Math.max(1,hi-lo); };
+  return {tail:Object.fromEntries(TAILS.map(a=>[a,added(0,Math.max(1,Math.round(a*n)))])),bad:added(Math.floor(0.04*n),Math.ceil(0.06*n))}; }
 // Every program on the same simulated years. The recession and the oil spike happen at the market's odds; each takes its fixed amount when it does,
 // and the rest of its risk shrinks so the total swing is unchanged. With the Fed ladder, the recession cover buys that much less: the ladder already
-// pays more in a recession year (recGap). pick: the program (not the comparison) with the most bad-year improvement per yuan of average cost.
+// pays more in a recession year (recGap). added: what the program pays after its cost in the years that are worst with no hedge (sameYears).
 function programResults(){ const sim=state.sim; if(!sim) return null;
   const rec=recessionProxy(), oil=oilProxy(), fx=(state.fx||[]).filter(c=>c.material).sort((a,b)=>b.sd-a.sd)[0], f=fx&&sim.fx&&sim.fx[fx.ccy], fed=fedProxy();
   if(!f&&!fed&&!(rec&&rec.n)&&!(oil&&oil.n)) return null;
@@ -1055,7 +1060,7 @@ function programResults(){ const sim=state.sim; if(!sim) return null;
     for(let i=0;i<N;i++){ fR[i]=Phi(z[i])<rec.p?1:0; c[i]=Lo[i]*sc+(fR[i]?rec.loss:0)-rec.p*rec.loss; raw[i]+=Lo[i]-c[i]; } }
   if(oil&&oil.n>0&&La){ const z=zFor('proxy:oil'), m=meanOf(La), v=varOf(La), sc=v>0?Math.sqrt(Math.max(0,1-oil.p*(1-oil.p)*oil.loss**2/v)):1, c=comp[state.priceRisk.key]=new Float64Array(N);
     for(let i=0;i<N;i++){ fO[i]=Phi(z[i])<oil.p?1:0; c[i]=m+(La[i]-m)*sc+(fO[i]?oil.loss:0)-oil.p*oil.loss; raw[i]+=La[i]-c[i]; } }
-  const s0=stats(Float64Array.from(raw,shortfall)), thr=0.7*s0.mean, ly=fx&&fxLastYear(fx.ccy);
+  const c0=Float64Array.from(raw,shortfall), s0=stats(c0), thr=0.7*s0.mean, ly=fx&&fxLastYear(fx.ccy), order0=Uint32Array.from({length:N},(_,i)=>i).sort((x,y)=>c0[x]-c0[y]);
   // Expected shortfall: how far net cash falls below the expected no-hedge mean, on average, in the worst 10%, 5% and 1% of simulated years
   const esOf=sorted=>Object.fromEntries(TAILS.map(a=>{ const k=Math.max(1,Math.round(a*N)); let t=0; for(let i=0;i<k;i++) t+=sorted[i]; return [a,s0.mean-t/k]; }));
   s0.es=esOf(s0.sorted);
@@ -1065,29 +1070,29 @@ function programResults(){ const sim=state.sim; if(!sim) return null;
     if(pg.recession&&rec&&rec.n>0){ recN=Math.min(rec.n,Math.max(0,Math.round(rec.loss-(fedLeg?fedLeg.recGap:0)))); upfront+=recN*rec.entry+feeOf(recN,rec.entry); legs.push(rec); for(let i=0;i<N;i++) if(fR[i]) pay[i]+=recN; }
     if(pg.oil&&oil&&oil.n>0){ legs.push(oil); upfront+=oil.cost; for(let i=0;i<N;i++) if(fO[i]) pay[i]+=oil.n; }
     const cf=new Float64Array(N); let under=0; for(let i=0;i<N;i++){ cf[i]=shortfall(raw[i]+pay[i]-fwdCost-upfront); if(cf[i]<thr) under++; }
-    const s=stats(cf); return {...pg,legs,fwdAmt,fwdCost,upfront,recN,fedLeg,s,es:esOf(s.sorted),avgCost:s0.mean-s.mean,dP5:s.p5-s0.p5,pUnder:under/N,slide:ly&&f?fxPath(fx.ccy,ly.g,fw).total:null}; });
-  // The recommended program puts a Kalshi contract on every risk that has one, directly or by proxy; among those, the one that cuts the average loss
-  // in the worst 5% of years the most per yuan of average cost
-  const cut5=x=>s0.es[0.05]-x.es[0.05], eligible=programs.filter(x=>x.key!=='none'&&!x.compare&&x.avgCost>0&&cut5(x)>0), all=x=>(!fed||x.fed)&&(!(rec&&rec.n>0)||x.recession)&&(!(oil&&oil.n>0)||x.oil);
+    const s=stats(cf); return {...pg,legs,fwdAmt,fwdCost,upfront,recN,fedLeg,s,es:esOf(s.sorted),added:sameYears(c0,cf,order0),avgCost:s0.mean-s.mean,dP5:s.p5-s0.p5,pUnder:under/N,slide:ly&&f?fxPath(fx.ccy,ly.g,fw).total:null}; });
+  // The recommended program puts a Kalshi contract on every risk that has one, directly or by proxy; among those, the one that pays the most after its
+  // cost in the worst 5% of years with no hedge, per yuan of average cost
+  const cut5=x=>x.added.tail[0.05], eligible=programs.filter(x=>x.key!=='none'&&!x.compare&&x.avgCost>0&&cut5(x)>0), all=x=>(!fed||x.fed)&&(!(rec&&rec.n>0)||x.recession)&&(!(oil&&oil.n>0)||x.oil);
   const pick=(eligible.some(all)?eligible.filter(all):eligible).sort((a,b)=>cut5(b)/b.avgCost-cut5(a)/a.avgCost)[0];
   const share=(p,L)=>varOf(raw)>0?p*(1-p)*L*L/varOf(raw):0;
   return {rec,oil,fx,fed,s0,thr,programs,tail:{raw,comp,fR,fO},pick:pick?pick.key:null,recShare:rec?share(rec.p,rec.loss):0,oilShare:oil?share(oil.p,oil.loss):0}; }
 const TAILS=[0.10,0.05,0.01];
-// Each risk's part of the average shortfall in the worst share a of simulated years, with no hedge and with program key. The parts add up to the
-// total in both cases: a risk's part is how much further than its own average it drags cash in those years, less what its position pays back there
-// after its cost (the Fed ladder filed under the currency, the recession contract under demand, the oil contract under parcel prices). With a hedge
-// the worst years are picked again on the hedged cash, so a risk's hedged part is the fall in its share of the loss, not the payout in the old worst years.
+// Each risk's part of the average shortfall in the worst share a of simulated years with no hedge, and what its position under program key pays back
+// in those same years after its cost (the Fed ladder filed under the currency, the recession contract under demand, the oil contract under parcel
+// prices). A risk's part is how much further than its own average it drags cash in those years. The parts add up to the loss in the table, and the
+// paybacks to what the program pays there after its cost (added.tail).
 function tailDrivers(R,key,a){ const T=R&&R.tail; if(!T) return null; const k=Math.max(1,Math.round(a*N)), pg=R.programs.find(p=>p.key===key);
-  const worst=cash=>Uint32Array.from({length:N},(_,i)=>i).sort((x,y)=>cash[x]-cash[y]).subarray(0,k), avg=(A,idx)=>{ let t=0; for(const i of idx) t+=A[i]; return t/k; };
+  const avg=(A,idx)=>{ let t=0; for(const i of idx) t+=A[i]; return t/k; };
   const back={};
   if(pg&&pg.fedLeg&&R.fed){ const c=pg.fedLeg.cost; back['fx_'+R.fed.ccy]=Float64Array.from(pg.fedLeg.pay,v=>v-c); }
   if(pg&&pg.recession&&R.rec&&pg.recN>0){ const c=pg.recN*R.rec.entry+feeOf(pg.recN,R.rec.entry); back.other=Float64Array.from(T.fR,f=>f*pg.recN-c); }
   if(pg&&pg.oil&&R.oil&&R.oil.n>0&&state.priceRisk){ const c=R.oil.cost; back[state.priceRisk.key]=Float64Array.from(T.fO,f=>f*R.oil.n-c); }
-  const cash=Float64Array.from(T.raw); for(const r in back){ const B=back[r]; for(let i=0;i<N;i++) cash[i]+=B[i]; }
-  const W0=T.worst0&&T.worst0.k===k?T.worst0.idx:(T.worst0={k,idx:worst(T.raw)}).idx, W1=worst(cash), rows={};
-  for(const r in T.comp){ const m=meanOf(T.comp[r]), before=avg(T.comp[r],W0)-m, after=avg(T.comp[r],W1)-m-(back[r]?avg(back[r],W1):0);
-    if(Math.abs(before)>0.5||Math.abs(after)>0.5) rows[r]={before,after,hedged:before-after}; }
-  return {a,k,before:R.s0.mean-avg(T.raw,W0),after:R.s0.mean-avg(cash,W1),rows}; }
+  const W0=T.worst0&&T.worst0.k===k?T.worst0.idx:(T.worst0={k,idx:Uint32Array.from({length:N},(_,i)=>i).sort((x,y)=>T.raw[x]-T.raw[y]).subarray(0,k)}).idx, rows={};
+  let paid=0; for(const r in back) paid+=avg(back[r],W0);
+  for(const r in T.comp){ const m=meanOf(T.comp[r]), before=avg(T.comp[r],W0)-m, hedged=back[r]?avg(back[r],W0):0;
+    if(Math.abs(before)>0.5||Math.abs(hedged)>0.5) rows[r]={before,after:before-hedged,hedged}; }
+  const before=R.s0.mean-avg(T.raw,W0); return {a,k,before,after:before-paid,rows}; }
 // What a program holds on day one: the Fed ladder's contracts per strike, forwards per quarter, contracts at today's ask
 function programPositions(R,key){ const pg=R.programs.find(x=>x.key===key); if(!pg) return null; const f=R.fx&&state.sim.fx[R.fx.ccy], fw=pg.fwd||[0,0,0,0], F=R.fed;
   return {key,fwd:f?f.blocks.map(b=>({q:b.q,months:b.months,ratio:fw[b.q]||0,amount:(fw[b.q]||0)*b.net,plan:b.net})).filter(x=>x.ratio>0):[],schedule:fw,
@@ -1890,23 +1895,23 @@ const lossTxt=v=>(v>0?'−':'')+km(Math.abs(v));
 function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=state.scan, pg=selProgram(), pick=R&&R.pick;
   const s0=R?R.s0:res.s0, E=s0.mean, rows=state.report.rows.filter(x=>x.share>=0.005), win=`${mabbr(F[0].month)} to ${mabbr(F[F.length-1].month)}`, chosen=pg&&pg.key!=='none';
   const D=R?null:directOrders(), hasDirect=D&&(D.legs.length||D.FW.length), nameOf=p=>p.key===pick?'the recommended hedge':'your chosen hedge';
-  const withHedge=chosen?pg.s:hasDirect?res.s1:null, before=a=>shortfallOf(s0,E,a), after=a=>withHedge?shortfallOf(withHedge,E,a):null;
+  // the hedge is always scored on the years that are bad with no hedge: what it pays there after its cost (sameYears)
+  const withHedge=chosen?pg.s:hasDirect?res.s1:null, added=chosen?pg.added:hasDirect?sameYears(res.cf0,res.cf):null, before=a=>shortfallOf(s0,E,a);
   const kpis=kpiCard('Expected net cash',km(E),`operating cash, ${win}`)+kpiCard('Typical swing',pm(s0.sd),'how far a typical year lands from expected')+kpiCard('Bad year (1 in 20)',km(s0.p5),'net cash, with no hedge')
-    +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,skm(withHedge.p5-s0.p5),`on the bad year, now ${km(withHedge.p5)}; typical swing ${pm(withHedge.sd)} instead of ${pm(s0.sd)}`,'pay')
+    +(withHedge?kpiCard(`With ${chosen?nameOf(pg):'the hedge'}`,skm(added.bad),`on the bad year, net of its cost: now ${km(s0.p5+added.bad)}; typical swing ${pm(withHedge.sd)} instead of ${pm(s0.sd)}`,'pay')
       :kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
   const tailCard=`<div class="card span-12"><div class="card-h"><h2>Expected loss in bad years</h2>${withHedge?`<span class="small muted">With ${esc(chosen?inSentence(pg.name):'the hedge')}</span>`:''}</div>
-      <p class="card-sub">The average amount 12-month net cash falls below the expected ${km(E)} in the worst years of ${fmtN(N)} simulated. With the hedge, the loss includes what the hedge costs.</p>
-      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n"><span class="lg">Expected loss, no hedge</span><span class="sm">No hedge</span></th>${withHedge?'<th class="n col-with">Expected loss, with the hedge</th><th class="n"><span class="lg">Improvement</span><span class="sm">Better by</span></th><th class="n">% hedged</th>':''}</tr></thead><tbody>
-      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=after(a); return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n col-with">${lossTxt(h)}</td><td class="n"><b>${km(b-h)}<span class="lg"> less</span></b></td><td class="n"><b>${pct((b-h)/b,1)}</b></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
-  // what drives the worst 5% of years, and how much of each risk's part the hedge takes off (the parts add up to the totals in the table)
+      <p class="card-sub">How far 12-month net cash falls below the expected ${km(E)}, on average, in the worst years of ${fmtN(N)} simulated${withHedge?`, and what the hedge pays in those same years, on average, less ${chosen?`the ${km(pg.upfront)} premium`:'what it costs'}`:''}.</p>
+      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n"><span class="lg">Expected loss, no hedge</span><span class="sm">No hedge</span></th>${withHedge?'<th class="n"><span class="lg">Hedge payoff, after premium</span><span class="sm">Hedge pays</span></th><th class="n">% hedged</th>':''}</tr></thead><tbody>
+      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=withHedge?added.tail[a]:0; return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n"><b>${skm(h)}</b></td><td class="n"><b>${pct(h/b,1)}</b></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
+  // what drives the worst 5% of years, and what each risk's contract pays back in those years (the parts add up to the totals in the table)
   const T=R?tailDrivers(R,chosen?pg.key:'none',0.05):null, viaOf={other:'Recession contract'};
   if(R&&R.fed) viaOf['fx_'+R.fed.ccy]='Fed-rate ladder'; if(state.priceRisk) viaOf[state.priceRisk.key]='Oil price contract';
   const holds=k=>chosen&&((k==='other'&&pg.recession)||(R.fed&&k==='fx_'+R.fed.ccy&&pg.fed)||(state.priceRisk&&k===state.priceRisk.key&&pg.oil));
   const driverLi=x=>{ const d=T.rows[x.key]; if(!d) return ''; const share=Math.max(0,d.before/T.before), cut=Math.max(0,Math.min(1,d.hedged/Math.max(1e-9,d.before))), via=holds(x.key)?viaOf[x.key]:'';
-    const foot=!chosen?`<span class="cov-v none">Not hedged</span><span class="muted">${km(d.before)} of the loss</span>`
-      :d.hedged>=50?`<span class="cov-v">${km(d.hedged)} hedged</span>${via?`<span class="pill acc">${esc(via)}</span>`:''}<span class="muted">${km(d.before)} of the loss, ${km(d.after)} with the hedge</span>`
-      :d.hedged<=-50?`<span class="cov-v none">${km(d.before)} of the loss, ${km(d.after)} with the hedge</span><span class="muted">${via?`The ${/^Fed/.test(via)?via:lc(via)} costs more than it pays back in these years`:'Its part grows once other risks are hedged'}</span>`
-      :`<span class="cov-v none">Not hedged</span><span class="muted">${km(d.before)} of the loss</span>`;
+    const foot=!chosen||!via?`<span class="cov-v none">Not hedged</span><span class="muted">${km(d.before)} of the loss</span>`
+      :d.hedged>=50?`<span class="cov-v">${km(d.hedged)} hedged</span><span class="pill acc">${esc(via)}</span><span class="muted">${km(d.before)} of the loss, ${d.after>=50?`${km(d.after)} left with you`:'all of it paid back'}</span>`
+      :`<span class="cov-v none">${km(d.before)} of the loss</span><span class="pill acc">${esc(via)}</span><span class="muted">${d.hedged<=-50?`Costs ${km(-d.hedged)} more than it pays back in these years`:'Pays back about what it costs in these years'}</span>`;
     return `<li class="risk"><div class="risk-top"><b>${esc(riskLabel(x))}</b><span class="share">${pct(share)}<small>of the loss</small></span></div>
       <div class="rbar" role="img" aria-label="${esc(`${riskLabel(x)}: ${pct(share)} of the loss in the worst 5% of years, ${km(Math.max(0,d.hedged))} of it hedged`)}"><i class="unc" style="width:${(share*100).toFixed(1)}%"><i class="cov" style="width:${(cut*100).toFixed(1)}%${cut>0?';min-width:3px':''}"></i></i></div>
       <div class="risk-foot">${foot}</div></li>`; };
@@ -1915,7 +1920,7 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
       <div class="rbar" role="img" aria-label="${esc(`${riskLabel(x)}: ${pctS(sh)} of the swing, ${cv>=0.0005?pctS(cv):'none'} of it covered`)}"><i class="unc" style="width:${(sh*100).toFixed(1)}%"><i class="cov" style="width:${(cv*100).toFixed(1)}%${cv>=0.0005?';min-width:3px':''}"></i></i></div>
       <div class="risk-foot">${cv>=0.0005?`<span class="cov-v">${pctS(cv)} covered</span><span class="pill acc">${esc(c.via)}</span>`:'<span class="cov-v none">Not covered</span>'}${c.hint?`<span class="muted">${esc(c.hint)}</span>`:''}</div></li>`; };
   const riskCard=T?`<div class="card span-12"><div class="card-h"><h2>What drives the worst 5% of years</h2><span class="keys"><span><i class="k-cov"></i>hedged</span><span><i class="k-unc"></i>left with you</span></span></div>
-      <p class="card-sub">Each bar is one risk's part of the ${km(T.before)} average loss in the worst 5% of years; the filled part is what the hedge takes off it.</p>
+      <p class="card-sub">Each bar is one risk's part of the ${km(T.before)} average loss in the worst 5% of years; the filled part is what its contract pays back in those years, after its cost.</p>
       <ul class="risks">${rows.map(driverLi).join('')}</ul>
       <p class="small muted">No Kalshi contract settles on these risks, so each hedge is a proxy that follows its risk only partly.</p></div>`
     :`<div class="card span-12"><div class="card-h"><h2>What moves your cash</h2><span class="keys"><span><i class="k-cov"></i>covered by the hedge</span><span><i class="k-unc"></i>not covered</span></span></div>
@@ -1951,11 +1956,11 @@ function renderPlan(){ const host=byId('view-plan'), R=state.programs;
   if(!R){ const D=directOrders();
     host.innerHTML=head+`<div class="grid"><div class="card span-12"><div class="card-h"><h2>What to buy</h2></div>${D.legs.length||D.FW.length?buyTables(D.legs,[],null):'<p class="muted">No hedge is worth its cost at today\'s prices.</p>'}</div></div>`; return; }
   const row=p=>`<tr data-key="${esc(p.key)}" class="${[p.key===APP.prog?'sel':'',p.compare?'compare':''].filter(Boolean).join(' ')}"><td><label class="radio"><input type="radio" name="prog" value="${esc(p.key)}"${p.key===APP.prog?' checked':''}><b>${esc(p.name)}</b></label>${p.key===R.pick?' <span class="pill acc">Recommended</span>':p.compare?' <span class="pill off">For comparison</span>':''}</td>
-    <td class="n">${p.key!=='none'?$k(p.upfront):'—'}</td><td class="n">${p.key!=='none'?$k(maxPayoff(R,p.key)):'—'}</td>${TAIL_ROWS.map(([a])=>{ const b=R.s0.es[a], h=p.es[a]; return `<td class="n">${$k(-h)}${p.key!=='none'?`<small>${$k(b-h)} hedged</small>`:''}</td>`; }).join('')}</tr>`;
+    <td class="n">${p.key!=='none'?$k(p.upfront):'—'}</td><td class="n">${p.key!=='none'?$k(maxPayoff(R,p.key)):'—'}</td>${TAIL_ROWS.map(([a])=>{ const b=R.s0.es[a], h=p.added.tail[a]; return p.key==='none'?`<td class="n">${$k(-b)}<small>average loss</small></td>`:`<td class="n">${$s(h)}<small>${pct(h/b,1)} hedged</small></td>`; }).join('')}</tr>`;
   host.innerHTML=head+`<div class="grid">
     <div class="card span-12"><div class="card-h"><h2>Programs</h2><span class="small muted">Select one to see what it holds. The overview follows your choice.</span></div>
       <div class="scroll"><table class="tbl progs"><thead><tr><th>Program</th><th class="n">Up front</th><th class="n">Max payoff</th><th class="n">Worst 10% of years</th><th class="n">Worst 5% of years</th><th class="n">Worst 1% of years</th></tr></thead><tbody>${R.programs.map(row).join('')}</tbody></table></div>
-      <p class="small muted">Each loss is how far 12-month net cash falls below expected, on average, in those years, including what the program costs.</p></div>
+      <p class="small muted">The no-hedge row is how far 12-month net cash falls below expected, on average, in the worst years with no hedge. Each program's figure is what its contracts pay in those same years, on average, less the premium.</p></div>
     <div class="card span-8" id="plan-buy"></div>
     <div class="card span-4"><div class="card-h"><h2>Before you order</h2></div><ul class="checklist">${beforeList(R).map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></div>`;
   const pickRow=key=>{ APP.prog=key; host.querySelectorAll('table.progs tbody tr').forEach(tr=>{ const on=tr.dataset.key===key; tr.classList.toggle('sel',on); tr.querySelector('input').checked=on; }); renderBuy(R); renderOverview(); renderCheck(); };
