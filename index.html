@@ -120,7 +120,7 @@ button,select,input{font-family:var(--body)} button{cursor:pointer;color:var(--i
 #hedge-size{width:100%;margin:0;accent-color:var(--accent);cursor:pointer}
 .size-note{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-size:13.5px;margin-top:-6px}
 .years{display:grid;gap:12px;border-top:1px solid var(--rule);padding-top:14px}
-.yr{display:grid;grid-template-columns:7.5rem minmax(0,1fr) 5.5rem 5.5rem 4.5rem;align-items:center;gap:6px 16px;font-size:14.5px}
+.yr{display:grid;grid-template-columns:10.5rem minmax(0,1fr) 5.5rem 5.5rem 4.5rem;align-items:center;gap:6px 16px;font-size:14.5px}
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap} .yr-bar,.yr-bar .rbar{display:block;min-width:0}
 .yr-h{font:700 11px/1.3 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .size-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-size:13.5px;border-top:1px solid var(--rule);padding-top:12px}
@@ -1904,7 +1904,7 @@ const statCard=(label,value,note,cls)=>`<div class="card kpi${cls?' '+cls:''}"><
 // Expected shortfall: how far net cash falls below the expected no-hedge mean, on average, in the worst share a of simulated years
 const shortfallOf=(st,mean,a)=>{ const n=st.sorted.length, k=Math.max(1,Math.round(a*n)); let t=0; for(let i=0;i<k;i++) t+=st.sorted[i]; return mean-t/k; };
 // The bad years the overview shows, by how often they come. A bad year is the worst 1 in 20 (a=5%), the one the headline numbers use.
-const TAIL_ROWS=[[0.10,'1 year in 10'],[0.05,'1 year in 20'],[0.01,'1 year in 100']];
+const TAIL_ROWS=[[0.10,'1 year in 10'],[0.05,'1 year in 20'],[0.01,'1 in 100 worst case']];
 const lossTxt=v=>(v>0?'−':'')+km(Math.abs(v));
 const hasDirectHedge=D=>!!(D&&(D.legs.length||D.FW.length));
 // The market risks behind every number when the business's own sales ups and downs are left out (assume.ownSales off)
