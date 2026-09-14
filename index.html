@@ -1938,7 +1938,7 @@ function fillHedge(){ const R=state.programs, res=state.res, pg=selProgram(), s0
   if(chosen){ cost=openOrders(R,pg.key).reduce((t,x)=>t+(x.cost||0),0)+(pg.fwdCost||0)*s; paid=Object.fromEntries(TAILS.map(a=>[a,pg.paid.tail[a]*s])); }
   else if(hasDirectHedge(D)){ paid=sameYears(res.cf0,res.pay).tail; cost=res.cost+(res.fund||0)+(res.fwdCost||0); }
   const loss=a=>shortfallOf(s0,s0.mean,a), on=!!paid&&cost>0, top=loss(0.01);
-  byId('three').innerHTML=statCard('Bad-year loss',lossTxt(loss(0.05)),`below the ${km(s0.mean)} expected`)
+  byId('three').innerHTML=statCard('Bad-year loss',lossTxt(loss(0.05)),'net cash below expected in a bad year')
     +statCard('Hedge cost',on?km(cost):'None',on?'paid up front':chosen?'the slider is at 0%':'no hedge chosen')
     +statCard('Hedge pays',on?skm(paid[0.05]):'—',on?'in a bad year':'nothing without a hedge','pay');
   byId('years').innerHTML=`<div class="yr yr-h"><span>How often</span><span class="yr-bar"></span><span class="n">You lose</span><span class="n">Hedge pays</span><span class="n">Covered</span></div>`
