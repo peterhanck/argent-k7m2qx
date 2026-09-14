@@ -1905,7 +1905,7 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
   const driverLi=x=>{ const d=T.rows[x.key]; if(!d) return ''; const share=Math.max(0,d.before/T.before), cut=Math.max(0,Math.min(1,d.hedged/Math.max(1e-9,d.before))), via=holds(x.key)?viaOf[x.key]:'';
     const foot=!chosen?`<span class="cov-v none">Not hedged</span><span class="muted">${km(d.before)} of the loss</span>`
       :d.hedged>=50?`<span class="cov-v">${km(d.hedged)} hedged</span>${via?`<span class="pill acc">${esc(via)}</span>`:''}<span class="muted">${km(d.before)} of the loss, ${km(d.after)} with the hedge</span>`
-      :d.hedged<=-50?`<span class="cov-v none">${km(d.before)} of the loss, ${km(d.after)} with the hedge</span><span class="muted">${via?`The ${lc(via)} costs more than it pays back in these years`:'Its part grows once other risks are hedged'}</span>`
+      :d.hedged<=-50?`<span class="cov-v none">${km(d.before)} of the loss, ${km(d.after)} with the hedge</span><span class="muted">${via?`The ${/^Fed/.test(via)?via:lc(via)} costs more than it pays back in these years`:'Its part grows once other risks are hedged'}</span>`
       :`<span class="cov-v none">Not hedged</span><span class="muted">${km(d.before)} of the loss</span>`;
     return `<li class="risk"><div class="risk-top"><b>${esc(riskLabel(x))}</b><span class="share">${pct(share)}<small>of the loss</small></span></div>
       <div class="rbar" role="img" aria-label="${esc(`${riskLabel(x)}: ${pct(share)} of the loss in the worst 5% of years, ${km(Math.max(0,d.hedged))} of it hedged`)}"><i class="unc" style="width:${(share*100).toFixed(1)}%"><i class="cov" style="width:${(cut*100).toFixed(1)}%${cut>0?';min-width:3px':''}"></i></i></div>
@@ -2048,7 +2048,7 @@ function renderDataSide(){ const host=byId('data-side'), src=APP.src, sc=state.s
         ${ph?`<dt>Carrier prices</dt><dd>${fmtN(ph.shipments)} shipments on the main US parcel line</dd>`:''}</dl></div>
     ${cogsOn||recOn?`<div class="card"><div class="card-h"><h2>Assumptions</h2></div><p class="card-sub">Your books can't show these. Set them to match your business.</p>
       <div class="assume">${cogsOn?`<label for="as-cogs">Product cost, % of sales<input id="as-cogs" type="number" min="0" max="90" step="1" value="${Math.round(state.assume.cogs*100)}"><small>The file has no product cost, so Argent assumes one, paid in ${esc(ccyLabel(state.home))}.</small></label>`:''}
-        ${recOn?`<label for="as-rec">Sales drop in a US recession, %<input id="as-rec" type="number" min="0" max="60" step="1" value="${Math.round(state.assume.recDrop*100)}"><small>Sizes the recession cover. US online sales fell about 10% from their peak in the 2008–09 recession.</small></label>`:''}</div>
+        ${recOn?`<label for="as-rec">Sales drop in a US recession, %<input id="as-rec" type="number" min="0" max="60" step="1" value="${Math.round(state.assume.recDrop*100)}"><small>Sizes the recession cover.</small></label>`:''}</div>
       <button class="btn sm" type="button" id="as-go">Recalculate</button></div>`:''}
     <div class="card"><div class="card-h"><h2>Market data</h2></div>
       <dl class="facts"><dt>Kalshi prices</dt><dd>${esc(snapTime())}</dd>${PX?`<dt>Proxy contracts</dt><dd>${esc(ts(PX.fetched_at))}</dd>`:''}
@@ -2110,7 +2110,9 @@ function renderAll(){ const src=APP.src;
   if(!APP.files.ledger) byId('home-ccy').value=state.home==='CNY'?'CNY':'USD';
   renderOverview(); renderPlan(); renderCheck(); renderDataSide();
   byId('foot').textContent=`Kalshi prices from its public API, ${snapTime()}, change continuously${FXS.asOf?`; exchange rates from the ${FXS.spotSource||`ECB, ${fxAsOf()}`}`:''}. An illustration, not investment advice.`; }
-function bootClient(){ wireTabs(); wireUpload(); renderDrops(); const h=(location.hash||'').slice(1); showTab(VIEWS.includes(h)?h:'overview',{scroll:false}); analyze(SAMPLE(),{animate:false}); }
+// The illustration assumes a US recession would cut sales by 20%; the Your data tab can change it
+const ILLUSTRATIVE_REC_DROP=0.20;
+function bootClient(){ state.assume.recDrop=ILLUSTRATIVE_REC_DROP; wireTabs(); wireUpload(); renderDrops(); const h=(location.hash||'').slice(1); showTab(VIEWS.includes(h)?h:'overview',{scroll:false}); analyze(SAMPLE(),{animate:false}); }
 bootClient();
 
 })();
