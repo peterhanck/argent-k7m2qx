@@ -142,7 +142,7 @@ svg text{font-family:var(--body);fill:var(--ink)} .tk{font-size:11.5px;fill:var(
 .tbl td small{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
 .tbl tr.big td{font-weight:700;border-bottom:0}
 .tbl .tick{font-size:12.5px}
-table.progs{min-width:900px} table.buy{min-width:720px} table.rules{min-width:760px}
+table.progs{min-width:900px} .tbl.tails .sm{display:none} table.buy{min-width:720px} table.rules{min-width:760px}
 table.progs tbody tr{cursor:pointer} table.progs tbody tr:hover td{background:var(--panel)}
 table.progs tr.sel td{background:var(--accent-tint)}
 table.progs tr.compare td{color:var(--muted)}
@@ -208,7 +208,7 @@ details.rules[open] summary{margin-bottom:12px}
 @media (max-width:560px){ .bar{padding-inline:16px;min-height:56px} .tabs .in,.app,.foot{padding-inline:16px} .span-3{grid-column:span 12}
   .card{padding:16px} .brand img{height:20px} .mini3{grid-template-columns:1fr} .pair{grid-template-columns:1fr}
   .decision{grid-template-columns:minmax(0,1fr)} .decision .n{text-align:left} .top .btn.primary .lbl-long{display:none}
-  .tbl.tails th,.tbl.tails td{padding:9px 6px;font-size:13.5px} .tbl.tails .col-with{display:none} .tbl.tails td.n small{white-space:normal} }
+  .tbl.tails th,.tbl.tails td{padding:9px 6px;font-size:13.5px} .tbl.tails .col-with,.tbl.tails .lg{display:none} .tbl.tails .sm{display:inline} .tbl.tails th.n{white-space:normal} .tbl.tails td.n small{white-space:normal} }
 </style>
 <style>img{max-width:100%}</style>
 </head>
@@ -1896,8 +1896,8 @@ function renderOverview(){ const R=state.programs, res=state.res, F=state.F, sc=
       :kpiCard('Hedge',R?'None chosen':'None',R?'pick a program on the Hedge plan tab':'no hedge is worth its cost at today\'s prices'));
   const tailCard=`<div class="card span-12"><div class="card-h"><h2>Expected loss in bad years</h2>${withHedge?`<span class="small muted">With ${esc(chosen?inSentence(pg.name):'the hedge')}</span>`:''}</div>
       <p class="card-sub">The average amount 12-month net cash falls below the expected ${km(E)} in the worst years of ${fmtN(N)} simulated. With the hedge, the loss includes what the hedge costs.</p>
-      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n">Expected loss, no hedge</th>${withHedge?'<th class="n col-with">Expected loss, with the hedge</th><th class="n">Improvement</th>':''}</tr></thead><tbody>
-      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=after(a); return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n col-with">${lossTxt(h)}</td><td class="n"><b>${km(b-h)} less</b><small>${pct((b-h)/b,1)} lower</small></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
+      <div class="scroll"><table class="tbl tails"><thead><tr><th>Worst years</th><th class="n"><span class="lg">Expected loss, no hedge</span><span class="sm">No hedge</span></th>${withHedge?'<th class="n col-with">Expected loss, with the hedge</th><th class="n"><span class="lg">Improvement</span><span class="sm">Better by</span></th><th class="n">% hedged</th>':''}</tr></thead><tbody>
+      ${TAIL_ROWS.map(([a,label,sub])=>{ const b=before(a), h=after(a); return `<tr><td><b>${label}</b><small>${sub}</small></td><td class="n">${lossTxt(b)}</td>${withHedge?`<td class="n col-with">${lossTxt(h)}</td><td class="n"><b>${km(b-h)}<span class="lg"> less</span></b></td><td class="n"><b>${pct((b-h)/b,1)}</b></td>`:''}</tr>`; }).join('')}</tbody></table></div></div>`;
   // what drives the worst 5% of years, and how much of each risk's part the hedge takes off (the parts add up to the totals in the table)
   const T=R?tailDrivers(R,chosen?pg.key:'none',0.05):null, viaOf={other:'Recession contract'};
   if(R&&R.fed) viaOf['fx_'+R.fed.ccy]='Fed-rate ladder'; if(state.priceRisk) viaOf[state.priceRisk.key]='Oil price contract';
